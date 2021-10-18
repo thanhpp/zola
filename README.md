@@ -11,6 +11,7 @@
 ### Requirements
 - [GOOGLE DRIVE](https://drive.google.com/drive/folders/1ii_FZnXnlrzpcdi5AwqHDAD82lV-0S8T?usp=sharing)
 - [API TESTING](https://docs.google.com/spreadsheets/d/12-7goP0F4rkHljCae2DN6iesQMPO_0gtiVl8lKsxjPA/edit?usp=sharing)
+- Timestamp: Seconds from 01/01/1970 (Unix)
 ### Database
 ![Diagram](docs/Zola.png)
 
