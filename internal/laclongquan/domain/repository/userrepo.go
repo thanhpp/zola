@@ -3,7 +3,12 @@ package repository
 import (
 	"context"
 
+	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+)
+
+var (
+	ErrDuplicateUser = errors.New("duplicate user")
 )
 
 type UserUpdateFunc func(ctx context.Context, user *entity.User) (*entity.User, error)

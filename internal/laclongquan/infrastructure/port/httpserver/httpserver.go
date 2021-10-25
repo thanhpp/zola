@@ -8,14 +8,28 @@ import (
 
 	"errors"
 
+	"github.com/thanhpp/zola/config/shared"
+	"github.com/thanhpp/zola/internal/laclongquan/application"
 	"github.com/thanhpp/zola/pkg/booting"
 	"github.com/thanhpp/zola/pkg/logger"
 )
 
-func Start(host, port string) (booting.Daemon, error) {
+type HTTPServer struct {
+	cfg *shared.HTTPServerConfig
+	app application.Application
+}
+
+func NewHTTPServer(cfg *shared.HTTPServerConfig, app application.Application) *HTTPServer {
+	return &HTTPServer{
+		cfg: cfg,
+		app: app,
+	}
+}
+
+func (s *HTTPServer) Start() (booting.Daemon, error) {
 	server := &http.Server{
-		Addr:    fmt.Sprintf("%s:%s", host, port),
-		Handler: newRouter(),
+		Addr:    fmt.Sprintf("%s:%s", s.cfg.Host, s.cfg.Port),
+		Handler: s.newRouter(),
 	}
 
 	return func(ctx context.Context) (start func() error, cleanup func()) {

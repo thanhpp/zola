@@ -1,13 +1,15 @@
 package entity
 
+import "github.com/google/uuid"
+
 type User struct {
-	id      string
+	id      uuid.UUID
 	name    string
 	avatar  string
 	account Account
 }
 
-func (u User) ID() string {
+func (u User) ID() uuid.UUID {
 	return u.id
 }
 

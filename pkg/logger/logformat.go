@@ -51,25 +51,25 @@ func (lf LogFormat) toZapFields() []zapcore.Field {
 var nilStr = ""
 
 func FatalFmt(lf LogFormat) {
-	globalLogger.Fatal(nilStr, lf.toZapFields()...)
+	zap.L().Fatal(nilStr, lf.toZapFields()...)
 }
 
 func PanicFmt(lf LogFormat) {
-	globalLogger.Panic(nilStr, lf.toZapFields()...)
+	zap.L().Panic(nilStr, lf.toZapFields()...)
 }
 
 func ErrorFmt(lf LogFormat) {
-	globalLogger.Error(nilStr, lf.toZapFields()...)
+	zap.L().Error(nilStr, lf.toZapFields()...)
 }
 
 func WarnFmt(lf LogFormat) {
-	globalLogger.Error(nilStr, lf.toZapFields()...)
+	zap.L().Error(nilStr, lf.toZapFields()...)
 }
 
 func InfoFmt(lf LogFormat) {
-	globalLogger.Error(nilStr, lf.toZapFields()...)
+	zap.L().Error(nilStr, lf.toZapFields()...)
 }
 
 func DebugFmt(lf LogFormat) {
-	globalLogger.Debug(nilStr, lf.toZapFields()...)
+	zap.L().Debug(nilStr, lf.toZapFields()...)
 }

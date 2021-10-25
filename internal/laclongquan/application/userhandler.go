@@ -12,6 +12,13 @@ type UserHandler struct {
 	repo repository.UserRepository
 }
 
+func NewUserHandler(fac entity.UserFactory, repo repository.UserRepository) UserHandler {
+	return UserHandler{
+		fac:  fac,
+		repo: repo,
+	}
+}
+
 func (h UserHandler) SignUp(ctx context.Context, phone, pass, name, avatar string) error {
 	newUser, err := h.fac.NewUser(phone, pass, name, avatar)
 	if err != nil {

@@ -1,0 +1,19 @@
+Name: LacLongQuan
+
+Log:
+  Color:        true
+  LoggerName:   LLQ
+  Level:        Debug
+
+HTTPServer:
+  Host:         127.0.0.1
+  Port:         12100
+
+Database:
+  Host:    127.0.0.1
+  Port:    5432
+  DBName:  laclongquan_db
+  User:    laclongquan_user
+  Pass:    laclongquan_pass
+  LogLevel:   Info
+  LogColor:   true

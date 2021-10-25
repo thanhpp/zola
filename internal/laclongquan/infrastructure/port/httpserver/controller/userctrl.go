@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/zola/internal/laclongquan/application"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/dto"
 	"github.com/thanhpp/zola/pkg/logger"
 	"github.com/thanhpp/zola/pkg/responsevalue"
@@ -13,16 +14,23 @@ type UserController struct {
 	handler application.UserHandler
 }
 
+func NewUserCtrl(userHandler application.UserHandler) *UserController {
+	return &UserController{
+		handler: userHandler,
+	}
+}
+
 func (ctrl UserController) SignUp(c *gin.Context) {
 	var (
 		req = new(dto.SignUpReq)
 	)
 
-	if err := c.ShouldBindJSON(req); err != nil {
+	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind req %v", err)
 		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", nil)
 		return
 	}
+	logger.Debugf("signup req: %v", req)
 
 	err := ctrl.handler.SignUp(c, req.PhoneNumber, req.Password, "", "")
 	if err != nil {
@@ -36,9 +44,9 @@ func (ctrl UserController) SignUp(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid password", nil)
 			return
 
-			// case ErrUserExisted:
-			// ginAbortNotAcceptable(c, responsevalue.CodeUserExisted, "user existed", nil)
-			// return
+		case repository.ErrDuplicateUser:
+			ginAbortNotAcceptable(c, responsevalue.CodeUserExisted, "user existed", nil)
+			return
 		}
 
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)

@@ -26,13 +26,13 @@ type UserFactory interface {
 func NewUserFactory() UserFactory {
 	return &userFactoryImpl{
 		hashCost:    hashCost,
-		phoneRegexp: *regexp.MustCompile(regexpPhoneNumber),
+		phoneRegexp: regexp.MustCompile(regexpPhoneNumber),
 	}
 }
 
 type userFactoryImpl struct {
 	hashCost    int
-	phoneRegexp regexp.Regexp
+	phoneRegexp *regexp.Regexp
 }
 
 func (fac userFactoryImpl) NewUser(phone, pass, name, avatar string) (*User, error) {
@@ -47,7 +47,7 @@ func (fac userFactoryImpl) NewUser(phone, pass, name, avatar string) (*User, err
 	}
 
 	return &User{
-		id:      userID.String(),
+		id:      userID,
 		name:    name,
 		avatar:  avatar,
 		account: *account,
@@ -67,7 +67,7 @@ func (fac userFactoryImpl) hashString(in string) (string, error) {
 }
 
 func (fac userFactoryImpl) validatePhone(phone string) error {
-	if fac.phoneRegexp.Match([]byte(phone)) {
+	if !fac.phoneRegexp.Match([]byte(phone)) {
 		return ErrInvalidPhone
 	}
 

@@ -1,13 +1,22 @@
 package httpserver
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/controller"
+)
 
-func newRouter() *gin.Engine {
+func (s *HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
 
-	r.POST("/signup")
+	// ---- CONTROLLERS ----
+	userCtrl := controller.NewUserCtrl(s.app.UserHandler)
+	// ---------------------
+
+	// ---- ROUTES ----
+	r.POST("/signup", userCtrl.SignUp)
+	// ---------------
 
 	return r
 }

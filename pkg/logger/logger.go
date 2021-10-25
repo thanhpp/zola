@@ -7,17 +7,13 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var (
-	globalLogger, _ = zap.NewProduction()
-)
-
 func SetLog(cfg *LogConfig) error {
 	if cfg == nil {
 		return ErrNilConfig
 	}
 
 	var (
-		zapCfg zap.Config
+		zapCfg = zap.NewDevelopmentConfig()
 	)
 	// log level
 	switch strings.ToUpper(cfg.Level) {
@@ -65,77 +61,63 @@ func SetLog(cfg *LogConfig) error {
 		return err
 	}
 
-	globalLogger = zlg
+	zap.ReplaceGlobals(zlg.Named(cfg.LoggerName))
 
 	return nil
 }
 
 func Fatal(message string) {
-	globalLogger.Sugar().Fatal(message)
-	return
+	zap.S().Fatal(message)
 }
 
 func Fatalf(template string, args ...interface{}) {
-	globalLogger.Sugar().Fatalf(template, args...)
-	return
+	zap.S().Fatalf(template, args...)
 }
 
 func Panic(message string) {
-	globalLogger.Sugar().Panic(message)
-	return
+	zap.S().Panic(message)
 }
 
 func Panicf(template string, args ...interface{}) {
-	globalLogger.Sugar().Panicf(template, args...)
-	return
+	zap.S().Panicf(template, args...)
 }
 
 func DPanic(message string) {
-	globalLogger.Sugar().DPanic(message)
-	return
+	zap.S().DPanic(message)
 }
 
 func DPanicf(template string, args ...interface{}) {
-	globalLogger.Sugar().DPanicf(template, args...)
-	return
+	zap.S().DPanicf(template, args...)
 }
 
 func Error(message string) {
-	globalLogger.Sugar().Error(message)
-	return
+	zap.S().Error(message)
 }
 
 func Errorf(template string, args ...interface{}) {
-	globalLogger.Sugar().Errorf(template, args...)
-	return
+	zap.S().Errorf(template, args...)
 }
 
 func Warn(message string) {
-	globalLogger.Sugar().Warn(message)
-	return
+	zap.S().Warn(message)
 }
 
 func Warnf(template string, args ...interface{}) {
-	globalLogger.Sugar().Warnf(template, args...)
-	return
+	zap.S().Warnf(template, args...)
 }
 
 func Info(message string) {
-	globalLogger.Sugar().Info(message)
-	return
+	zap.S().Info(message)
 }
 
 func Infof(template string, args ...interface{}) {
-	globalLogger.Sugar().Infof(template, args...)
-	return
+	zap.S().Infof(template, args...)
 }
 
 func Debug(message string) {
-	globalLogger.Sugar().Debug(message)
-	return
+	zap.S().Debug(message)
 }
 
 func Debugf(template string, args ...interface{}) {
-	globalLogger.Sugar().Debugf(template, args...)
-	return
+	zap.S().Debugf(template, args...)
 }
