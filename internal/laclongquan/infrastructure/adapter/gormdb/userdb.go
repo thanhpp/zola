@@ -75,6 +75,10 @@ func (u userGorm) GetByPhone(ctx context.Context, phone string) (*entity.User, e
 
 	err := u.db.WithContext(ctx).Model(u.model).Where("phone = ?", phone).Find(userDB).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, repository.ErrUserNotFound
+		}
+
 		return nil, err
 	}
 

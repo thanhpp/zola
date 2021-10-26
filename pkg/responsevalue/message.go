@@ -1,6 +1,7 @@
 package responsevalue
 
 const (
-	MsgOK           = "OK"
-	MsgUnknownError = "unknown error"
+	MsgOK             = "OK"
+	MsgUnknownError   = "unknown error"
+	MsgInvalidRequest = "invalid request"
 )

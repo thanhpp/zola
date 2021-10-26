@@ -9,6 +9,7 @@ import (
 
 var (
 	ErrDuplicateUser = errors.New("duplicate user")
+	ErrUserNotFound  = errors.New("user not found")
 )
 
 type UserUpdateFunc func(ctx context.Context, user *entity.User) (*entity.User, error)
