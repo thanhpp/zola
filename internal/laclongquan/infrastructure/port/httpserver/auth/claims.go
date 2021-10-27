@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-type JWT struct {
+type Claims struct {
 	jwt.StandardClaims
 	User JWTUserData `json:"user"`
 }
@@ -16,12 +16,12 @@ type JWTUserData struct {
 	ID string `json:"id"`
 }
 
-func (j JWT) exportMapClaims() (*jwt.MapClaims, error) {
+func (c Claims) exportMapClaims() (*jwt.MapClaims, error) {
 	var (
 		mapClaims = new(jwt.MapClaims)
 	)
 
-	data, err := json.Marshal(j)
+	data, err := json.Marshal(c)
 	if err != nil {
 		return nil, errors.WithMessage(err, "marshal json")
 	}
