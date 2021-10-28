@@ -10,6 +10,7 @@ import (
 	"github.com/thanhpp/zola/internal/laclongquan/application"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/adapter/gormdb"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/auth"
 	"github.com/thanhpp/zola/pkg/booting"
 	"github.com/thanhpp/zola/pkg/logger"
 )
@@ -33,9 +34,19 @@ func start(configPath string) {
 	app := application.NewApplication(dbao.User)
 	logger.Info("application OK")
 
+	authSrv, err := auth.NewAuthService(
+		&laclongquanconfig.Get().JWT,
+		dbao.Auth,
+	)
+	if err != nil {
+		panic(errors.WithMessage(err, "start auth service"))
+	}
+	logger.Info("auth service OK")
+
 	httpServer := httpserver.NewHTTPServer(
 		&laclongquanconfig.Get().HTTPServer,
 		app,
+		authSrv,
 	)
 	httpDaemon, err := httpServer.Start()
 	if err != nil {

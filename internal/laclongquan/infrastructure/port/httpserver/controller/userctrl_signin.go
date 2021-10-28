@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
@@ -35,5 +35,15 @@ func (ctrl UserController) SignIn(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(user)
+	token, err := ctrl.authsrv.NewTokenFromUser(c, user)
+	if err != nil {
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		return
+	}
+
+	resp := new(dto.SignInResp)
+	resp.SetCode(responsevalue.CodeOK)
+	resp.SetData(token)
+
+	c.JSON(http.StatusOK, resp)
 }

@@ -3,9 +3,8 @@ package auth
 import "context"
 
 type Repository interface {
-	GetByID(ctx context.Context, id string) (*Claims, error)
-
-	Cache(ctx context.Context, jwt *Claims) error
-
+	CheckByID(ctx context.Context, id string) error
+	Cache(ctx context.Context, claims *Claims) error
 	Delete(ctx context.Context, id string) error
+	DeleteExpired(ctx context.Context) error
 }

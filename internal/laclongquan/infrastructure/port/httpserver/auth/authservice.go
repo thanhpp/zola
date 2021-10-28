@@ -51,7 +51,7 @@ func (s AuthService) NewClaimsFromToken(ctx context.Context, token string) (*Cla
 		return nil, err
 	}
 
-	_, err = s.repo.GetByID(ctx, claims.Id)
+	err = s.repo.CheckByID(ctx, claims.Id)
 	if err != nil {
 		return nil, err
 	}

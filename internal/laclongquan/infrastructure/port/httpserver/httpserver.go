@@ -10,19 +10,22 @@ import (
 
 	"github.com/thanhpp/zola/config/shared"
 	"github.com/thanhpp/zola/internal/laclongquan/application"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/auth"
 	"github.com/thanhpp/zola/pkg/booting"
 	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type HTTPServer struct {
-	cfg *shared.HTTPServerConfig
-	app application.Application
+	cfg  *shared.HTTPServerConfig
+	app  application.Application
+	auth *auth.AuthService
 }
 
-func NewHTTPServer(cfg *shared.HTTPServerConfig, app application.Application) *HTTPServer {
+func NewHTTPServer(cfg *shared.HTTPServerConfig, app application.Application, authSrv *auth.AuthService) *HTTPServer {
 	return &HTTPServer{
-		cfg: cfg,
-		app: app,
+		cfg:  cfg,
+		app:  app,
+		auth: authSrv,
 	}
 }
 

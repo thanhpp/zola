@@ -22,5 +22,5 @@ JWT:
   ExpireDuration: 1 # hour
   Issuer:         LacLongQuan
   RSAKeyName:     LacLongQuanKey
-  RSAPubKeyPath:  key.pri.pub
-  RSAPriKeyPath:  key.pri
+  RSAPubKeyPath:  pri.rsa.pub
+  RSAPriKeyPath:  pri.rsa
