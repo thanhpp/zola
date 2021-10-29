@@ -20,6 +20,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	// ---- ROUTES ----
 	r.POST("/signup", userCtrl.SignUp)
 	r.POST("/signin", userCtrl.SignIn)
+	r.GET("/signout", s.AuthMiddleware(), userCtrl.Signout)
 	// ---------------
 
 	return r
