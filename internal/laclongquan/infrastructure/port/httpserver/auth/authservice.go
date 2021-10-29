@@ -27,6 +27,7 @@ func NewAuthService(cfg *Config, repo Repository) (*AuthService, error) {
 	}, nil
 }
 
+// NewTokenFromUser creates a new token from user and delete other's user token
 func (s AuthService) NewTokenFromUser(ctx context.Context, user *entity.User) (string, error) {
 	claims, err := s.fac.NewClaimsFromUser(user)
 	if err != nil {
@@ -36,6 +37,10 @@ func (s AuthService) NewTokenFromUser(ctx context.Context, user *entity.User) (s
 	token, err := s.fac.SignClaims(claims)
 	if err != nil {
 		return "", nil
+	}
+
+	if err := s.repo.DeleteByUserID(ctx, user.ID().String()); err != nil {
+		return "", err
 	}
 
 	if err := s.repo.Cache(ctx, claims); err != nil {

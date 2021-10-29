@@ -19,7 +19,7 @@ func NewUserHandler(fac entity.UserFactory, repo repository.UserRepository) User
 	}
 }
 
-func (h UserHandler) SignUp(ctx context.Context, phone, pass, name, avatar string) error {
+func (h UserHandler) CreateUser(ctx context.Context, phone, pass, name, avatar string) error {
 	newUser, err := h.fac.NewUser(phone, pass, name, avatar)
 	if err != nil {
 		return err
@@ -32,7 +32,7 @@ func (h UserHandler) SignUp(ctx context.Context, phone, pass, name, avatar strin
 	return nil
 }
 
-func (h UserHandler) SignIn(ctx context.Context, phone, pass string) (*entity.User, error) {
+func (h UserHandler) GetUser(ctx context.Context, phone, pass string) (*entity.User, error) {
 	user, err := h.repo.GetByPhone(ctx, phone)
 	if err != nil {
 		return nil, err

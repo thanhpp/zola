@@ -52,6 +52,10 @@ func (a authGorm) Delete(ctx context.Context, id string) error {
 	return a.db.WithContext(ctx).Model(a.model).Where("id = ?").Delete(&AuthDB{}).Error
 }
 
+func (a authGorm) DeleteByUserID(ctx context.Context, userID string) error {
+	return a.db.WithContext(ctx).Model(a.model).Where("user_id = ?", userID).Delete(&AuthDB{}).Error
+}
+
 func (a authGorm) DeleteExpired(ctx context.Context) error {
 	return a.db.WithContext(ctx).Model(a.model).Where("expired_at <= ?", time.Now().Unix()).Delete(&AuthDB{}).Error
 }

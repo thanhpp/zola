@@ -21,7 +21,7 @@ func (ctrl UserController) SignUp(c *gin.Context) {
 	}
 	logger.Debugf("signup req: %v", req)
 
-	err := ctrl.handler.SignUp(c, req.PhoneNumber, req.Password, "", "")
+	err := ctrl.handler.CreateUser(c, req.PhoneNumber, req.Password, "", "")
 	if err != nil {
 		logger.Errorf("handle %v", err)
 		switch err {
