@@ -31,7 +31,7 @@ func (a authGorm) marshalClaims(claims *auth.Claims) *AuthDB {
 }
 
 func (a authGorm) CheckByID(ctx context.Context, id string) error {
-	err := a.db.WithContext(ctx).Model(a.model).Where("id = ?").Take(&AuthDB{}).Error
+	err := a.db.WithContext(ctx).Model(a.model).Where("id = ?", id).Take(&AuthDB{}).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return auth.ErrTokenNotFound
@@ -49,7 +49,7 @@ func (a authGorm) Cache(ctx context.Context, claims *auth.Claims) error {
 }
 
 func (a authGorm) Delete(ctx context.Context, id string) error {
-	return a.db.WithContext(ctx).Model(a.model).Where("id = ?").Delete(&AuthDB{}).Error
+	return a.db.WithContext(ctx).Model(a.model).Where("id = ?", id).Delete(&AuthDB{}).Error
 }
 
 func (a authGorm) DeleteByUserID(ctx context.Context, userID string) error {

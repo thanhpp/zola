@@ -265,6 +265,21 @@
 		},
 		{
 			"name": "Signin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(pm.response);",
+							"var strData = pm.response.stream.toString('utf8');",
+							"var jsonData = JSON.parse(strData);",
+							"console.log(jsonData);",
+							"pm.environment.set(\"token\", jsonData.data);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -273,7 +288,7 @@
 					"formdata": [
 						{
 							"key": "phonenumber",
-							"value": "0965508018",
+							"value": "0965508019",
 							"type": "text"
 						},
 						{
@@ -343,6 +358,104 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"code\": 1000,\n    \"message\": \"\",\n    \"data\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IkxhY0xvbmdRdWFuS2V5IiwidHlwIjoiSldUIn0.eyJleHAiOjE2MzU0MzIxODMsImlhdCI6MTYzNTQyODU4MywiaXNzIjoiTGFjTG9uZ1F1YW4iLCJqdGkiOiJmOTEwNzhkMi0zN2Y0LTExZWMtYTU3Ny0yY2YwNWQ4OTAzZTMiLCJ1c2VyIjp7ImlkIjoiYmQwYTk1ZmItMzVjMS0xMWVjLTk0ZjMtMmNmMDVkODkwM2UzIn19.JSpHkoReZuWxTR6ioB5CxQVHXyf0xQT6HmKtCCpTgi7Q0W0BUPLrqQQRIcL90twyhAcgBm1legsFvGicmUorrl8OUDlG_-EkDJtYoqBAIYKfmiuByvSc56dluxfX5FyIGBQxFzXZ7c_OZtNBbiJhyqsS4_EKuQqm03FVNMx8LBHYOZkwMjsTdMtEAYGyriB7nTnA4GNpX6Guzs1x-Aim7WLNPp5kFxb34ew64x-33SwDoMo2WAAR421-_ae-qYL3n1zYfsl4kwvfK0zXHwgFcht9LWGVpC20VZeL3nxgqK21t6OVGc9TCuAAW6SrxBPAJhW7j31JMdB-1o_XpAD0-lHZJWuIXueWeXCnMGcOZt3I6lTdIhE4nKONAzwkiJK24vXoe4LFmuyq6Smg7i1YxZDcwt_Sj7bASRTwL4PrDXBTSQPz5JvliKljsyZrwDyBJOcQOvuAQ5ub8uyDrOVqXXiaGoiq4A79siFhLPRvolItyp6B8Prtypxssw82uRKG\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Signout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{zola}}/signout",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"signout"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Signout - Error",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/signout",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"signout"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 29 Oct 2021 06:08:09 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 9998,\n    \"message\": \"invalid request\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "Signout - OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/signout",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"signout"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 29 Oct 2021 06:08:30 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
 				}
 			]
 		}

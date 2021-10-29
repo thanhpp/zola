@@ -34,10 +34,7 @@ func SetLog(cfg *LogConfig) error {
 	default:
 		zapCfg.Level.SetLevel(zapcore.InfoLevel)
 	}
-	// log color
-	if cfg.Color {
-		zapCfg.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
-	}
+
 	// encoder
 	zapCfg.EncoderConfig = zapcore.EncoderConfig{
 		MessageKey:  "message",
@@ -55,6 +52,12 @@ func SetLog(cfg *LogConfig) error {
 		CallerKey:    "caller",
 		EncodeCaller: zapcore.ShortCallerEncoder,
 	}
+
+	// log color
+	if cfg.Color {
+		zapCfg.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	}
+
 	// build
 	zlg, err := zapCfg.Build(zap.AddCallerSkip(1), zap.AddStacktrace(zap.DPanicLevel))
 	if err != nil {

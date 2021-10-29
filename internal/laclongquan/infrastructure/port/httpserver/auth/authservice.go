@@ -63,3 +63,7 @@ func (s AuthService) NewClaimsFromToken(ctx context.Context, token string) (*Cla
 
 	return claims, nil
 }
+
+func (s AuthService) DeleteUserTokens(ctx context.Context, userID string) error {
+	return s.repo.DeleteByUserID(ctx, userID)
+}
