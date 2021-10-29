@@ -55,5 +55,6 @@ func initConnection(dsn string, logLevel string, color bool) error {
 func autoMigrate() error {
 	return gDB.AutoMigrate(
 		&UserDB{},
+		&AuthDB{},
 	)
 }

@@ -2,6 +2,7 @@ package laclongquanconfig
 
 import (
 	"github.com/thanhpp/zola/config/shared"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/auth"
 	"github.com/thanhpp/zola/pkg/logger"
 )
 
@@ -12,6 +13,7 @@ type MainConfig struct {
 	Log        logger.LogConfig        `mapstructure:"Log"`
 	HTTPServer shared.HTTPServerConfig `mapstructure:"HTTPServer"`
 	Database   shared.DatabaseConfig   `mapstructure:"Database"`
+	JWT        auth.Config             `mapstructure:"JWT"`
 }
 
 func Set(path string) error {

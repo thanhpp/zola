@@ -11,11 +11,15 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	r.Use(gin.Logger())
 
 	// ---- CONTROLLERS ----
-	userCtrl := controller.NewUserCtrl(s.app.UserHandler)
+	userCtrl := controller.NewUserCtrl(
+		s.app.UserHandler,
+		*s.auth,
+	)
 	// ---------------------
 
 	// ---- ROUTES ----
 	r.POST("/signup", userCtrl.SignUp)
+	r.POST("/signin", userCtrl.SignIn)
 	// ---------------
 
 	return r

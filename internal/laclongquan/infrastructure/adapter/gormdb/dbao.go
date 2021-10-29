@@ -4,6 +4,7 @@ import "github.com/thanhpp/zola/config/shared"
 
 type DBAO struct {
 	User userGorm
+	Auth authGorm
 }
 
 func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
@@ -15,6 +16,10 @@ func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
 		User: userGorm{
 			db:    gDB,
 			model: &UserDB{},
+		},
+		Auth: authGorm{
+			db:    gDB,
+			model: &AuthDB{},
 		},
 	}, nil
 }
