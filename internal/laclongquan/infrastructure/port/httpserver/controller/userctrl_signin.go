@@ -21,7 +21,7 @@ func (ctrl UserController) SignIn(c *gin.Context) {
 		return
 	}
 
-	user, err := ctrl.handler.SignIn(c, req.PhoneNumber, req.Password)
+	user, err := ctrl.handler.GetUser(c, req.PhoneNumber, req.Password)
 	if err != nil {
 		logger.Errorf("handle %v", err)
 
