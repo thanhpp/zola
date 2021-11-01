@@ -56,5 +56,7 @@ func autoMigrate() error {
 	return gDB.AutoMigrate(
 		&UserDB{},
 		&AuthDB{},
+		&PostDB{},
+		&MediaDB{},
 	)
 }

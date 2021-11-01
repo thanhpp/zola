@@ -19,21 +19,21 @@ func NewUserHandler(fac entity.UserFactory, repo repository.UserRepository) User
 	}
 }
 
-func (h UserHandler) CreateUser(ctx context.Context, phone, pass, name, avatar string) error {
-	newUser, err := h.fac.NewUser(phone, pass, name, avatar)
+func (u UserHandler) CreateUser(ctx context.Context, phone, pass, name, avatar string) error {
+	newUser, err := u.fac.NewUser(phone, pass, name, avatar)
 	if err != nil {
 		return err
 	}
 
-	if err := h.repo.Create(ctx, newUser); err != nil {
+	if err := u.repo.Create(ctx, newUser); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (h UserHandler) GetUser(ctx context.Context, phone, pass string) (*entity.User, error) {
-	user, err := h.repo.GetByPhone(ctx, phone)
+func (u UserHandler) GetUser(ctx context.Context, phone, pass string) (*entity.User, error) {
+	user, err := u.repo.GetByPhone(ctx, phone)
 	if err != nil {
 		return nil, err
 	}

@@ -9,11 +9,12 @@ import (
 var cfg = new(MainConfig)
 
 type MainConfig struct {
-	Name       string                  `mapstructure:"Name"`
-	Log        logger.LogConfig        `mapstructure:"Log"`
-	HTTPServer shared.HTTPServerConfig `mapstructure:"HTTPServer"`
-	Database   shared.DatabaseConfig   `mapstructure:"Database"`
-	JWT        auth.Config             `mapstructure:"JWT"`
+	Name          string                  `mapstructure:"Name"`
+	Log           logger.LogConfig        `mapstructure:"Log"`
+	HTTPServer    shared.HTTPServerConfig `mapstructure:"HTTPServer"`
+	Database      shared.DatabaseConfig   `mapstructure:"Database"`
+	JWT           auth.Config             `mapstructure:"JWT"`
+	SaveDirectory string                  `mapstructure:"SaveDirectory"`
 }
 
 func Set(path string) error {

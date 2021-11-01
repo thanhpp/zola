@@ -117,5 +117,5 @@ func (u userGorm) Update(ctx context.Context, id string, fn repository.UserUpdat
 }
 
 func (u userGorm) DeleteByID(ctx context.Context, id string) error {
-	return u.db.WithContext(ctx).Model(u.model).Where("id = ?", id).Delete(u.model).Error
+	return u.db.WithContext(ctx).Model(u.model).Where("user_uuid = ?", id).Delete(u.model).Error
 }

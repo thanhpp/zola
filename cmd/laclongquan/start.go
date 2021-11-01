@@ -31,7 +31,7 @@ func start(configPath string) {
 	}
 	logger.Info("dbao OK")
 
-	app := application.NewApplication(dbao.User)
+	app := application.NewApplication(dbao.User, dbao.Post, laclongquanconfig.Get().SaveDirectory)
 	logger.Info("application OK")
 
 	authSrv, err := auth.NewAuthService(
