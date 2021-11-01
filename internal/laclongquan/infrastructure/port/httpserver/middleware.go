@@ -17,7 +17,7 @@ func (s HTTPServer) AuthMiddleware() gin.HandlerFunc {
 			logger.Errorf("get token %v", err)
 			resp := new(dto.DefaultResp)
 			resp.SetCode(responsevalue.CodeInvalidToken)
-			resp.SetMsg(responsevalue.MsgInvalidRequest)
+			resp.SetMsg(responsevalue.MsgUnauthorized)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, resp)
 			return
 		}
@@ -27,7 +27,7 @@ func (s HTTPServer) AuthMiddleware() gin.HandlerFunc {
 			logger.Errorf("generate claims %v", err)
 			resp := new(dto.DefaultResp)
 			resp.SetCode(responsevalue.CodeInvalidToken)
-			resp.SetMsg(responsevalue.MsgInvalidRequest)
+			resp.SetMsg(responsevalue.MsgUnauthorized)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, resp)
 			return
 		}

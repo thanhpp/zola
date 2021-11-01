@@ -6,6 +6,184 @@
 	},
 	"item": [
 		{
+			"name": "post",
+			"item": [
+				{
+					"name": "add_post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								},
+								{
+									"key": "described",
+									"value": "Hello there",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "video",
+									"type": "file",
+									"src": "/home/thanhpp/go/src/github.com/thanhpp/zola/test/add_post/sample-5s.mp4.mp4"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/post",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "add_post - invalid ext",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "text"
+										},
+										{
+											"key": "described",
+											"value": "Hello there",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/home/thanhpp/Downloads/TKB20203-SIE-2206.xlsx"
+										},
+										{
+											"key": "video",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Nov 2021 17:57:32 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid image extension\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "add_post - OK - video",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "text"
+										},
+										{
+											"key": "described",
+											"value": "Hello there",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"type": "file",
+											"src": []
+										},
+										{
+											"key": "video",
+											"type": "file",
+											"src": "/home/thanhpp/go/src/github.com/thanhpp/zola/test/add_post/sample-5s.mp4.mp4"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 01 Nov 2021 18:03:11 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "79"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"\",\n    \"data\": {\n        \"id\": \"f9fb825d-3b3d-11ec-b13a-2cf05d8903e3\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
 			"name": "Signup",
 			"request": {
 				"method": "POST",
@@ -264,7 +442,7 @@
 			]
 		},
 		{
-			"name": "Signin",
+			"name": "login",
 			"event": [
 				{
 					"listen": "test",
@@ -299,12 +477,12 @@
 					]
 				},
 				"url": {
-					"raw": "{{zola}}/signin",
+					"raw": "{{zola}}/login",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
-						"signin"
+						"login"
 					]
 				}
 			},
@@ -362,7 +540,7 @@
 			]
 		},
 		{
-			"name": "Signout",
+			"name": "logout",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -377,12 +555,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{zola}}/signout",
+					"raw": "{{zola}}/logout",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
-						"signout"
+						"logout"
 					]
 				}
 			},

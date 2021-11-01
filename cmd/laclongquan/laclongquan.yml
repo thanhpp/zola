@@ -19,8 +19,10 @@ Database:
   LogColor:   true
 
 JWT:
-  ExpireDuration: 1 # hour
+  ExpireDuration: 12 # hour
   Issuer:         LacLongQuan
   RSAKeyName:     LacLongQuanKey
   RSAPubKeyPath:  pri.rsa.pub
   RSAPriKeyPath:  pri.rsa
+
+SaveDirectory: ./localstorage
