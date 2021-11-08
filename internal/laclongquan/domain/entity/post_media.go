@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"errors"
 	"path/filepath"
 
 	"github.com/google/uuid"
@@ -12,14 +11,6 @@ type MediaType string
 const (
 	MediaTypeImage MediaType = "image"
 	MediaTypeVideo MediaType = "video"
-)
-
-var (
-	ErrMediaImageTooBig      = errors.New("image is too big")
-	ErrInvalidImageExtension = errors.New("invalid image extension")
-	ErrMediaVideoTooBig      = errors.New("video is too big")
-	ErrInvalidVideoExtension = errors.New("invalid video extension")
-	ErrInvalidVideoDuration  = errors.New("invalid video duration")
 )
 
 type Media struct {
@@ -52,7 +43,7 @@ func (m Media) Size() int64 {
 
 func extensionCheck(path string, exts ...string) bool {
 	ext := filepath.Ext(path)
-	
+
 	for i := range exts {
 		if ext == exts[i] {
 			return true

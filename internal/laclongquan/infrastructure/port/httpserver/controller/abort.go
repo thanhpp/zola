@@ -27,3 +27,10 @@ func ginAbortInternalError(c *gin.Context, code int, msg string, data interface{
 		dto.NewDefaultResp(code, msg, data),
 	)
 }
+
+func ginAbortUnauthorized(c *gin.Context, code int, msg string, data interface{}) {
+	c.AbortWithStatusJSON(
+		http.StatusUnauthorized,
+		dto.NewDefaultResp(code, msg, data),
+	)
+}
