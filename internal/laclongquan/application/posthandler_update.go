@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 var (
@@ -77,6 +78,8 @@ func (p PostHandler) UpdatePost(ctx context.Context, creator, postID uuid.UUID, 
 		for i := range addedMedia {
 			p.filehdl.Cleanup(addedMedia[i].Path())
 		}
+
+		logger.Errorf("failed to update post: %v", err)
 
 		return err
 	}

@@ -2,6 +2,6 @@ package dto
 
 type EditPostReq struct {
 	Described string   `form:"described"`
-	ImageDel  []string `form:"image_del"`
+	MediaDel  []string `form:"media_del"`
 	ImageSort []string `form:"image_sort"`
 }

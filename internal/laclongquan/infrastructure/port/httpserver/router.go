@@ -29,7 +29,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	{
 		postGr.Use(s.AuthMiddleware())
 		postGr.POST("", postCtrl.CreatePost)
-		postGr.PUT("/:postid")
+		postGr.PUT("/:postid", postCtrl.EditPost)
 	}
 	// ---------------
 

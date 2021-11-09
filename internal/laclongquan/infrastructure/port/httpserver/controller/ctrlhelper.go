@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/thanhpp/zola/internal/laclongquan/application"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/auth"
 )
 
@@ -66,6 +67,24 @@ func getPostID(c *gin.Context) (uuid.UUID, error) {
 	}
 
 	return postUUID, nil
+}
+
+func genMultipartOpts(c *gin.Context) []application.MultipartOption {
+	if !strings.Contains(c.Request.Header.Get("Content-Type"), "multipart/form-data") {
+		return nil
+	}
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		return nil
+	}
+	images := form.File["image"]
+	video, err := c.FormFile("video")
+	if err != nil {
+		return nil
+	}
+
+	return []application.MultipartOption{application.WithImagesMultipart(images), application.WithVideoMultipart(video)}
 }
 
 const source = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

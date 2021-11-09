@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type Post struct {
@@ -60,24 +61,35 @@ func (p *Post) AddMedia(m Media) error {
 			return ErrTooManyVideos
 		}
 	}
-
+	logger.Debugf("post media after added %v", p.media)
 	p.media = append(p.media, m)
 
 	return nil
 }
 
 func (p *Post) RemoveMedia(ids ...string) ([]*Media, error) {
-	var deleted = make([]*Media, 0, len(ids))
-	for i := range ids {
-		for j := range p.media {
-			if p.media[j].ID() == ids[i] {
-				p.media = append(p.media[:j], p.media[j+1:]...)
-				deleted = append(deleted, &p.media[j])
+	var (
+		deleted    = make([]*Media, 0, len(ids))
+		deleteflag bool
+		newMedia   = make([]Media, 0, len(p.media))
+	)
+
+	for i := range p.media {
+		deleteflag = false
+		for j := range ids {
+			if p.media[i].ID() == ids[j] {
+				deleteflag = true
+				deleted = append(deleted, &p.media[i])
 				break
 			}
 			return nil, ErrPostNotContainsMedia
 		}
+		if !deleteflag {
+			newMedia = append(newMedia, p.media[i])
+		}
 	}
+
+	p.media = newMedia
 
 	return deleted, nil
 }

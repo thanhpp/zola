@@ -13,12 +13,13 @@ import (
 
 func (ctrl PostController) EditPost(c *gin.Context) {
 	var req = new(dto.EditPostReq)
-
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind req %v", err)
 		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 		return
 	}
+
+	logger.Debugf("delete id %v", req.MediaDel)
 
 	creator, err := getUserUUIDFromCtx(c)
 	if err != nil {
@@ -34,25 +35,16 @@ func (ctrl PostController) EditPost(c *gin.Context) {
 		return
 	}
 
-	form, err := c.MultipartForm()
-	if err != nil {
-		logger.Errorf("multipart form %v", err)
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
-		return
-	}
-	images := form.File["image"]
-	video, _ := c.FormFile("video")
-
 	err = ctrl.handler.UpdatePost(
 		c,
 		creator,
 		postUUID,
 		req.Described,
-		req.ImageDel,
-		application.WithImagesMultipart(images),
-		application.WithVideoMultipart(video),
+		req.MediaDel,
+		genMultipartOpts(c)...,
 	)
 	if err != nil {
+		logger.Errorf("update post error: %v", err)
 		switch err {
 		case application.ErrUnauthorizedCreator:
 			ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, responsevalue.MsgUnauthorized, nil)
@@ -81,8 +73,11 @@ func (ctrl PostController) EditPost(c *gin.Context) {
 		case entity.ErrInvalidVideoDuration:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid video duration", nil)
 			return
+
+		default:
+			ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+			return
 		}
-		return
 	}
 
 	resp := new(dto.DefaultResp)
