@@ -6,11 +6,16 @@ import (
 )
 
 type Application struct {
-	UserHandler UserHandler
-	PostHandler PostHandler
+	UserHandler   UserHandler
+	PostHandler   PostHandler
+	ReportHandler ReportHandler
 }
 
-func NewApplication(userRepo repository.UserRepository, postRepo repository.PostRepository, saveDir string) Application {
+func NewApplication(
+	userRepo repository.UserRepository,
+	postRepo repository.PostRepository, saveDir string,
+	reportRepo repository.ReportRepository,
+) Application {
 
 	return Application{
 		UserHandler: NewUserHandler(
@@ -20,6 +25,11 @@ func NewApplication(userRepo repository.UserRepository, postRepo repository.Post
 		PostHandler: NewPostHandler(
 			postRepo,
 			saveDir,
+		),
+		ReportHandler: NewReportHandler(
+			entity.NewReportFactory(),
+			reportRepo,
+			postRepo,
 		),
 	}
 }

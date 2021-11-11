@@ -2,6 +2,7 @@ package gormdb
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
@@ -103,7 +104,14 @@ func (p postGorm) GetByID(ctx context.Context, id string) (*entity.Post, error) 
 }
 
 func (p postGorm) getByIDTx(ctx context.Context, tx *gorm.DB, id string, expect *PostDB) error {
-	return tx.WithContext(ctx).Model(p.postModel).Preload(clause.Associations).Where("post_uuid = ?", id).Take(expect).Error
+	err := tx.WithContext(ctx).Model(p.postModel).Preload(clause.Associations).Where("post_uuid = ?", id).Take(expect).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return repository.ErrPostNotFound
+		}
+		return err
+	}
+	return nil
 }
 
 func (p postGorm) Create(ctx context.Context, post *entity.Post) error {

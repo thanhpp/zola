@@ -58,5 +58,6 @@ func autoMigrate() error {
 		&AuthDB{},
 		&PostDB{},
 		&MediaDB{},
+		&ReportDB{},
 	)
 }

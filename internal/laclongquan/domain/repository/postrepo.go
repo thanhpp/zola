@@ -2,8 +2,13 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+)
+
+var (
+	ErrPostNotFound = errors.New("post not found")
 )
 
 type PostUpdateFn func(ctx context.Context, post *entity.Post) (*entity.Post, error)
