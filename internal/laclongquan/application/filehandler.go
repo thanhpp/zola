@@ -2,6 +2,7 @@ package application
 
 import (
 	"io"
+	"mime/multipart"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -31,6 +32,24 @@ func (f FileHandler) SaveFile(path string, reader io.Reader) error {
 		// cleanup if err
 		os.RemoveAll(path)
 
+		return err
+	}
+
+	return nil
+}
+
+func (f FileHandler) SaveFileMultipart(path string, mulHeader *multipart.FileHeader) error {
+	if mulHeader == nil {
+		return nil
+	}
+
+	file, err := mulHeader.Open()
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	if err := f.SaveFile(path, file); err != nil {
 		return err
 	}
 

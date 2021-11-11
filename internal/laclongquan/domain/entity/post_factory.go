@@ -1,8 +1,6 @@
 package entity
 
 import (
-	"errors"
-
 	"github.com/google/uuid"
 )
 
@@ -18,11 +16,6 @@ type PostFactory interface {
 	NewMediaVideo(path string, size int64, owner uuid.UUID) (*Media, error)
 	NewPostWithVideo(creator uuid.UUID, content string, video Media) (*Post, error)
 }
-
-var (
-	ErrTooManyImages  = errors.New("too many images")
-	ErrContentTooLong = errors.New("content too long")
-)
 
 func NewPostFactory() PostFactory {
 	return new(postFactoryImpl)

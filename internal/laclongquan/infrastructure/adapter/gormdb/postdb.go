@@ -89,9 +89,7 @@ func (p postGorm) GetByID(ctx context.Context, id string) (*entity.Post, error) 
 		postDB = new(PostDB)
 	)
 
-	err := p.db.WithContext(ctx).Model(p.postModel).
-		Preload(clause.Associations).
-		Take(postDB).Error
+	err := p.getByIDTx(ctx, p.db, id, postDB)
 	if err != nil {
 		return nil, err
 	}
@@ -102,6 +100,10 @@ func (p postGorm) GetByID(ctx context.Context, id string) (*entity.Post, error) 
 	}
 
 	return post, nil
+}
+
+func (p postGorm) getByIDTx(ctx context.Context, tx *gorm.DB, id string, expect *PostDB) error {
+	return tx.WithContext(ctx).Model(p.postModel).Preload(clause.Associations).Where("post_uuid = ?", id).Take(expect).Error
 }
 
 func (p postGorm) Create(ctx context.Context, post *entity.Post) error {
@@ -117,8 +119,49 @@ func (p postGorm) Create(ctx context.Context, post *entity.Post) error {
 }
 
 func (p postGorm) Update(ctx context.Context, id string, fn repository.PostUpdateFn) error {
+	return gDB.Transaction(func(tx *gorm.DB) error {
+		var postDB = new(PostDB)
+		if err := p.getByIDTx(ctx, tx, id, postDB); err != nil {
+			return err
+		}
 
-	return nil
+		post, err := p.unmarshalPost(postDB)
+		if err != nil {
+			return err
+		}
+
+		post, err = fn(ctx, post)
+		if err != nil {
+			return err
+		}
+
+		postDB = p.marshalPost(post)
+
+		// add media records
+		var existMediaIDs = make([]string, 0, len(postDB.MediaDB))
+		for i := range postDB.MediaDB {
+			if err := tx.WithContext(ctx).Model(p.mediaModel).Create(postDB.MediaDB[i]).Error; err != nil {
+				return err
+			}
+			existMediaIDs = append(existMediaIDs, postDB.MediaDB[i].MediaUUID)
+		}
+
+		// remove media
+		if err := tx.WithContext(ctx).Model(p.mediaModel).
+			Where("media_uuid NOT IN ? AND post_uuid = ?", existMediaIDs, postDB.PostUUID).
+			Delete(p.mediaModel).Error; err != nil {
+			return err
+		}
+
+		// save post data
+		if err := tx.WithContext(ctx).Model(p.postModel).
+			Preload(clause.Associations).
+			Where("post_uuid = ?", id).Updates(postDB).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 func (p postGorm) Delete(ctx context.Context, id string) error {
 

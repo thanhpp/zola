@@ -11,20 +11,20 @@ var (
 	ErrHasVideoAndImages = errors.New("has both video and images")
 )
 
-type createPostMultipartConfig struct {
+type multipartConfig struct {
 	images []*multipart.FileHeader
 	video  *multipart.FileHeader
 }
 
-func (cfg createPostMultipartConfig) haveImages() bool {
+func (cfg multipartConfig) haveImages() bool {
 	return len(cfg.images) > 0
 }
 
-func (cfg createPostMultipartConfig) haveVideo() bool {
+func (cfg multipartConfig) haveVideo() bool {
 	return cfg.video != nil
 }
 
-func (cfg createPostMultipartConfig) validate() error {
+func (cfg multipartConfig) validate() error {
 	if len(cfg.images) > 4 {
 		return entity.ErrTooManyImages
 	}
@@ -36,16 +36,16 @@ func (cfg createPostMultipartConfig) validate() error {
 	return nil
 }
 
-type CreatePostMultipartOption func(*createPostMultipartConfig)
+type MultipartOption func(*multipartConfig)
 
-func WithImagesMultipart(images []*multipart.FileHeader) CreatePostMultipartOption {
-	return func(c *createPostMultipartConfig) {
+func WithImagesMultipart(images []*multipart.FileHeader) MultipartOption {
+	return func(c *multipartConfig) {
 		c.images = images
 	}
 }
 
-func WithVideoMultipart(video *multipart.FileHeader) CreatePostMultipartOption {
-	return func(c *createPostMultipartConfig) {
+func WithVideoMultipart(video *multipart.FileHeader) MultipartOption {
+	return func(c *multipartConfig) {
 		c.video = video
 	}
 }
