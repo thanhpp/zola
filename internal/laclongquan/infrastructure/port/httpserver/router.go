@@ -18,6 +18,9 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	postCtrl := controller.NewPostCtrl(
 		s.app.PostHandler,
 	)
+	reportCtrl := controller.NewReportCtrl(
+		s.app.ReportHandler,
+	)
 	// ---------------------
 
 	// ---- ROUTES ----
@@ -30,6 +33,12 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		postGr.Use(s.AuthMiddleware())
 		postGr.POST("", postCtrl.CreatePost)
 		postGr.PUT("/:postid", postCtrl.EditPost)
+	}
+
+	reportGr := r.Group("/report")
+	{
+		reportGr.Use(s.AuthMiddleware())
+		reportGr.POST("", reportCtrl.Create)
 	}
 	// ---------------
 
