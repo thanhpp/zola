@@ -48,8 +48,11 @@ func (ctrl ReportController) Create(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodePostNotExist, "post not exist", nil)
 			return
 
-			// FIXME:case locked post :D
+		case entity.ErrReportLockedPost:
+			ginAbortNotAcceptable(c, responsevalue.CodeActionHasBeenDone, "report locked post", nil)
+			return
 		}
+
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
 		return
 	}

@@ -13,6 +13,7 @@ import (
 
 type PostDB struct {
 	PostUUID  string    `gorm:"Column:post_uuid; Type:text; primaryKey"`
+	Status    string    `gorm:"Column:status; Type:text"`
 	Content   string    `gorm:"Column:context; Type:text"`
 	Creator   string    `gorm:"Column:creator; Type:text; index"`
 	CreatedAt time.Time `gorm:"Column:created_at"`
@@ -60,6 +61,7 @@ func (p postGorm) marshalPost(post *entity.Post) *PostDB {
 	return &PostDB{
 		PostUUID: post.ID(),
 		Content:  post.Content(),
+		Status:   post.Status().String(),
 		Creator:  post.Creator(),
 		MediaDB:  mediaDB,
 	}
@@ -82,7 +84,7 @@ func (p postGorm) unmarshalPost(postDB *PostDB) (*entity.Post, error) {
 		mediaList = append(mediaList, *media)
 	}
 
-	return entity.NewPostFromDB(postDB.PostUUID, postDB.Creator, postDB.Content, mediaList)
+	return entity.NewPostFromDB(postDB.PostUUID, postDB.Creator, postDB.Status, postDB.Content, mediaList)
 }
 
 func (p postGorm) GetByID(ctx context.Context, id string) (*entity.Post, error) {

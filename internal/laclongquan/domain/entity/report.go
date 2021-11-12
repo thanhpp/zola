@@ -1,7 +1,13 @@
 package entity
 
+import "errors"
+
 var (
 	ReportNil = Report{}
+)
+
+var (
+	ErrReportLockedPost = errors.New("report locked post")
 )
 
 type Report struct {

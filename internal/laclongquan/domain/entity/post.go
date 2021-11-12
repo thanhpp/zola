@@ -11,6 +11,7 @@ type Post struct {
 	id      uuid.UUID
 	creator uuid.UUID
 	content string
+	status  PostStatus
 	media   []Media
 }
 
@@ -42,6 +43,14 @@ func (p *Post) UpdateContent(content string) error {
 	p.content = content
 
 	return nil
+}
+
+func (p Post) Status() PostStatus {
+	return p.status
+}
+
+func (p Post) IsLocked() bool {
+	return p.status == PostStatusLocked
 }
 
 func (p Post) Media() []Media {

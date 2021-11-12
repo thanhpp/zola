@@ -30,7 +30,7 @@ func NewMediaFromDB(id, owner, mediaType, path string) (*Media, error) {
 	}, nil
 }
 
-func NewPostFromDB(id, creator, content string, media []Media) (*Post, error) {
+func NewPostFromDB(id, creator, status, content string, media []Media) (*Post, error) {
 	postID, err := uuid.Parse(id)
 	if err != nil {
 		return nil, err
@@ -44,6 +44,7 @@ func NewPostFromDB(id, creator, content string, media []Media) (*Post, error) {
 	return &Post{
 		id:      postID,
 		creator: creatorID,
+		status:  PostStatus(status),
 		content: content,
 		media:   media,
 	}, nil

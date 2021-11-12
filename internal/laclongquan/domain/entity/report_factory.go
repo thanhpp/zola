@@ -3,7 +3,7 @@ package entity
 import "github.com/google/uuid"
 
 type ReportFactory interface {
-	NewReport(postID, userID string, subjectID int, detail string) (Report, error)
+	NewReport(post *Post, userID string, subjectID int, detail string) (Report, error)
 }
 
 func NewReportFactory() ReportFactory {
@@ -12,7 +12,11 @@ func NewReportFactory() ReportFactory {
 
 type reportFactoryImpl struct{}
 
-func (f reportFactoryImpl) NewReport(postID, creator string, subjectID int, detail string) (Report, error) {
+func (f reportFactoryImpl) NewReport(post *Post, creator string, subjectID int, detail string) (Report, error) {
+	if post.IsLocked() {
+		return ReportNil, ErrReportLockedPost
+	}
+
 	subject, err := reportSubjectFromID(subjectID)
 	if err != nil {
 		return ReportNil, err
@@ -20,7 +24,7 @@ func (f reportFactoryImpl) NewReport(postID, creator string, subjectID int, deta
 
 	return Report{
 		ID:        uuid.NewString(),
-		PostID:    postID,
+		PostID:    post.ID(),
 		CreatedBy: creator,
 		Subject:   subject,
 		Detail:    detail,

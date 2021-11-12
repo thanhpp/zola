@@ -23,13 +23,13 @@ func NewReportHandler(fac entity.ReportFactory, reportRepo repository.ReportRepo
 
 func (r ReportHandler) CreateReport(ctx context.Context, postID, creatorID string, subjectID int, detail string) (*entity.Report, error) {
 	// check post
-	_, err := r.postRepo.GetByID(ctx, postID)
+	post, err := r.postRepo.GetByID(ctx, postID)
 	if err != nil {
 		return nil, err
 	}
 
 	// create report
-	report, err := r.fac.NewReport(postID, creatorID, subjectID, detail)
+	report, err := r.fac.NewReport(post, creatorID, subjectID, detail)
 	if err != nil {
 		return nil, err
 	}
