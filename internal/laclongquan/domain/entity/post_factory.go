@@ -23,6 +23,10 @@ func NewPostFactory() PostFactory {
 
 type postFactoryImpl struct{}
 
+func (fac postFactoryImpl) defaultStatus() PostStatus {
+	return PostStatusActive
+}
+
 func (fac postFactoryImpl) NewPost(creator uuid.UUID, content string) (*Post, error) {
 	// content
 	if !contentLengthCheck(content) {
@@ -36,6 +40,7 @@ func (fac postFactoryImpl) NewPost(creator uuid.UUID, content string) (*Post, er
 
 	return &Post{
 		id:      postID,
+		status:  fac.defaultStatus(),
 		creator: creator,
 		content: content,
 	}, nil
@@ -59,6 +64,7 @@ func (fac postFactoryImpl) NewPostWithImages(creator uuid.UUID, content string, 
 
 	return &Post{
 		id:      postID,
+		status:  fac.defaultStatus(),
 		creator: creator,
 		content: content,
 		media:   images,
@@ -77,6 +83,7 @@ func (fac postFactoryImpl) NewPostWithVideo(creator uuid.UUID, content string, v
 
 	return &Post{
 		id:      postID,
+		status:  fac.defaultStatus(),
 		creator: creator,
 		content: content,
 		media:   []Media{video},
