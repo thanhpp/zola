@@ -5,11 +5,13 @@ import (
 )
 
 type PostController struct {
-	handler application.PostHandler
+	handler     application.PostHandler
+	likeHandler application.LikeHandler
 }
 
-func NewPostCtrl(h application.PostHandler) *PostController {
+func NewPostCtrl(h application.PostHandler, likeHdl application.LikeHandler) *PostController {
 	return &PostController{
-		handler: h,
+		handler:     h,
+		likeHandler: likeHdl,
 	}
 }

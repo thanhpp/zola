@@ -17,6 +17,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	)
 	postCtrl := controller.NewPostCtrl(
 		s.app.PostHandler,
+		s.app.LikeHandler,
 	)
 	reportCtrl := controller.NewReportCtrl(
 		s.app.ReportHandler,
@@ -33,6 +34,9 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		postGr.Use(s.AuthMiddleware())
 		postGr.POST("", postCtrl.CreatePost)
 		postGr.PUT("/:postid", postCtrl.EditPost)
+
+		// like
+		postGr.PUT("/:postid/like", postCtrl.LikePost)
 	}
 
 	reportGr := r.Group("/report")
