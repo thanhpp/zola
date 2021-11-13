@@ -1,5 +1,7 @@
 package entity
 
+import "errors"
+
 type PostStatus string
 
 var (
@@ -10,3 +12,7 @@ var (
 func (s PostStatus) String() string {
 	return string(s)
 }
+
+var (
+	ErrLockedPost = errors.New("locked post")
+)

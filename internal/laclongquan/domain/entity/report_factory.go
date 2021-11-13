@@ -14,7 +14,7 @@ type reportFactoryImpl struct{}
 
 func (f reportFactoryImpl) NewReport(post *Post, creator string, subjectID int, detail string) (Report, error) {
 	if post.IsLocked() {
-		return ReportNil, ErrReportLockedPost
+		return ReportNil, ErrLockedPost
 	}
 
 	subject, err := reportSubjectFromID(subjectID)

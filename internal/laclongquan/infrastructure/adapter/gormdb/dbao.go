@@ -7,6 +7,7 @@ type DBAO struct {
 	Auth   authGorm
 	Post   postGorm
 	Report reportGorm
+	Like   likeGorm
 }
 
 func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
@@ -31,6 +32,10 @@ func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
 		Report: reportGorm{
 			db:    gDB,
 			model: &ReportDB{},
+		},
+		Like: likeGorm{
+			db:    gDB,
+			model: &LikeDB{},
 		},
 	}, nil
 }

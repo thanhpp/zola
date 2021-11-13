@@ -244,6 +244,184 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "like",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}/like",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}",
+								"like"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "like - 1010 | locked post",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/like",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"like"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 13 Nov 2021 15:39:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1010,\n    \"message\": \"locked post\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "like - 1000 | unlike",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/like",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"like"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 13 Nov 2021 16:13:05 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "44"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"\",\n    \"data\": {\n        \"like\": 0\n    }\n}"
+						},
+						{
+							"name": "like - 9992 | invalid postID",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}-as/like",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}-as",
+										"like"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 13 Nov 2021 16:13:46 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "52"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1003,\n    \"message\": \"invalid postID\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "like - 1000 | like",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/like",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"like"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 13 Nov 2021 16:12:07 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "44"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"\",\n    \"data\": {\n        \"like\": 1\n    }\n}"
+						}
+					]
 				}
 			]
 		},
@@ -295,7 +473,118 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "report_post - 1010 | locked post",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "id",
+											"value": "{{new_post_id}}",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "details",
+											"value": "stupid",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/report",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"report"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Nov 2021 17:05:50 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "56"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1010,\n    \"message\": \"report locked post\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "report_post - 9992 | post not exist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "id",
+											"value": "{{new_post_id}}-abc",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "details",
+											"value": "stupid",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/report",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"report"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Nov 2021 17:06:05 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "52"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9992,\n    \"message\": \"post not exist\",\n    \"data\": null\n}"
+						}
+					]
 				}
 			]
 		},

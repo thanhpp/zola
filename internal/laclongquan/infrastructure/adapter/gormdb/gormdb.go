@@ -1,11 +1,14 @@
 package gormdb
 
 import (
+	"errors"
 	"log"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/jackc/pgconn"
+	"github.com/jackc/pgerrcode"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormlog "gorm.io/gorm/logger"
@@ -59,5 +62,16 @@ func autoMigrate() error {
 		&PostDB{},
 		&MediaDB{},
 		&ReportDB{},
+		&LikeDB{},
 	)
+}
+
+func isDuplicate(err error) bool {
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) {
+		if pgErr.Code == pgerrcode.UniqueViolation {
+			return true
+		}
+	}
+	return false
 }
