@@ -34,6 +34,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		postGr.Use(s.AuthMiddleware())
 		postGr.POST("", postCtrl.CreatePost)
 		postGr.PUT("/:postid", postCtrl.EditPost)
+		postGr.DELETE("/:postid", postCtrl.DeletePost)
 
 		// like
 		postGr.PUT("/:postid/like", postCtrl.LikePost)

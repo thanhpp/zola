@@ -174,6 +174,28 @@ func (p postGorm) Update(ctx context.Context, id string, fn repository.PostUpdat
 	})
 }
 func (p postGorm) Delete(ctx context.Context, id string) error {
+	return p.db.Transaction(func(tx *gorm.DB) error {
+		// delete likes
+		if err := tx.WithContext(ctx).Model(&LikeDB{}).Where("post_uuid = ?", id).Delete(&LikeDB{}).Error; err != nil {
+			return err
+		}
 
-	return nil
+		// FIXME: delete comments
+
+		// delete media
+		if err := tx.WithContext(ctx).Model(p.mediaModel).Where("post_uuid = ?", id).Delete(p.mediaModel).Error; err != nil {
+			return err
+		}
+
+		// delete reports
+		if err := tx.WithContext(ctx).Model(&ReportDB{}).Where("post_uuid = ?", id).Delete(&ReportDB{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.WithContext(ctx).Model(p.postModel).Where("post_uuid = ?", id).Delete(p.postModel).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
