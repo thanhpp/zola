@@ -110,3 +110,8 @@ func contentLengthCheck(content string) bool {
 
 	return true
 }
+
+func (p *Post) CanBeDeletedBy(userID string) bool {
+
+	return p.Creator() == userID
+}

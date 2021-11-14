@@ -422,6 +422,71 @@
 							"body": "{\n    \"code\": 1000,\n    \"message\": \"\",\n    \"data\": {\n        \"like\": 1\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "delete_post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "delete_post - OK",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 14 Nov 2021 05:20:47 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+						}
+					]
 				}
 			]
 		},
