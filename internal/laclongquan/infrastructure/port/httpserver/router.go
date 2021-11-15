@@ -29,6 +29,12 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	r.POST("/login", userCtrl.SignIn)
 	r.GET("/logout", s.AuthMiddleware(), userCtrl.Signout)
 
+	blockGr := r.Group("/block")
+	{
+		blockGr.Use(s.AuthMiddleware())
+		blockGr.POST("", userCtrl.BlockUser)
+	}
+
 	postGr := r.Group("/post")
 	{
 		postGr.Use(s.AuthMiddleware())

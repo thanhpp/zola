@@ -57,8 +57,11 @@ func initConnection(dsn string, logLevel string, color bool) error {
 
 func autoMigrate() error {
 	return gDB.AutoMigrate(
+		// user
 		&UserDB{},
 		&AuthDB{},
+		&BlockDB{},
+		// post
 		&PostDB{},
 		&MediaDB{},
 		&ReportDB{},
