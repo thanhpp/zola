@@ -3,19 +3,22 @@ package application
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 )
 
 type UserHandler struct {
-	fac  entity.UserFactory
-	repo repository.UserRepository
+	fac       entity.UserFactory
+	repo      repository.UserRepository
+	blockRepo repository.BlockRepository
 }
 
-func NewUserHandler(fac entity.UserFactory, repo repository.UserRepository) UserHandler {
+func NewUserHandler(fac entity.UserFactory, repo repository.UserRepository, blockRepo repository.BlockRepository) UserHandler {
 	return UserHandler{
-		fac:  fac,
-		repo: repo,
+		fac:       fac,
+		repo:      repo,
+		blockRepo: blockRepo,
 	}
 }
 
@@ -43,4 +46,32 @@ func (u UserHandler) GetUser(ctx context.Context, phone, pass string) (*entity.U
 	}
 
 	return user, nil
+}
+
+func (u UserHandler) BlockUser(ctx context.Context, blocker uuid.UUID, blocked string) error {
+	blockedUser, err := u.repo.GetByID(ctx, blocked)
+	if err != nil {
+		return err
+	}
+
+	blockerUser, err := u.repo.GetByID(ctx, blocker.String())
+	if err != nil {
+		return err
+	}
+
+	block, err := u.fac.NewBlock(blockerUser, blockedUser)
+	if err != nil {
+		return err
+	}
+
+	return u.blockRepo.Create(ctx, block)
+}
+
+func (u UserHandler) UnblockUser(ctx context.Context, blocker uuid.UUID, blocked string) error {
+	blockedUser, err := u.repo.GetByID(ctx, blocked)
+	if err != nil {
+		return err
+	}
+
+	return u.blockRepo.Delete(ctx, blocker.String(), blockedUser.ID().String())
 }

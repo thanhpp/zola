@@ -60,8 +60,11 @@ func (u userGorm) GetByID(ctx context.Context, id string) (*entity.User, error) 
 		userDB = new(UserDB)
 	)
 
-	err := u.db.WithContext(ctx).Model(u.model).Where("user_uuid = ?", id).Find(userDB).Error
+	err := u.db.WithContext(ctx).Model(u.model).Where("user_uuid = ?", id).Take(userDB).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, repository.ErrUserNotFound
+		}
 		return nil, err
 	}
 

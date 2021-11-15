@@ -21,6 +21,7 @@ var (
 
 type UserFactory interface {
 	NewUser(phone, pass, name, avatar string) (*User, error)
+	NewBlock(blocker, blocked *User) (*Block, error)
 }
 
 func NewUserFactory() UserFactory {

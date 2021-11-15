@@ -49,12 +49,12 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": []
+									"src": "/home/thanhpp/go/src/github.com/thanhpp/zola/test/add_post/2021-11-01_22-53.png"
 								},
 								{
 									"key": "video",
 									"type": "file",
-									"src": "/home/thanhpp/go/src/github.com/thanhpp/zola/test/add_post/sample-5s.mp4.mp4"
+									"src": []
 								}
 							]
 						},
@@ -648,6 +648,254 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"code\": 9992,\n    \"message\": \"post not exist\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "block",
+			"item": [
+				{
+					"name": "block/unblock user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "c474e292-45df-11ec-8986-2cf05d8903e3",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/block",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"block"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "block/unblock user - user not exist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "c474e292-45df-11ec-8986-2cf05d8903e3",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 15 Nov 2021 15:12:09 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "52"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1004,\n    \"message\": \"user not exist\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "unblock user - ok",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "d460ac72-4625-11ec-a9f3-2cf05d8903e3",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 15 Nov 2021 15:10:14 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "block/unblock user - self block error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "b0c0fb13-35c1-11ec-94f3-2cf05d8903e3",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 15 Nov 2021 15:03:39 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "58"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1004,\n    \"message\": \"can't block yourself\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "block/unblock user - OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "d460ac72-4625-11ec-a9f3-2cf05d8903e3",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 15 Nov 2021 15:09:24 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
 						}
 					]
 				}
