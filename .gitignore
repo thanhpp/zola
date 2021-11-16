@@ -15,3 +15,4 @@
 # vendor/
 cmd/laclongquan/laclongquan
 cmd/laclongquan/localstorage/*
+searchengine/node_modules
