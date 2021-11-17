@@ -16,3 +16,4 @@
 cmd/laclongquan/laclongquan
 cmd/laclongquan/localstorage/*
 searchengine/node_modules
+client/node_modules
