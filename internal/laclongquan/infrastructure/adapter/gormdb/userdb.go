@@ -15,6 +15,7 @@ type UserDB struct {
 	UserUUID  string       `gorm:"Column:user_uuid; Type:text; primaryKey; not null"`
 	Name      string       `gorm:"Column:name; Type:text"`
 	Avatar    string       `gorm:"Column:avatar; Type:text"`
+	State     string       `gorm:"Column:state; Type:text"`
 	Phone     string       `gorm:"Column:phone; Type:text; unique; index"`
 	HashPass  string       `gorm:"Column:hash_pass; Type:text"`
 	CreatedAt time.Time    `gorm:"Column:created_at"`
