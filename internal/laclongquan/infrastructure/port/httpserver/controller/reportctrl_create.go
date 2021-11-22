@@ -21,7 +21,7 @@ func (ctrl ReportController) Create(c *gin.Context) {
 	}
 
 	// get creator id
-	userID, err := getUserUUIDFromCtx(c)
+	userID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user id from ctx err: %v", err)
 		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, responsevalue.MsgInvalidRequest, nil)

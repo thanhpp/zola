@@ -23,7 +23,7 @@ func (ctrl UserController) BlockUser(c *gin.Context) {
 		return
 	}
 
-	userID, err := getUserUUIDFromCtx(c)
+	userID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user uuid %v", err)
 		ginAbortInternalError(c, responsevalue.CodeInvalidateUser, "invalid user id", nil)

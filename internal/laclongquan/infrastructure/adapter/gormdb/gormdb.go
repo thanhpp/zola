@@ -61,6 +61,7 @@ func autoMigrate() error {
 		&UserDB{},
 		&AuthDB{},
 		&BlockDB{},
+		&RelationDB{},
 		// post
 		&PostDB{},
 		&MediaDB{},

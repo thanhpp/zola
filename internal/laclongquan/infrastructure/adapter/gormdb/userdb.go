@@ -39,6 +39,7 @@ func (u userGorm) marshalUser(user *entity.User) (*UserDB, error) {
 		Avatar:   user.Avatar(),
 		Phone:    user.Account().Phone,
 		HashPass: user.Account().HashPass,
+		State:    user.State().String(),
 	}, nil
 }
 
@@ -53,6 +54,7 @@ func (u userGorm) unmarshalUser(userDB *UserDB) (*entity.User, error) {
 		userDB.Avatar,
 		userDB.Phone,
 		userDB.HashPass,
+		userDB.State,
 	)
 }
 

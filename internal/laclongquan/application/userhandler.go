@@ -9,16 +9,23 @@ import (
 )
 
 type UserHandler struct {
-	fac       entity.UserFactory
-	repo      repository.UserRepository
-	blockRepo repository.BlockRepository
+	fac          entity.UserFactory
+	repo         repository.UserRepository
+	blockRepo    repository.BlockRepository
+	relationRepo repository.RelationRepository
 }
 
-func NewUserHandler(fac entity.UserFactory, repo repository.UserRepository, blockRepo repository.BlockRepository) UserHandler {
+func NewUserHandler(
+	fac entity.UserFactory,
+	repo repository.UserRepository,
+	blockRepo repository.BlockRepository,
+	relationRepo repository.RelationRepository,
+) UserHandler {
 	return UserHandler{
-		fac:       fac,
-		repo:      repo,
-		blockRepo: blockRepo,
+		fac:          fac,
+		repo:         repo,
+		blockRepo:    blockRepo,
+		relationRepo: relationRepo,
 	}
 }
 

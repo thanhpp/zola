@@ -21,7 +21,7 @@ func (ctrl PostController) EditPost(c *gin.Context) {
 
 	logger.Debugf("delete id %v", req.MediaDel)
 
-	creator, err := getUserUUIDFromCtx(c)
+	creator, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user uuid error: %v", err)
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)

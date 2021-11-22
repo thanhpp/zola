@@ -1,10 +1,12 @@
 package gormdb
 
 import (
+	"context"
 	"time"
 
 	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 	"gorm.io/gorm"
 )
 
@@ -43,4 +45,32 @@ func (r relationGorm) unmarshal(relationDB *RelationDB) (*entity.Relation, error
 		relationDB.UserB,
 		relationDB.Status,
 	)
+}
+
+func (r relationGorm) GetRelationBetween(ctx context.Context, userIDA, userIDB string) (*entity.Relation, error) {
+	var relationDB = new(RelationDB)
+
+	if err := r.db.WithContext(ctx).Model(r.model).
+		Where("(user_a = ? AND user_b = ?) OR (user_a = ? AND user_b = ?)", userIDA, userIDB, userIDB, userIDA).
+		Take(relationDB).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, repository.ErrRelationNotFound
+		}
+		return nil, err
+	}
+
+	return r.unmarshal(relationDB)
+}
+
+func (r relationGorm) CreateRelation(ctx context.Context, relation *entity.Relation) error {
+	if relation == nil {
+		return errors.New("nil input")
+	}
+
+	relationDB, err := r.marshal(relation)
+	if err != nil {
+		return err
+	}
+
+	return r.db.WithContext(ctx).Model(r.model).Create(relationDB).Error
 }

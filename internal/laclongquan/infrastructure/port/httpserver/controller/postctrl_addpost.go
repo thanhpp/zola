@@ -22,7 +22,7 @@ func (ctrl PostController) CreatePost(c *gin.Context) {
 		return
 	}
 
-	creator, err := getUserUUIDFromCtx(c)
+	creator, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user uuid %v", err)
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)

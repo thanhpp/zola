@@ -48,7 +48,7 @@ var (
 	ErrLockedUser = errors.New("locked user")
 )
 
-func (fac userFactoryImpl) preRelationCheck(userA, userB User) error {
+func (fac userFactoryImpl) preRelationCheck(userA, userB *User) error {
 	if userA.ID().String() == userB.ID().String() {
 		return ErrSameUser
 	}
@@ -60,7 +60,7 @@ func (fac userFactoryImpl) preRelationCheck(userA, userB User) error {
 	return nil
 }
 
-func (fac userFactoryImpl) NewFriendRequest(requestor, requestee User) (*Relation, error) {
+func (fac userFactoryImpl) NewFriendRequest(requestor, requestee *User) (*Relation, error) {
 	if err := fac.preRelationCheck(requestor, requestee); err != nil {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func (fac userFactoryImpl) NewFriendRequest(requestor, requestee User) (*Relatio
 	}, nil
 }
 
-func (fac userFactoryImpl) NewBlockRelation(blocker, blocked User) (*Relation, error) {
+func (fac userFactoryImpl) NewBlockRelation(blocker, blocked *User) (*Relation, error) {
 	if err := fac.preRelationCheck(blocker, blocked); err != nil {
 		return nil, err
 	}
