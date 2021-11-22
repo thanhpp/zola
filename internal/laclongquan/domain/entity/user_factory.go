@@ -22,6 +22,7 @@ var (
 type UserFactory interface {
 	NewUser(phone, pass, name, avatar string) (*User, error)
 	NewBlock(blocker, blocked *User) (*Block, error)
+	NewFriendRequest(requestor, requestee *User) (*Relation, error)
 }
 
 func NewUserFactory() UserFactory {
@@ -52,6 +53,7 @@ func (fac userFactoryImpl) NewUser(phone, pass, name, avatar string) (*User, err
 		name:    name,
 		avatar:  avatar,
 		account: *account,
+		state:   UserStateActive,
 	}, nil
 }
 

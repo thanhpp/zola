@@ -15,6 +15,7 @@ type UserDB struct {
 	UserUUID  string       `gorm:"Column:user_uuid; Type:text; primaryKey; not null"`
 	Name      string       `gorm:"Column:name; Type:text"`
 	Avatar    string       `gorm:"Column:avatar; Type:text"`
+	State     string       `gorm:"Column:state; Type:text"`
 	Phone     string       `gorm:"Column:phone; Type:text; unique; index"`
 	HashPass  string       `gorm:"Column:hash_pass; Type:text"`
 	CreatedAt time.Time    `gorm:"Column:created_at"`
@@ -38,6 +39,7 @@ func (u userGorm) marshalUser(user *entity.User) (*UserDB, error) {
 		Avatar:   user.Avatar(),
 		Phone:    user.Account().Phone,
 		HashPass: user.Account().HashPass,
+		State:    user.State().String(),
 	}, nil
 }
 
@@ -52,6 +54,7 @@ func (u userGorm) unmarshalUser(userDB *UserDB) (*entity.User, error) {
 		userDB.Avatar,
 		userDB.Phone,
 		userDB.HashPass,
+		userDB.State,
 	)
 }
 

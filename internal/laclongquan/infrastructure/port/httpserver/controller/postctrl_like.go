@@ -19,7 +19,7 @@ func (ctrl PostController) LikePost(c *gin.Context) {
 		return
 	}
 
-	userID, err := getUserUUIDFromCtx(c)
+	userID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user id error: %v", err)
 		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid userID", nil)

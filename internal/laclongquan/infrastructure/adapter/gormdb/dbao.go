@@ -3,12 +3,13 @@ package gormdb
 import "github.com/thanhpp/zola/config/shared"
 
 type DBAO struct {
-	User   userGorm
-	Auth   authGorm
-	Post   postGorm
-	Report reportGorm
-	Like   likeGorm
-	Block  blockGorm
+	User     userGorm
+	Auth     authGorm
+	Post     postGorm
+	Report   reportGorm
+	Like     likeGorm
+	Block    blockGorm
+	Relation relationGorm
 }
 
 func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
@@ -41,6 +42,10 @@ func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
 		Block: blockGorm{
 			db:    gDB,
 			model: &BlockDB{},
+		},
+		Relation: relationGorm{
+			db:    gDB,
+			model: &RelationDB{},
 		},
 	}, nil
 }

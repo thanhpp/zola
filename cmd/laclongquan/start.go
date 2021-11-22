@@ -37,6 +37,7 @@ func start(configPath string) {
 		dbao.Post, laclongquanconfig.Get().SaveDirectory,
 		dbao.Report,
 		dbao.Like,
+		dbao.Relation,
 	)
 	logger.Info("application OK")
 

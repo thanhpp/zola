@@ -20,6 +20,7 @@ var (
 	ErrClaimsNotExist = errors.New("claims not exist")
 	ErrNotClaims      = errors.New("not claims")
 	ErrInvalidPostID  = errors.New("invalid post id")
+	ErrInvalidUserID  = errors.New("invalid user id")
 )
 
 func getClaimsFromCtx(c *gin.Context) (*auth.Claims, error) {
@@ -36,7 +37,7 @@ func getClaimsFromCtx(c *gin.Context) (*auth.Claims, error) {
 	return &claims, nil
 }
 
-func getUserUUIDFromCtx(c *gin.Context) (uuid.UUID, error) {
+func getUserUUIDFromClaims(c *gin.Context) (uuid.UUID, error) {
 	claims, err := getClaimsFromCtx(c)
 	if err != nil {
 		return uuid.Nil, err
@@ -57,6 +58,16 @@ func getUserUUID(c *gin.Context) string {
 	}
 
 	return claims.User.ID
+}
+
+func getUserUUIDFromParam(c *gin.Context) (uuid.UUID, error) {
+	userID := c.Param("userid")
+	userUUID, err := uuid.Parse(userID)
+	if err != nil {
+		return uuid.Nil, ErrInvalidUserID
+	}
+
+	return userUUID, nil
 }
 
 func getPostID(c *gin.Context) (uuid.UUID, error) {

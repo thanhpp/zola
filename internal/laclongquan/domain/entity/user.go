@@ -2,10 +2,22 @@ package entity
 
 import "github.com/google/uuid"
 
+type UserState string
+
+func (s UserState) String() string {
+	return string(s)
+}
+
+const (
+	UserStateActive UserState = "active"
+	UserStateLocked UserState = "locked"
+)
+
 type User struct {
 	id      uuid.UUID
 	name    string
 	avatar  string
+	state   UserState
 	account Account
 }
 
@@ -27,4 +39,12 @@ func (u User) Account() Account {
 
 func (u User) PassEqual(pass string) error {
 	return u.account.Equal(u.account.Phone, pass)
+}
+
+func (u User) State() UserState {
+	return u.state
+}
+
+func (u User) IsLocked() bool {
+	return u.state == UserStateLocked
 }
