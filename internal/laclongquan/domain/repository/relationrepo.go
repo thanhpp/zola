@@ -17,4 +17,6 @@ type RelationRepository interface {
 
 	// write
 	CreateRelation(ctx context.Context, relation *entity.Relation) error
+	UpdateRelation(ctx context.Context, relation *entity.Relation) error
+	DeleteRelation(ctx context.Context, relation *entity.Relation) error
 }

@@ -6,6 +6,10 @@ import (
 	"github.com/google/uuid"
 )
 
+var (
+	ErrNotAFriendRequest = errors.New("not a friend request")
+)
+
 type RelationStatus string
 
 func (rs RelationStatus) String() string {
@@ -41,6 +45,24 @@ func (r Relation) UserBID() uuid.UUID {
 
 func (r Relation) UserBIDStr() string {
 	return r.UserB.String()
+}
+
+func (r *Relation) AcceptFriendRequest() error {
+	if r.Status != RelationRequesting {
+		return ErrNotAFriendRequest
+	}
+
+	r.Status = RelationFriend
+
+	return nil
+}
+
+func (r *Relation) RejectFriendRequest() error {
+	if r.Status != RelationRequesting {
+		return ErrNotAFriendRequest
+	}
+
+	return nil
 }
 
 var (

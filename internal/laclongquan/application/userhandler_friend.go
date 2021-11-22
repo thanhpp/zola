@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 )
 
@@ -39,4 +40,47 @@ func (u UserHandler) NewFriendRequest(ctx context.Context, requestorID, requeste
 	}
 
 	return u.relationRepo.CreateRelation(ctx, newRelation)
+}
+
+func (u UserHandler) UpdateFriendRequest(ctx context.Context, userAID, userBID string, accept bool) error {
+	userA, err := u.repo.GetByID(ctx, userAID)
+	if err != nil {
+		return err
+	}
+
+	userB, err := u.repo.GetByID(ctx, userBID)
+	if err != nil {
+		return err
+	}
+
+	if userA.IsLocked() || userB.IsLocked() {
+		return entity.ErrLockedUser
+	}
+
+	relation, err := u.relationRepo.GetRelationBetween(ctx, userAID, userBID)
+	if err != nil {
+		return err
+	}
+
+	switch accept {
+	case true:
+		if err := relation.AcceptFriendRequest(); err != nil {
+			return err
+		}
+		if err := u.relationRepo.UpdateRelation(ctx, relation); err != nil {
+			return err
+		}
+		return nil
+
+	case false:
+		if err := relation.RejectFriendRequest(); err != nil {
+			return err
+		}
+		if err := u.relationRepo.DeleteRelation(ctx, relation); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	return nil
 }

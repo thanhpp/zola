@@ -44,3 +44,7 @@ func (u User) PassEqual(pass string) error {
 func (u User) State() UserState {
 	return u.state
 }
+
+func (u User) IsLocked() bool {
+	return u.state == UserStateLocked
+}

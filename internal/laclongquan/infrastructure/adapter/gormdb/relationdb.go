@@ -74,3 +74,29 @@ func (r relationGorm) CreateRelation(ctx context.Context, relation *entity.Relat
 
 	return r.db.WithContext(ctx).Model(r.model).Create(relationDB).Error
 }
+
+func (r relationGorm) UpdateRelation(ctx context.Context, relation *entity.Relation) error {
+	if relation == nil {
+		return errors.New("nil input")
+	}
+
+	relationDB, err := r.marshal(relation)
+	if err != nil {
+		return err
+	}
+
+	return r.db.WithContext(ctx).Model(r.model).
+		Where("user_a = ? AND user_b = ?", relationDB.UserA, relationDB.UserB).
+		Updates(relationDB).Error
+}
+
+func (r relationGorm) DeleteRelation(ctx context.Context, relation *entity.Relation) error {
+	relationDB, err := r.marshal(relation)
+	if err != nil {
+		return err
+	}
+
+	return r.db.WithContext(ctx).Model(r.model).
+		Where("user_a = ? AND user_b = ?", relationDB.UserA, relationDB.UserB).
+		Delete(relation).Error
+}

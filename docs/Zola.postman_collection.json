@@ -1354,6 +1354,570 @@
 					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
 				}
 			]
+		},
+		{
+			"name": "set_request_friend",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{zola}}/friend/request/bd0a95fb-35c1-11ec-94f3-2cf05d8903e3",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"friend",
+						"request",
+						"bd0a95fb-35c1-11ec-94f3-2cf05d8903e3"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "set_request_friend - 1010 | relation existed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/request/2d276ca1-35c1-11ec-b59d-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"2d276ca1-35c1-11ec-b59d-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 11:05:06 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "54"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1010,\n    \"message\": \"relation existed\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_request_friend - 1000 | OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/request/2d276ca1-35c1-11ec-b59d-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"2d276ca1-35c1-11ec-b59d-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 11:04:49 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_request_friend | 9995 - locked user",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/request/d460ac72-4625-11ec-a9f3-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"d460ac72-4625-11ec-a9f3-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 11:09:38 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "49"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 9995,\n    \"message\": \"locked user\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_request_friend - 9995 | invalid user",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/request/as",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"as"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 11:05:50 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "48"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 9995,\n    \"message\": \"invalid user\",\n    \"data\": {}\n}"
+				},
+				{
+					"name": "set_request_friend - 1004 | same id request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/request/b0c0fb13-35c1-11ec-94f3-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"b0c0fb13-35c1-11ec-94f3-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 11:03:56 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"same id request\",\n    \"data\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "set_accept_friend",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "is_accept",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{zola}}/friend/request/bd0a95fb-35c1-11ec-94f3-2cf05d8903e3",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"friend",
+						"request",
+						"bd0a95fb-35c1-11ec-94f3-2cf05d8903e3"
+					],
+					"query": [
+						{
+							"key": "is_accept",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "set_accept_friend - 1000 | accept OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "is_accept",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/friend/request/bd0a95fb-35c1-11ec-94f3-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"bd0a95fb-35c1-11ec-94f3-2cf05d8903e3"
+							],
+							"query": [
+								{
+									"key": "is_accept",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 18:33:00 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_accept_friend - 1004 | invalid code",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/request/d460ac72-4625-11ec-a9f3-2cf05d8903e3?is_accept=4",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"d460ac72-4625-11ec-a9f3-2cf05d8903e3"
+							],
+							"query": [
+								{
+									"key": "is_accept",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 18:30:26 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "70"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid request code\",\n    \"data\": {\n        \"IsAccept\": \"4\"\n    }\n}"
+				},
+				{
+					"name": "set_accept_friend - 1004 | not a friend request",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "is_accept",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/friend/request/bd0a95fb-35c1-11ec-94f3-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"bd0a95fb-35c1-11ec-94f3-2cf05d8903e3"
+							],
+							"query": [
+								{
+									"key": "is_accept",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 18:34:42 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "58"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"not a friend request\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_accept_friend - 9995 | locked user",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/request/d460ac72-4625-11ec-a9f3-2cf05d8903e3?is_accept=1",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"d460ac72-4625-11ec-a9f3-2cf05d8903e3"
+							],
+							"query": [
+								{
+									"key": "is_accept",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 18:31:17 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "49"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 9995,\n    \"message\": \"locked user\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_accept_friend - 1000 | reject OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "is_accept",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/friend/request/bd0a95fb-35c1-11ec-94f3-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"bd0a95fb-35c1-11ec-94f3-2cf05d8903e3"
+							],
+							"query": [
+								{
+									"key": "is_accept",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 18:33:54 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_accept_friend - 9995 | no friend request",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "is_accept",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/friend/request/bd0a95fb-35c1-11ec-94f3-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"request",
+								"bd0a95fb-35c1-11ec-94f3-2cf05d8903e3"
+							],
+							"query": [
+								{
+									"key": "is_accept",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 22 Nov 2021 18:34:16 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "62"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 9995,\n    \"message\": \"friend request not found\",\n    \"data\": null\n}"
+				}
+			]
 		}
 	]
 }

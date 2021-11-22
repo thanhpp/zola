@@ -33,6 +33,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	{
 		friendGr.Use(s.AuthMiddleware())
 		friendGr.POST("/request/:userid", userCtrl.NewFriendRequest)
+		friendGr.PUT("/request/:userid", userCtrl.UpdateFriendRequest)
 	}
 
 	blockGr := r.Group("/block")
