@@ -21,8 +21,8 @@ var (
 
 type UserFactory interface {
 	NewUser(phone, pass, name, avatar string) (*User, error)
-	NewBlock(blocker, blocked *User) (*Block, error)
 	NewFriendRequest(requestor, requestee *User) (*Relation, error)
+	NewBlockRelation(blocker, blocked *User) (*Relation, error)
 }
 
 func NewUserFactory() UserFactory {

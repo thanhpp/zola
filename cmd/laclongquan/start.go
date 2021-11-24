@@ -33,7 +33,6 @@ func start(configPath string) {
 
 	app := application.NewApplication(
 		dbao.User,
-		dbao.Block,
 		dbao.Post, laclongquanconfig.Get().SaveDirectory,
 		dbao.Report,
 		dbao.Like,

@@ -8,7 +8,6 @@ type DBAO struct {
 	Post     postGorm
 	Report   reportGorm
 	Like     likeGorm
-	Block    blockGorm
 	Relation relationGorm
 }
 
@@ -38,10 +37,6 @@ func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
 		Like: likeGorm{
 			db:    gDB,
 			model: &LikeDB{},
-		},
-		Block: blockGorm{
-			db:    gDB,
-			model: &BlockDB{},
 		},
 		Relation: relationGorm{
 			db:    gDB,
