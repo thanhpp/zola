@@ -14,7 +14,6 @@ type Application struct {
 
 func NewApplication(
 	userRepo repository.UserRepository,
-	blockRepo repository.BlockRepository,
 	postRepo repository.PostRepository, saveDir string,
 	reportRepo repository.ReportRepository,
 	likeRepo repository.LikeRepository,
@@ -25,7 +24,6 @@ func NewApplication(
 		UserHandler: NewUserHandler(
 			entity.NewUserFactory(),
 			userRepo,
-			blockRepo,
 			relationRepo,
 		),
 		PostHandler: NewPostHandler(

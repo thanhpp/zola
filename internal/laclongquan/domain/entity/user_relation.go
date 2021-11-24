@@ -8,6 +8,7 @@ import (
 
 var (
 	ErrNotAFriendRequest = errors.New("not a friend request")
+	ErrSelfRelation      = errors.New("self relation")
 )
 
 type RelationStatus string
@@ -47,6 +48,10 @@ func (r Relation) UserBIDStr() string {
 	return r.UserB.String()
 }
 
+func (r Relation) IsBlock() bool {
+	return r.Status == RelationBlocked
+}
+
 func (r *Relation) AcceptFriendRequest() error {
 	if r.Status != RelationRequesting {
 		return ErrNotAFriendRequest
@@ -65,14 +70,17 @@ func (r *Relation) RejectFriendRequest() error {
 	return nil
 }
 
+func (r *Relation) Block() {
+	r.Status = RelationBlocked
+}
+
 var (
-	ErrSameUser   = errors.New("same user")
 	ErrLockedUser = errors.New("locked user")
 )
 
 func (fac userFactoryImpl) preRelationCheck(userA, userB *User) error {
 	if userA.ID().String() == userB.ID().String() {
-		return ErrSameUser
+		return ErrSelfRelation
 	}
 
 	if userA.State() == UserStateLocked || userB.State() == UserStateLocked {

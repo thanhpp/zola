@@ -37,7 +37,7 @@ func (ctrl UserController) NewFriendRequest(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
 			return
 
-		case entity.ErrSameUser:
+		case entity.ErrSelfRelation:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "same id request", nil)
 			return
 

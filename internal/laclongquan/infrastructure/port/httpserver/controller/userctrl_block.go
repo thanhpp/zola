@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/thanhpp/zola/internal/laclongquan/application"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/dto"
@@ -39,11 +40,11 @@ func (ctrl UserController) BlockUser(c *gin.Context) {
 				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
 				return
 
-			case repository.ErrUserAlreadyBlocked:
+			case application.ErrAlreadyBlocked:
 				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user has already been blocked", nil)
 				return
 
-			case entity.ErrSelfBlock:
+			case entity.ErrSelfRelation:
 				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "can't block yourself", nil)
 				return
 
@@ -62,6 +63,14 @@ func (ctrl UserController) BlockUser(c *gin.Context) {
 			switch err {
 			case repository.ErrUserNotFound:
 				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
+				return
+
+			case repository.ErrRelationNotFound:
+				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "no relationship", nil)
+				return
+
+			case application.ErrNotABlockRelation:
+				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "not a block relation", nil)
 				return
 
 			default:
