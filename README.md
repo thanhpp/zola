@@ -42,7 +42,7 @@
 - [ ] get_requested_friend
 - [x] set_accept_friend
 - [ ] get_user_friends
-- [ ] [change_password](https://github.com/thanhpp/zola/issues/26)
+- [x] [change_password](https://github.com/thanhpp/zola/issues/26)
 - [x] set_block_user
 - [ ] set_block_diary
 - [ ] get_conversation
