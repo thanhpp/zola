@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/config/laclongquanconfig"
 	"github.com/thanhpp/zola/internal/laclongquan/application"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/accountcipher"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/adapter/gormdb"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/auth"
@@ -31,7 +32,14 @@ func start(configPath string) {
 	}
 	logger.Info("dbao OK")
 
+	accountCipher, err := accountcipher.New(laclongquanconfig.Get().AESKey)
+	if err != nil {
+		panic(errors.WithMessage(err, "new account cipher"))
+	}
+	logger.Info("account cipher OK")
+
 	app := application.NewApplication(
+		accountCipher,
 		dbao.User,
 		dbao.Post, laclongquanconfig.Get().SaveDirectory,
 		dbao.Report,

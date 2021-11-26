@@ -15,6 +15,7 @@ type MainConfig struct {
 	Database      shared.DatabaseConfig   `mapstructure:"Database"`
 	JWT           auth.Config             `mapstructure:"JWT"`
 	SaveDirectory string                  `mapstructure:"SaveDirectory"`
+	AESKey        string                  `mapstructure:"AESKey"`
 }
 
 func Set(path string) error {

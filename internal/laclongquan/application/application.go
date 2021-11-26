@@ -13,6 +13,7 @@ type Application struct {
 }
 
 func NewApplication(
+	accCipher entity.AccountCipher,
 	userRepo repository.UserRepository,
 	postRepo repository.PostRepository, saveDir string,
 	reportRepo repository.ReportRepository,
@@ -22,9 +23,10 @@ func NewApplication(
 
 	return Application{
 		UserHandler: NewUserHandler(
-			entity.NewUserFactory(),
+			entity.NewUserFactory(accCipher),
 			userRepo,
 			relationRepo,
+			accCipher,
 		),
 		PostHandler: NewPostHandler(
 			postRepo,
