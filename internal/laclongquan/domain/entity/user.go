@@ -1,6 +1,8 @@
 package entity
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+)
 
 type UserState string
 
@@ -37,8 +39,20 @@ func (u User) Account() Account {
 	return u.account
 }
 
-func (u User) PassEqual(pass string) error {
-	return u.account.Equal(u.account.Phone, pass)
+func (u User) PassEqual(pass string, accCipher AccountCipher) error {
+	return u.account.Equal(u.account.Phone, pass, accCipher)
+}
+
+func (u *User) UpdatePass(oldPass, newPass string, accCipher AccountCipher) error {
+	if u.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if err := u.account.UpdatePass(oldPass, newPass, accCipher); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u User) State() UserState {

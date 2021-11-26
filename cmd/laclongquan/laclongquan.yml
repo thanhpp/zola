@@ -26,3 +26,4 @@ JWT:
   RSAPriKeyPath:  pri.rsa
 
 SaveDirectory: ./localstorage
+AESKey: idheysngor640udnwye385jtufhdbe6w
