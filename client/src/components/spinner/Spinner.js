@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import spinerStyle from "Spinner.module.css";
+import spinerStyle from "./Spinner.module.css";
 import { Spin } from "antd";
 
 export default function Spinner() {

@@ -1,7 +1,9 @@
 import "./App.css";
+//import AdminLayout from "./containers/AdminLayout";
+import UserLayout from "./containers/UserLayout";
 
 function App() {
-	return <div>Kickoff project</div>;
+	return <UserLayout>This is working</UserLayout>;
 }
 
 export default App;

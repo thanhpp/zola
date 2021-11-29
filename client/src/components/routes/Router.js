@@ -1,16 +1,16 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import PrivateRoute from "./PrivateRoute.js";
-import AdminRoute from "./AdminRoute.js";
-import UserRoute from "./UserRoute.js";
+// import PrivateRoute from "./PrivateRoute.js";
+// import AdminRoute from "./AdminRoute.js";
+// import UserRoute from "./UserRoute.js";
 
 export default function Router() {
 	return (
 		<Switch>
-			<Route />
-			<PrivateRoute />
+			{/* <Route /> */}
+			{/* <PrivateRoute />
 			<AdminRoute></AdminRoute>
-			<UserRoute></UserRoute>
+			<UserRoute></UserRoute> */}
 			<Route exact path="/">
 				<Redirect to="/home" />
 			</Route>
