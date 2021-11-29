@@ -3,12 +3,38 @@ import Messages from "../../components/chat/Messages";
 import Editor from "../../components/chat/Editor";
 import Spinner from "../../components/spinner/Spinner";
 import styles from "./Chat.module.css";
+import ScrollToBottom from "react-scroll-to-bottom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 export default function Chat() {
 	const [messages, setMessages] = useState([
+		{
+			author: "Han Solo",
+			content: <p>this is a message</p>,
+			datetime: dayjs().fromNow(),
+		},
+		{
+			author: "Han Solo",
+			content: <p>this is a message</p>,
+			datetime: dayjs().fromNow(),
+		},
+		{
+			author: "Han Solo",
+			content: <p>this is a message</p>,
+			datetime: dayjs().fromNow(),
+		},
+		{
+			author: "Han Solo",
+			content: <p>this is a message</p>,
+			datetime: dayjs().fromNow(),
+		},
+		{
+			author: "Han Solo",
+			content: <p>this is a message</p>,
+			datetime: dayjs().fromNow(),
+		},
 		{
 			author: "Han Solo",
 			content: <p>this is a message</p>,
@@ -58,8 +84,10 @@ export default function Chat() {
 
 	return (
 		<div className={styles.background}>
-			<div className={styles.container}>
-				{isLoading && <Spinner />}
+			{isLoading && <Spinner />}
+
+			<ScrollToBottom className={styles.container}>
+				<div className={styles.header}>Han Solo</div>
 				{messages.length > 1 && <Messages messages={messages} />}
 				<Editor
 					onChange={handleChange}
@@ -67,7 +95,7 @@ export default function Chat() {
 					submitting={message.submitting}
 					value={message.value}
 				/>
-			</div>
+			</ScrollToBottom>
 		</div>
 	);
 }

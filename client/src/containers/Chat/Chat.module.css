@@ -7,10 +7,20 @@
 .container {
 	background: #fff;
 	display: block;
-	position: absolute;
+	/* position: absolute; */
 	top: 20%;
-	left: 35%;
-	width: 600px;
-	height: 400px;
-	overflow-y: scroll;
+	left: 30%;
+	right: 30%;
+	width: 40%;
+	height: 50vh;
+	overflow: auto;
+	padding: 0 5px;
+}
+
+.header {
+	position: fixed;
+	top: 19%;
+	margin: 0 -5px;
+	background: cornflowerblue;
+	width: 38.5%;
 }
