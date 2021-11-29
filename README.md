@@ -9,6 +9,8 @@
       - [User](#user)
       - [Post](#post)
       - [Chat](#chat)
+      - [More APIs](#more-apis)
+      - [Admin APIs](#admin-apis)
 
 ## Documents
 
@@ -59,3 +61,19 @@
 - [ ] delete_message
 - [ ] get_list_conversation
 - [ ] delete_conversation
+
+#### More APIs
+- [ ] set_official_account
+- [ ] check_verify_code
+- [ ] del_saved_search
+- [ ] get_list_suggested_friends
+- [ ] get_verify_code
+- [ ] get_saved_search
+
+#### Admin APIs
+- [ ] get_admin_permission
+- [ ] get_user_list
+- [ ] set_role
+- [ ] get_analyst_result
+- [ ] set_user_state, delete_user
+- [ ] get_user_basic_info
