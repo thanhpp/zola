@@ -19,6 +19,7 @@ func NewApplication(
 	reportRepo repository.ReportRepository,
 	likeRepo repository.LikeRepository,
 	relationRepo repository.RelationRepository,
+	commentRepo repository.CommentRepository,
 ) Application {
 
 	return Application{
@@ -31,6 +32,9 @@ func NewApplication(
 		PostHandler: NewPostHandler(
 			postRepo,
 			saveDir,
+			commentRepo,
+			relationRepo,
+			userRepo,
 		),
 		ReportHandler: NewReportHandler(
 			entity.NewReportFactory(),
