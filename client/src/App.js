@@ -1,9 +1,10 @@
 import "./App.css";
 //import AdminLayout from "./containers/AdminLayout";
-import UserLayout from "./containers/UserLayout";
+//import UserLayout from "./containers/UserLayout";
+import Login from "./views/Login";
 
 function App() {
-	return <UserLayout>This is working</UserLayout>;
+	return <Login />;
 }
 
 export default App;

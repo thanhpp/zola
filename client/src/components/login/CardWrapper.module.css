@@ -1,0 +1,15 @@
+.site-card-border-less-wrapper {
+	padding: 30px;
+	background: #ececec;
+	height: 100vh;
+}
+[data-theme="dark"] .site-card-border-less-wrapper {
+	background: #303030;
+}
+
+.center {
+	display: block;
+	position: absolute;
+	top: 20%;
+	left: 35%;
+}
