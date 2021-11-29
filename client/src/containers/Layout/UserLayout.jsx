@@ -1,7 +1,7 @@
 import React from "react";
 import "antd/dist/antd.css";
 import { Layout } from "antd";
-import HeaderMenu from "../components/layout/HeaderMenu";
+import HeaderMenu from "../../components/layout/Header/HeaderMenu";
 
 const { Content } = Layout;
 

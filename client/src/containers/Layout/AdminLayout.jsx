@@ -1,8 +1,8 @@
 import React from "react";
 import "antd/dist/antd.css";
 import { Layout } from "antd";
-import HeaderMenu from "../components/layout/HeaderMenu";
-import Sidebar from "../components/layout/Sidebar";
+import HeaderMenu from "../../components/layout/Header/HeaderMenu";
+import Sidebar from "../../components/layout/Siderbar/Sidebar";
 
 const { Content } = Layout;
 

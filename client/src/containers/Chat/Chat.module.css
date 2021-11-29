@@ -1,0 +1,16 @@
+.background {
+	padding: 30px;
+	background: #ececec;
+	height: 100vh;
+}
+
+.container {
+	background: #fff;
+	display: block;
+	position: absolute;
+	top: 20%;
+	left: 35%;
+	width: 600px;
+	height: 400px;
+	overflow-y: scroll;
+}
