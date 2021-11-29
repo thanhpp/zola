@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
 )
 
@@ -15,6 +17,7 @@ type PostFactory interface {
 	NewPostWithImages(creator uuid.UUID, content string, images ...Media) (*Post, error)
 	NewMediaVideo(path string, size int64, owner uuid.UUID) (*Media, error)
 	NewPostWithVideo(creator uuid.UUID, content string, video Media) (*Post, error)
+	NewComment(content string, post *Post, creator *User) (*Comment, error)
 }
 
 func NewPostFactory() PostFactory {
@@ -87,5 +90,30 @@ func (fac postFactoryImpl) NewPostWithVideo(creator uuid.UUID, content string, v
 		creator: creator,
 		content: content,
 		media:   []Media{video},
+	}, nil
+}
+
+func (fac postFactoryImpl) NewComment(content string, post *Post, creator *User) (*Comment, error) {
+	if post == nil || creator == nil {
+		return nil, errors.New("nil input")
+	}
+
+	if len(content) > 500 {
+		return nil, ErrContentTooLong
+	}
+
+	if post.IsLocked() {
+		return nil, ErrLockedPost
+	}
+
+	if creator.IsLocked() {
+		return nil, ErrLockedUser
+	}
+
+	return &Comment{
+		ID:      uuid.New(),
+		Content: content,
+		Creator: creator,
+		Post:    post,
 	}, nil
 }

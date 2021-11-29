@@ -52,6 +52,10 @@ func (r Relation) IsBlock() bool {
 	return r.Status == RelationBlocked
 }
 
+func (r Relation) IsFriend() bool {
+	return r.Status == RelationFriend
+}
+
 func (r *Relation) AcceptFriendRequest() error {
 	if r.Status != RelationRequesting {
 		return ErrNotAFriendRequest

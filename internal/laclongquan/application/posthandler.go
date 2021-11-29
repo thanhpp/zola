@@ -10,18 +10,28 @@ import (
 )
 
 type PostHandler struct {
-	fac     entity.PostFactory
-	repo    repository.PostRepository
-	filehdl *FileHandler
-	saveDir string
+	fac          entity.PostFactory
+	repo         repository.PostRepository
+	commentRepo  repository.CommentRepository
+	relationRepo repository.RelationRepository
+	userRepo     repository.UserRepository
+	filehdl      *FileHandler
+	saveDir      string
 }
 
-func NewPostHandler(repo repository.PostRepository, saveDir string) PostHandler {
+func NewPostHandler(repo repository.PostRepository, saveDir string,
+	commentRepo repository.CommentRepository,
+	relationRepo repository.RelationRepository,
+	userRepo repository.UserRepository,
+) PostHandler {
 	return PostHandler{
-		fac:     entity.NewPostFactory(),
-		repo:    repo,
-		filehdl: new(FileHandler),
-		saveDir: saveDir,
+		fac:          entity.NewPostFactory(),
+		repo:         repo,
+		commentRepo:  commentRepo,
+		relationRepo: relationRepo,
+		userRepo:     userRepo,
+		filehdl:      new(FileHandler),
+		saveDir:      saveDir,
 	}
 }
 

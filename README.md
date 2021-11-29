@@ -6,6 +6,9 @@
     - [Database](#database)
     - [Services](#services)
     - [APIs](#apis)
+      - [User](#user)
+      - [Post](#post)
+      - [Chat](#chat)
 
 ## Documents
 
@@ -22,29 +25,36 @@
 2. Âu Cơ - Manage chats, messages
 
 ### APIs
-- [x] signup
-- [x] login
-- [x] logout
-- [x] add_post
+#### User 
+- [x] [signup](https://github.com/thanhpp/zola/commit/1a1bef3d247af842f8c1a16e8a4abea2c158e953)
+- [x] [login](https://github.com/thanhpp/zola/issues/1)
+- [x] [logout](https://github.com/thanhpp/zola/issues/3)
+- [x] [set_request_friend](https://github.com/thanhpp/zola/issues/21)
+- [ ] get_requested_friend
+- [x] [set_accept_friend](https://github.com/thanhpp/zola/issues/21)
+- [ ] get_user_friends
+- [x] [change_password](https://github.com/thanhpp/zola/issues/26)
+- [x] [set_block_user](https://github.com/thanhpp/zola/issues/19)
+- [ ] set_block_diary
+#### Post
+- [x] [add_post](https://github.com/thanhpp/zola/issues/5)
 - [ ] get_post
 - [ ] get_list_posts
 - [ ] check_new_item
-- [x] edit_post (missing images order)
-- [x] delete_post
-- [x] report
+- [x] [edit_post](https://github.com/thanhpp/zola/issues/7)
+  - [ ] missing images order
+- [x] [delete_post](https://github.com/thanhpp/zola/issues/17)
+- [x] [report](https://github.com/thanhpp/zola/issues/10)
 - [ ] set_comment
+  - [x] [Create comment](https://github.com/thanhpp/zola/issues/28)
+  - [ ] Get comment
 - [ ] get_comment
-- [x] like
+- [x] [like](https://github.com/thanhpp/zola/issues/15)
 - [ ] edit_comment
 - [ ] del_comment
 - [ ] search
-- [x] set_request_friend
-- [ ] get_requested_friend
-- [x] set_accept_friend
-- [ ] get_user_friends
-- [x] [change_password](https://github.com/thanhpp/zola/issues/26)
-- [x] set_block_user
-- [ ] set_block_diary
+
+#### Chat
 - [ ] get_conversation
 - [ ] delete_message
 - [ ] get_list_conversation

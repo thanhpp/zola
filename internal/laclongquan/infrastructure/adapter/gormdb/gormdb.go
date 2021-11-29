@@ -66,6 +66,7 @@ func autoMigrate() error {
 		&MediaDB{},
 		&ReportDB{},
 		&LikeDB{},
+		&CommentDB{},
 	)
 }
 

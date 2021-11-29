@@ -34,6 +34,10 @@ func (ctrl UserController) SignIn(c *gin.Context) {
 		case entity.ErrLockedUser:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "user is locked", nil)
 			return
+
+		case entity.ErrPassNotEqual:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "password mismatch", nil)
+			return
 		}
 
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
