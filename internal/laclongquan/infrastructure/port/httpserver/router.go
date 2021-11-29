@@ -57,6 +57,9 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 
 		// like
 		postGr.PUT("/:postid/like", postCtrl.LikePost)
+
+		// comment
+		postGr.POST("/:postid/comment", postCtrl.CreateComment)
 	}
 
 	reportGr := r.Group("/report")

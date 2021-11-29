@@ -9,6 +9,7 @@ type DBAO struct {
 	Report   reportGorm
 	Like     likeGorm
 	Relation relationGorm
+	Comment  commentGorm
 }
 
 func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
@@ -16,7 +17,7 @@ func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
 		return nil, err
 	}
 
-	return &DBAO{
+	dbao := &DBAO{
 		User: userGorm{
 			db:    gDB,
 			model: &UserDB{},
@@ -42,5 +43,13 @@ func NewDBAO(cfg *shared.DatabaseConfig) (*DBAO, error) {
 			db:    gDB,
 			model: &RelationDB{},
 		},
-	}, nil
+	}
+	dbao.Comment = commentGorm{
+		db:       gDB,
+		cmtModel: &CommentDB{},
+		postGorm: dbao.Post,
+		userGorm: dbao.User,
+	}
+
+	return dbao, nil
 }

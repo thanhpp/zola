@@ -45,6 +45,7 @@ func start(configPath string) {
 		dbao.Report,
 		dbao.Like,
 		dbao.Relation,
+		dbao.Comment,
 	)
 	logger.Info("application OK")
 

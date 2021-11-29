@@ -487,6 +487,234 @@
 							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "set_comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "comment 1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}/comment",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}",
+								"comment"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "set_comment - 1000 | OK - blocked",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Nov 2021 15:17:04 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "57"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null,\n    \"is_blocked\": \"1\"\n}"
+						},
+						{
+							"name": "set_comment - 1000 | comment OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Nov 2021 15:13:24 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "set_comment - 9992 | post not exist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/c4b3340e-4012-4b63-b78b-b42a6244e699/comment",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"c4b3340e-4012-4b63-b78b-b42a6244e699",
+										"comment"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Nov 2021 15:14:01 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "52"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9992,\n    \"message\": \"post not exist\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "set_comment - 1010 | locked post",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 29 Nov 2021 15:15:20 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1010,\n    \"message\": \"locked post\",\n    \"data\": null\n}"
+						}
+					]
 				}
 			]
 		},
