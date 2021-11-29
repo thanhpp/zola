@@ -1918,6 +1918,356 @@
 					"body": "{\n    \"code\": 9995,\n    \"message\": \"friend request not found\",\n    \"data\": null\n}"
 				}
 			]
+		},
+		{
+			"name": "change_password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "password",
+							"value": "PPThanh123",
+							"type": "text"
+						},
+						{
+							"key": "new_password",
+							"value": "ThanhPPT1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{zola}}/user/password",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"user",
+						"password"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "change_password - 1000 | Update OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "ThanhPPT1",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "PPThanh123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user/password",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"password"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Nov 2021 09:22:39 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "change_password - 1004 | invalid old password",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "ThanhPP",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "ThanhPPT1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user/password",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"password"
+							]
+						}
+					},
+					"status": "Internal Server Error",
+					"code": 500,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Nov 2021 09:20:17 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "58"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid old password\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "change_password - 1004 | same password",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "ThanhPPT1",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "ThanhPPT1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user/password",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"password"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Nov 2021 09:20:45 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "82"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"new password is too common with old password\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "change_password - 9995 | locked user",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "PPThanh123",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "ThanhPPT1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user/password",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"password"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Nov 2021 09:29:11 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "52"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 9995,\n    \"message\": \"user is locked\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "change_password - 1004 | Invalid password",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "ThanhPPT1",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "PP.Thanh123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user/password",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"password"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Nov 2021 09:21:31 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "58"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid new password\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "change_password - 1004 | common password",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "password",
+									"value": "ThanhPPT1",
+									"type": "text"
+								},
+								{
+									"key": "new_password",
+									"value": "ThanhPPT123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user/password",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"password"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Nov 2021 09:20:58 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "82"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"new password is too common with old password\",\n    \"data\": null\n}"
+				}
+			]
 		}
 	]
 }

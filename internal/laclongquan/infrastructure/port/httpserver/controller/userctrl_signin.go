@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/dto"
 	"github.com/thanhpp/zola/pkg/logger"
@@ -28,6 +29,10 @@ func (ctrl UserController) SignIn(c *gin.Context) {
 		switch err {
 		case repository.ErrUserNotFound:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "user is not validated", nil)
+			return
+
+		case entity.ErrLockedUser:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "user is locked", nil)
 			return
 		}
 

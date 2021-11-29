@@ -18,17 +18,20 @@ type UserHandler struct {
 	fac          entity.UserFactory
 	repo         repository.UserRepository
 	relationRepo repository.RelationRepository
+	accCipher    entity.AccountCipher
 }
 
 func NewUserHandler(
 	fac entity.UserFactory,
 	repo repository.UserRepository,
 	relationRepo repository.RelationRepository,
+	accountCipher entity.AccountCipher,
 ) UserHandler {
 	return UserHandler{
 		fac:          fac,
 		repo:         repo,
 		relationRepo: relationRepo,
+		accCipher:    accountCipher,
 	}
 }
 
@@ -51,8 +54,12 @@ func (u UserHandler) GetUser(ctx context.Context, phone, pass string) (*entity.U
 		return nil, err
 	}
 
-	if err := user.PassEqual(pass); err != nil {
+	if err := user.PassEqual(pass, u.accCipher); err != nil {
 		return nil, err
+	}
+
+	if user.IsLocked() {
+		return nil, entity.ErrLockedUser
 	}
 
 	return user, nil

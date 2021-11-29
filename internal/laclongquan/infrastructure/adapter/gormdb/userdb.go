@@ -119,7 +119,14 @@ func (u userGorm) Update(ctx context.Context, id string, fn repository.UserUpdat
 		return err
 	}
 
-	return u.db.WithContext(ctx).Model(u.db).Updates(user).Error
+	userDB, err := u.marshalUser(user)
+	if err != nil {
+		return err
+	}
+
+	return u.db.WithContext(ctx).Model(u.model).
+		Where("user_uuid = ?", id).
+		Updates(userDB).Error
 }
 
 func (u userGorm) DeleteByID(ctx context.Context, id string) error {

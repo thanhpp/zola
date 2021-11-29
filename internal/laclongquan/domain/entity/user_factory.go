@@ -3,7 +3,6 @@ package entity
 import (
 	"errors"
 	"regexp"
-	"unicode"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -25,16 +24,18 @@ type UserFactory interface {
 	NewBlockRelation(blocker, blocked *User) (*Relation, error)
 }
 
-func NewUserFactory() UserFactory {
+func NewUserFactory(accountCipher AccountCipher) UserFactory {
 	return &userFactoryImpl{
-		hashCost:    hashCost,
-		phoneRegexp: regexp.MustCompile(regexpPhoneNumber),
+		hashCost:      hashCost,
+		phoneRegexp:   regexp.MustCompile(regexpPhoneNumber),
+		accountCipher: accountCipher,
 	}
 }
 
 type userFactoryImpl struct {
-	hashCost    int
-	phoneRegexp *regexp.Regexp
+	hashCost      int
+	phoneRegexp   *regexp.Regexp
+	accountCipher AccountCipher
 }
 
 func (fac userFactoryImpl) NewUser(phone, pass, name, avatar string) (*User, error) {
@@ -77,43 +78,16 @@ func (fac userFactoryImpl) validatePhone(phone string) error {
 	return nil
 }
 
-func (fac userFactoryImpl) validatePass(pass string, phone string) error {
-	if len(pass) > 10 || len(pass) < 6 {
-		return ErrInvalidPassword
-	}
-
-	if pass == phone {
-		return ErrInvalidPassword
-	}
-
-	for _, c := range pass {
-		switch {
-		case unicode.IsLower(c):
-			continue
-
-		case unicode.IsUpper(c):
-			continue
-
-		case unicode.IsNumber(c):
-			continue
-		}
-
-		return ErrInvalidPassword
-	}
-
-	return nil
-}
-
 func (fac userFactoryImpl) newAccount(phone, pass string) (*Account, error) {
 	if err := fac.validatePhone(phone); err != nil {
 		return nil, err
 	}
 
-	if err := fac.validatePass(pass, phone); err != nil {
+	if err := validatePass(pass, phone); err != nil {
 		return nil, err
 	}
 
-	hashPass, err := fac.hashString(pass)
+	hashPass, err := fac.accountCipher.Encrypt(pass)
 	if err != nil {
 		return nil, err
 	}

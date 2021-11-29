@@ -5,11 +5,13 @@ import (
 	"testing"
 
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/accountcipher"
 )
 
 func TestFactory(t *testing.T) {
 	var (
-		fac = entity.NewUserFactory()
+		accCipher, _ = accountcipher.New("12345678901234567890234567890123")
+		fac          = entity.NewUserFactory(accCipher)
 	)
 
 	t.Run("create invalid user - phone", func(t *testing.T) {
