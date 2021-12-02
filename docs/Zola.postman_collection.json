@@ -715,6 +715,239 @@
 							"body": "{\n    \"code\": 1010,\n    \"message\": \"locked post\",\n    \"data\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "edit_comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "comment 123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}",
+								"comment",
+								"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "edit_comment - 1004 | invalid content",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Dec 2021 15:56:18 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid comment content\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "edit_comment - 1000 | ok",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Dec 2021 15:54:13 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "edit_comment - 9995 | blocked ",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Dec 2021 16:00:27 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9995,\n    \"message\": \"not a friend\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "edit_comment - 9995 | locked user",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Dec 2021 15:58:57 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9995,\n    \"message\": \"locked user\",\n    \"data\": null\n}"
+						}
+					]
 				}
 			]
 		},

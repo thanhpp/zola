@@ -60,6 +60,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 
 		// comment
 		postGr.POST("/:postid/comment", postCtrl.CreateComment)
+		postGr.PUT("/:postid/comment/:commentid", postCtrl.UpdateComment)
 	}
 
 	reportGr := r.Group("/report")

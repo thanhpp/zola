@@ -98,7 +98,7 @@ func (fac postFactoryImpl) NewComment(content string, post *Post, creator *User)
 		return nil, errors.New("nil input")
 	}
 
-	if len(content) > 500 {
+	if !commentContentCheck(content) {
 		return nil, ErrContentTooLong
 	}
 
