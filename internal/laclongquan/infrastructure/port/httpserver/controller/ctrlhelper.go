@@ -17,10 +17,11 @@ var (
 )
 
 var (
-	ErrClaimsNotExist = errors.New("claims not exist")
-	ErrNotClaims      = errors.New("not claims")
-	ErrInvalidPostID  = errors.New("invalid post id")
-	ErrInvalidUserID  = errors.New("invalid user id")
+	ErrClaimsNotExist   = errors.New("claims not exist")
+	ErrNotClaims        = errors.New("not claims")
+	ErrInvalidPostID    = errors.New("invalid post id")
+	ErrInvalidUserID    = errors.New("invalid user id")
+	ErrInvalidCommentID = errors.New("invalid comment id")
 )
 
 func getClaimsFromCtx(c *gin.Context) (*auth.Claims, error) {
@@ -78,6 +79,16 @@ func getPostID(c *gin.Context) (uuid.UUID, error) {
 	}
 
 	return postUUID, nil
+}
+
+func getCommentID(c *gin.Context) (uuid.UUID, error) {
+	commentID := c.Param("commentid")
+	commentUUID, err := uuid.Parse(commentID)
+	if err != nil {
+		return uuid.Nil, ErrInvalidCommentID
+	}
+
+	return commentUUID, nil
 }
 
 func genMultipartOpts(c *gin.Context) []application.MultipartOption {

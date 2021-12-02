@@ -5,7 +5,6 @@ import (
 
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
-	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type LikeHandler struct {
@@ -24,7 +23,7 @@ func NewLikeHandler(fac entity.LikeFactory, likeRepo repository.LikeRepository, 
 
 func (l LikeHandler) LikePost(ctx context.Context, postID, userID string) (int, error) {
 	// post id check
-	logger.Debugf("post repo nil check %v", l.postRepo)
+	// logger.Debugf("post repo nil check %v", l.postRepo)
 	post, err := l.postRepo.GetByID(ctx, postID)
 	if err != nil {
 		return 0, err

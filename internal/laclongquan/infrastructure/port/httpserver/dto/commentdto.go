@@ -19,3 +19,7 @@ func (resp *CreateCommentResp) SetIsBlocked(isBlocked bool) {
 	resp.IsBlocked = "0"
 	return
 }
+
+type UpdateCommentReq struct {
+	NewContent string `form:"comment"`
+}

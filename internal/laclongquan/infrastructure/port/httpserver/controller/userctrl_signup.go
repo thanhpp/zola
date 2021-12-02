@@ -19,7 +19,7 @@ func (ctrl UserController) SignUp(c *gin.Context) {
 		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", nil)
 		return
 	}
-	logger.Debugf("signup req: %v", req)
+	// logger.Debugf("signup req: %v", req)
 
 	err := ctrl.handler.CreateUser(c, req.PhoneNumber, req.Password, "", "")
 	if err != nil {

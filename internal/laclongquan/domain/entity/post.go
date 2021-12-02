@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type Post struct {
@@ -70,7 +69,7 @@ func (p *Post) AddMedia(m Media) error {
 			return ErrTooManyVideos
 		}
 	}
-	logger.Debugf("post media after added %v", p.media)
+	// logger.Debugf("post media after added %v", p.media)
 	p.media = append(p.media, m)
 
 	return nil

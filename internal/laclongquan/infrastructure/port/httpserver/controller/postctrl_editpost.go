@@ -19,7 +19,7 @@ func (ctrl PostController) EditPost(c *gin.Context) {
 		return
 	}
 
-	logger.Debugf("delete id %v", req.MediaDel)
+	// logger.Debugf("delete id %v", req.MediaDel)
 
 	creator, err := getUserUUIDFromClaims(c)
 	if err != nil {
