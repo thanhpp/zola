@@ -52,7 +52,7 @@
   - [ ] Get comment
 - [ ] get_comment
 - [x] [like](https://github.com/thanhpp/zola/issues/15)
-- [ ] edit_comment
+- [x] [edit_comment](https://github.com/thanhpp/zola/issues/30)
 - [ ] del_comment
 - [ ] search
 
