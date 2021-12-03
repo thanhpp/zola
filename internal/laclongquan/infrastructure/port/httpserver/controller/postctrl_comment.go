@@ -179,3 +179,59 @@ func (ctrl PostController) UpdateComment(c *gin.Context) {
 
 	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
 }
+
+func (ctrl PostController) DeleteComment(c *gin.Context) {
+	userID, err := getUserUUIDFromClaims(c)
+	if err != nil {
+		logger.Errorf("get user id from claims: %v", err)
+		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		return
+	}
+
+	postID, err := getPostID(c)
+	if err != nil {
+		logger.Errorf("get post id: %v", err)
+		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid post id", nil)
+		return
+	}
+
+	commentID, err := getCommentID(c)
+	if err != nil {
+		logger.Errorf("get comment id: %v", err)
+		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid comment id", nil)
+		return
+	}
+
+	if err := ctrl.handler.DeleteComment(c, userID.String(), postID.String(), commentID.String()); err != nil {
+		logger.Errorf("delete comment error: %v", err)
+		switch err {
+		case repository.ErrUserNotFound:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			return
+
+		case repository.ErrPostNotFound:
+			ginAbortNotAcceptable(c, responsevalue.CodePostNotExist, "invalid post id", nil)
+			return
+
+		case repository.ErrCommentNotFound:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid comment id", nil)
+			return
+
+		case entity.ErrLockedUser:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "locked user", nil)
+			return
+
+		case entity.ErrLockedPost:
+			ginAbortNotAcceptable(c, responsevalue.CodePostNotExist, "locked post", nil)
+			return
+
+		case entity.ErrNotCreator:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid permission", nil)
+			return
+		}
+
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+	}
+
+	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+}

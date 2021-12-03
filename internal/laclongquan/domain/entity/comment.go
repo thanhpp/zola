@@ -10,6 +10,7 @@ import (
 var (
 	ErrPermissionDenied      = errors.New("permission denied")
 	ErrInvalidCommentContent = errors.New("invalid comment content")
+	ErrNotCreator            = errors.New("not creator")
 )
 
 type Comment struct {
@@ -67,6 +68,22 @@ func (c *Comment) UpdateContent(updater *User, content string) error {
 	}
 
 	c.Content = content
+
+	return nil
+}
+
+func (c *Comment) IsDeletable(deleter *User) error {
+	if deleter.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if c.Post.IsLocked() {
+		return ErrLockedPost
+	}
+
+	if c.Creator.ID() != deleter.ID() {
+		return ErrNotCreator
+	}
 
 	return nil
 }

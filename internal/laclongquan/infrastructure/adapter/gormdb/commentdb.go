@@ -2,10 +2,10 @@ package gormdb
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 	"gorm.io/gorm"
@@ -47,15 +47,19 @@ func (c commentGorm) unmarshal(commentDB *CommentDB, post *entity.Post, user *en
 	}
 }
 
-func (c commentGorm) Create(ctx context.Context, comment *entity.Comment) error {
-	return c.db.WithContext(ctx).Model(c.cmtModel).
-		Create(c.marshal(comment)).Error
+func (c commentGorm) GetByIDAndPostID(ctx context.Context, commentID, postID string) (*entity.Comment, error) {
+	return c.getByPostIDCommentID(ctx, c.db, postID, commentID)
 }
 
 func (c commentGorm) getByPostIDCommentID(ctx context.Context, tx *gorm.DB, postID, commentID string) (*entity.Comment, error) {
 	var cmtDB = new(CommentDB)
 
-	err := tx.WithContext(ctx).Model(c.cmtModel).
+	post, err := c.postGorm.GetByID(ctx, cmtDB.PostUUID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = tx.WithContext(ctx).Model(c.cmtModel).
 		Where("post_uuid = ? AND comment_uuid = ?", postID, commentID).
 		Take(cmtDB).Error
 	if err != nil {
@@ -70,12 +74,12 @@ func (c commentGorm) getByPostIDCommentID(ctx context.Context, tx *gorm.DB, post
 		return nil, err
 	}
 
-	post, err := c.postGorm.GetByID(ctx, cmtDB.PostUUID)
-	if err != nil {
-		return nil, err
-	}
-
 	return c.unmarshal(cmtDB, post, user), nil
+}
+
+func (c commentGorm) Create(ctx context.Context, comment *entity.Comment) error {
+	return c.db.WithContext(ctx).Model(c.cmtModel).
+		Create(c.marshal(comment)).Error
 }
 
 func (c commentGorm) Update(ctx context.Context, postID, commentID string, fn repository.CommentUpdateFunc) error {
@@ -94,4 +98,10 @@ func (c commentGorm) Update(ctx context.Context, postID, commentID string, fn re
 			Where("comment_uuid = ?", commentID).
 			Save(c.marshal(comment)).Error
 	})
+}
+
+func (c commentGorm) Delete(ctx context.Context, comment *entity.Comment) error {
+	return c.db.WithContext(ctx).Model(c.cmtModel).
+		Where("comment_uuid = ?", comment.IDString()).
+		Delete(c.cmtModel).Error
 }

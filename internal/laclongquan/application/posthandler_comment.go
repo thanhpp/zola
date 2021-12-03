@@ -77,3 +77,21 @@ func (p PostHandler) UpdateComment(ctx context.Context, updaterID, postID, comme
 		return comment, nil
 	})
 }
+
+func (p PostHandler) DeleteComment(ctx context.Context, deleterID, postID, commentID string) error {
+	deleter, err := p.userRepo.GetByID(ctx, deleterID)
+	if err != nil {
+		return err
+	}
+
+	comment, err := p.commentRepo.GetByIDAndPostID(ctx, commentID, postID)
+	if err != nil {
+		return err
+	}
+
+	if err := comment.IsDeletable(deleter); err != nil {
+		return err
+	}
+
+	return p.commentRepo.Delete(ctx, comment)
+}
