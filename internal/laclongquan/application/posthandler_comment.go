@@ -3,6 +3,8 @@ package application
 import (
 	"context"
 	"errors"
+
+	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 )
 
 var (
@@ -41,4 +43,55 @@ func (p PostHandler) CreateComment(ctx context.Context, postID, creatorID, conte
 	}
 
 	return p.commentRepo.Create(ctx, comment)
+}
+
+func (p PostHandler) UpdateComment(ctx context.Context, updaterID, postID, commentID, content string) error {
+	// logger.Debugf("handler - post id %v", postID)
+	// logger.Debugf("hanlder - comment id %v", commentID)
+
+	return p.commentRepo.Update(ctx, postID, commentID, func(ctx context.Context, comment *entity.Comment) (*entity.Comment, error) {
+		// get the relation if the updater is not the creator of the post
+		if comment.Creator.ID().String() != updaterID {
+			relation, err := p.relationRepo.GetRelationBetween(ctx, updaterID, comment.Creator.ID().String())
+			if err != nil {
+				return nil, err
+			}
+
+			if !relation.IsFriend() {
+				return nil, ErrNotFriend
+			}
+		}
+
+		// get the updater info
+		updater, err := p.userRepo.GetByID(ctx, updaterID)
+		if err != nil {
+			return nil, err
+		}
+
+		// update the comment
+		err = comment.UpdateContent(updater, content)
+		if err != nil {
+			return nil, err
+		}
+
+		return comment, nil
+	})
+}
+
+func (p PostHandler) DeleteComment(ctx context.Context, deleterID, postID, commentID string) error {
+	deleter, err := p.userRepo.GetByID(ctx, deleterID)
+	if err != nil {
+		return err
+	}
+
+	comment, err := p.commentRepo.GetByIDAndPostID(ctx, commentID, postID)
+	if err != nil {
+		return err
+	}
+
+	if err := comment.IsDeletable(deleter); err != nil {
+		return err
+	}
+
+	return p.commentRepo.Delete(ctx, comment)
 }

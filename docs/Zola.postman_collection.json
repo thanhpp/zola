@@ -715,6 +715,472 @@
 							"body": "{\n    \"code\": 1010,\n    \"message\": \"locked post\",\n    \"data\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "edit_comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "comment 123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}",
+								"comment",
+								"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "edit_comment - 1004 | invalid content",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Dec 2021 15:56:18 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid comment content\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "edit_comment - 1000 | ok",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Dec 2021 15:54:13 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "edit_comment - 9995 | blocked ",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Dec 2021 16:00:27 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9995,\n    \"message\": \"not a friend\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "edit_comment - 9995 | locked user",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/d956efb6-21d5-47b4-acf6-cb61b51eb024",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"d956efb6-21d5-47b4-acf6-cb61b51eb024"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Dec 2021 15:58:57 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9995,\n    \"message\": \"locked user\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "del_comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "comment 123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}/comment/48463920-78d6-483e-966c-8058ffd0e9ca",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}",
+								"comment",
+								"48463920-78d6-483e-966c-8058ffd0e9ca"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "del_comment - 9992 | invalid post id",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/48463920-78d6-483e-966c-8058ffd0e9ca",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"48463920-78d6-483e-966c-8058ffd0e9ca"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 03 Dec 2021 15:32:40 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "53"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9992,\n    \"message\": \"invalid post id\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "del_comment - 9995 | locked user",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/48463920-78d6-483e-966c-8058ffd0e9ca",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"48463920-78d6-483e-966c-8058ffd0e9ca"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 03 Dec 2021 15:27:09 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9995,\n    \"message\": \"locked user\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "del_comment - 1000 | OK",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/109b6e9a-c671-4a9d-a5c9-56367bd73619",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"109b6e9a-c671-4a9d-a5c9-56367bd73619"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 03 Dec 2021 15:16:54 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "del_comment - 9992 | locked post",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "comment",
+											"value": "comment 123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}/comment/32286578-4aa9-4c4c-82e8-d9c61966ab0c",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}",
+										"comment",
+										"32286578-4aa9-4c4c-82e8-d9c61966ab0c"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 03 Dec 2021 15:24:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 9992,\n    \"message\": \"locked post\",\n    \"data\": null\n}"
+						}
+					]
 				}
 			]
 		},
@@ -1139,12 +1605,12 @@
 					"formdata": [
 						{
 							"key": "phonenumber",
-							"value": "0965508018",
+							"value": "{{phonenumber}}",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "Thanh@PPT",
+							"value": "{{password}}",
 							"type": "text"
 						}
 					],
@@ -1412,12 +1878,12 @@
 					"formdata": [
 						{
 							"key": "phonenumber",
-							"value": "0965508019",
+							"value": "{{phonenumber}}",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "ThanhPPT",
+							"value": "{{password}}",
 							"type": "text"
 						}
 					]
