@@ -75,6 +75,28 @@ func (p *Post) AddMedia(m Media) error {
 	return nil
 }
 
+func (p Post) CanUserGetMedia(user *User, relation *Relation, mediaID string) (*Media, error) {
+	if user.IsLocked() {
+		return nil, ErrLockedUser
+	}
+
+	if p.IsLocked() {
+		return nil, ErrLockedPost
+	}
+
+	if user.ID().String() != p.Creator() && relation == nil || (relation != nil && relation.IsFriend()) {
+		return nil, ErrPermissionDenied
+	}
+
+	for i := range p.media {
+		if mediaID == p.media[i].ID() {
+			return &p.media[i], nil
+		}
+	}
+
+	return nil, ErrPostNotContainsMedia
+}
+
 func (p *Post) RemoveMedia(ids ...string) ([]*Media, error) {
 	var (
 		deleted    = make([]*Media, 0, len(ids))

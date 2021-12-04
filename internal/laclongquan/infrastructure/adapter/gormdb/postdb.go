@@ -116,6 +116,22 @@ func (p postGorm) getByIDTx(ctx context.Context, tx *gorm.DB, id string, expect 
 	return nil
 }
 
+func (p postGorm) GetMediaByID(ctx context.Context, id string) (*entity.Media, error) {
+	var (
+		mediaDB = new(MediaDB)
+	)
+
+	err := p.db.WithContext(ctx).Model(p.mediaModel).Where("media_uuid = ?", id).Take(mediaDB).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, repository.ErrMediaNotFound
+		}
+		return nil, err
+	}
+
+	return p.unmarshalMedia(mediaDB)
+}
+
 func (p postGorm) Create(ctx context.Context, post *entity.Post) error {
 	postDB := p.marshalPost(post)
 

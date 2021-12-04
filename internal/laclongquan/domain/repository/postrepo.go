@@ -8,7 +8,8 @@ import (
 )
 
 var (
-	ErrPostNotFound = errors.New("post not found")
+	ErrPostNotFound  = errors.New("post not found")
+	ErrMediaNotFound = errors.New("media not found")
 )
 
 type PostUpdateFn func(ctx context.Context, post *entity.Post) (*entity.Post, error)
@@ -16,6 +17,7 @@ type PostUpdateFn func(ctx context.Context, post *entity.Post) (*entity.Post, er
 type PostRepository interface {
 	// read
 	GetByID(ctx context.Context, id string) (*entity.Post, error)
+	GetMediaByID(ctx context.Context, id string) (*entity.Media, error)
 
 	// write
 	Create(ctx context.Context, post *entity.Post) error

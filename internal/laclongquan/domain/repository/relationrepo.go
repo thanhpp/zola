@@ -9,6 +9,7 @@ import (
 
 var (
 	ErrRelationNotFound = errors.New("relation not found")
+	ErrSameUser         = errors.New("same user")
 )
 
 type RelationRepository interface {
