@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "antd/dist/antd.css";
-import "./EditTableRow.css";
+
 import {
 	Table,
 	Input,
@@ -32,7 +32,7 @@ const EditTableRow = (props) => {
 		...restProps
 	}) => {
 		let inputNode = null;
-		if (dataIndex === "type") {
+		if (dataIndex === "state") {
 			inputNode = (
 				<Select>
 					{options.map((option) => {
@@ -172,8 +172,8 @@ const EditTableRow = (props) => {
 	});
 
 	const onCreate = (values) => {
-		handleAdd(values);
-		//console.log('Received values of form: ', values);
+		//handleAdd(values);
+		console.log("Received values of form: ", values);
 		setVisible(false);
 	};
 

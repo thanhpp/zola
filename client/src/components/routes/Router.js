@@ -1,19 +1,15 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 // import PrivateRoute from "./PrivateRoute.js";
 // import AdminRoute from "./AdminRoute.js";
 // import UserRoute from "./UserRoute.js";
 
+import UserList from "../../containers/UserList/UserList";
+
 export default function Router() {
 	return (
-		<Switch>
-			{/* <Route /> */}
-			{/* <PrivateRoute />
-			<AdminRoute></AdminRoute>
-			<UserRoute></UserRoute> */}
-			<Route exact path="/">
-				<Redirect to="/home" />
-			</Route>
-		</Switch>
+		<Routes>
+			<Route path="/users" element={<UserList />} />
+		</Routes>
 	);
 }

@@ -1,16 +1,14 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Modal, Form, Input, Select } from "antd";
-const { Option } = Select;
+import { Modal, Form, Input, Checkbox } from "antd";
 
 export default function ModalFormUser(props) {
 	const { visible, onCreate, onCancel } = props;
 	const [form] = Form.useForm();
-	const { title } = props;
 	return (
 		<Modal
 			visible={visible}
-			title={title}
+			title="Add new user"
 			okText="Save"
 			cancelText="Cancel"
 			onCancel={() => {
@@ -38,7 +36,36 @@ export default function ModalFormUser(props) {
 						//something
 					}
 				}
-			></Form>
+			>
+				<Form.Item
+					label="Phone number"
+					name="username"
+					rules={[
+						{
+							required: true,
+							message: "Please input your username!",
+						},
+					]}
+				>
+					<Input />
+				</Form.Item>
+
+				<Form.Item
+					label="Password"
+					name="password"
+					rules={[
+						{
+							required: true,
+							message: "Please input your password!",
+						},
+					]}
+				>
+					<Input.Password />
+				</Form.Item>
+				<Form.Item name="admin" valuePropName="checked">
+					<Checkbox>Admin</Checkbox>
+				</Form.Item>
+			</Form>
 		</Modal>
 	);
 }

@@ -8,16 +8,19 @@ const columns = [
 		title: "Username",
 		dataIndex: "username",
 		key: "username",
-		render: (text, url) => {
-			<>
-				{url ? (
-					<Avatar size="small" src={url} />
-				) : (
-					<Avatar size="small" icon={<UserOutlined />} />
-				)}
-				{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-				<a>{text}</a>
-			</>;
+		render: (text, row) => {
+			const { url } = row;
+			return (
+				<>
+					{url ? (
+						<Avatar size="small" src={url} />
+					) : (
+						<Avatar size="small" icon={<UserOutlined />} />
+					)}
+					{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+					<a style={{ marginLeft: 15 }}>{text}</a>
+				</>
+			);
 		},
 	},
 	{
@@ -29,6 +32,7 @@ const columns = [
 		title: "State",
 		dataIndex: "state",
 		key: "state",
+		editable: true,
 	},
 	{
 		title: "Last login",
@@ -42,7 +46,24 @@ const options = [
 	{ value: 1, text: "Active" },
 ];
 
-const data = [];
+const data = [
+	{
+		username: "omg",
+		key: "omg",
+		url: "",
+		status: "online",
+		state: "Inactive",
+		last_login: "6 hours ago",
+	},
+	{
+		username: "omg2",
+		key: "omg2",
+		url: "https://joeschmoe.io/api/v1/random",
+		status: "online",
+		state: "Inactive",
+		last_login: "6 hours ago",
+	},
+];
 
 export default function UserList() {
 	return <EditTableRow columnName={columns} data={data} options={options} />;
