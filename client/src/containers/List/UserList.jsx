@@ -69,6 +69,5 @@ const data = [
 ];
 
 export default function UserList() {
-	console.log("User List render");
 	return <EditTableRow columnName={columns} data={data} options={options} />;
 }

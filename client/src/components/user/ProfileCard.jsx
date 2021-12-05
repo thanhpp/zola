@@ -1,18 +1,23 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Card, Avatar } from "antd";
-import {
-	EditOutlined,
-	EllipsisOutlined,
-	SettingOutlined,
-} from "@ant-design/icons";
+import { Card, Avatar, Tooltip } from "antd";
+import { UserSwitchOutlined, UserDeleteOutlined } from "@ant-design/icons";
 
 const { Meta } = Card;
 
 export default function ProfileCard() {
+	const state = 0;
+
+	const handleDeleteUser = () => {
+		console.log("delete user");
+	};
+
+	const handleUserState = () => {
+		console.log("user state");
+	};
+
 	return (
 		<Card
-			// style={{ width: "30%" }}
 			cover={
 				<img
 					alt="example"
@@ -21,9 +26,15 @@ export default function ProfileCard() {
 				/>
 			}
 			actions={[
-				<SettingOutlined key="setting" />,
-				<EditOutlined key="edit" />,
-				<EllipsisOutlined key="ellipsis" />,
+				<Tooltip placement="bottom" title="Delete user">
+					<UserDeleteOutlined key="delete" onClick={handleDeleteUser} />
+				</Tooltip>,
+				<Tooltip
+					placement="bottom"
+					title={state ? "Set user inactive" : "Set user active"}
+				>
+					<UserSwitchOutlined key="state" onClick={handleUserState} />
+				</Tooltip>,
 			]}
 		>
 			<Meta

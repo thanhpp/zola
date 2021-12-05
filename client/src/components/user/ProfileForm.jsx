@@ -5,9 +5,13 @@ import { UploadOutlined } from "@ant-design/icons";
 
 export default function ProfileForm() {
 	const [form] = Form.useForm();
+
+	//clean up form values and validate
 	const onFinish = (values) => {
 		console.log(values);
 	};
+
+	//get file name?
 	const normFile = (e) => {
 		console.log("Upload event:", e);
 
@@ -24,27 +28,11 @@ export default function ProfileForm() {
 				form={form}
 				layout="vertical"
 				name="profile_form"
-				initialValues={{
-					//something
-					cover_img: [
-						{
-							uid: "1",
-							name: "cover",
-							status: "done",
-							response: "Server Error 500", // custom error message to show
-							url: "http://www.baidu.com/xxx.png",
-						},
-					],
-					avatar: [
-						{
-							uid: "1",
-							name: "avatar",
-							status: "done",
-							response: "Server Error 500", // custom error message to show
-							url: "http://www.baidu.com/xxx.png",
-						},
-					],
-				}}
+				initialValues={
+					{
+						//something
+					}
+				}
 			>
 				<Form.Item label="Name" name="name">
 					<Input />
