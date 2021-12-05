@@ -3,10 +3,11 @@ import "antd/dist/antd.css";
 import { Layout } from "antd";
 import HeaderMenu from "../../components/layout/Header/HeaderMenu";
 import Sidebar from "../../components/layout/Siderbar/Sidebar";
+import { Outlet } from "react-router";
 
 const { Content } = Layout;
 
-export default function AdminLayout(props) {
+export default function AdminLayout() {
 	return (
 		<Layout style={{ minHeight: "100vh" }}>
 			<HeaderMenu />
@@ -21,7 +22,7 @@ export default function AdminLayout(props) {
 							minHeight: 280,
 						}}
 					>
-						{props.children}
+						<Outlet />
 					</Content>
 				</Layout>
 			</Layout>

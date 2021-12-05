@@ -43,7 +43,7 @@ export default function ModalFormUser(props) {
 					rules={[
 						{
 							required: true,
-							message: "Please input your username!",
+							message: "Please input phone number!",
 						},
 					]}
 				>
@@ -56,7 +56,7 @@ export default function ModalFormUser(props) {
 					rules={[
 						{
 							required: true,
-							message: "Please input your password!",
+							message: "Please input password!",
 						},
 					]}
 				>

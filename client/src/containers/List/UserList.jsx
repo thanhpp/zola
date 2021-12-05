@@ -2,6 +2,7 @@ import React from "react";
 import EditTableRow from "../../components/table/EditableTableRow";
 import { Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const columns = [
 	{
@@ -18,7 +19,9 @@ const columns = [
 						<Avatar size="small" icon={<UserOutlined />} />
 					)}
 					{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-					<a style={{ marginLeft: 15 }}>{text}</a>
+					<Link to={`${text}`} style={{ marginLeft: 15 }}>
+						{text}
+					</Link>
 				</>
 			);
 		},
@@ -66,5 +69,6 @@ const data = [
 ];
 
 export default function UserList() {
+	console.log("User List render");
 	return <EditTableRow columnName={columns} data={data} options={options} />;
 }

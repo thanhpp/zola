@@ -4,12 +4,17 @@ import { Route, Routes } from "react-router-dom";
 // import AdminRoute from "./AdminRoute.js";
 // import UserRoute from "./UserRoute.js";
 
-import UserList from "../../containers/UserList/UserList";
+import AdminLayout from "../../containers/Layout/AdminLayout";
+import UserList from "../../containers/List/UserList";
+import UserDetail from "../../views/UserDetail";
 
 export default function Router() {
 	return (
 		<Routes>
-			<Route path="/users" element={<UserList />} />
+			<Route path="/" element={<AdminLayout />}>
+				<Route path="users" element={<UserList />} />
+				<Route path="users/:id" element={<UserDetail />} />
+			</Route>
 		</Routes>
 	);
 }
