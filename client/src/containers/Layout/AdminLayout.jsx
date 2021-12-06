@@ -2,7 +2,7 @@ import React from "react";
 import "antd/dist/antd.css";
 import { Layout } from "antd";
 import HeaderMenu from "../../components/layout/Header/HeaderMenu";
-import Sidebar from "../../components/layout/Siderbar/Sidebar";
+import Sidebar from "../../components/layout/Siderbar/Sidebar.jsx";
 import { Outlet } from "react-router";
 
 const { Content } = Layout;

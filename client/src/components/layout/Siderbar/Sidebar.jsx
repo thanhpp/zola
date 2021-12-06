@@ -2,7 +2,7 @@ import React from "react";
 import "antd/dist/antd.css";
 import styles from "./Sidebar.module.css";
 import { Layout, Menu } from "antd";
-import { sider } from "./SideBar.js";
+import { sider } from "./SideBar";
 import { Link, useLocation } from "react-router-dom";
 
 const { Sider } = Layout;

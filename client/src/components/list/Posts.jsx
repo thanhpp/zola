@@ -48,6 +48,7 @@ export default function Posts({ posts }) {
 							onConfirm={() => console.log(item.id)}
 						>
 							<DeleteOutlined />
+							<span className="comment-action-delete"> Delete</span>
 						</Popconfirm>,
 					]}
 					extra={
@@ -59,7 +60,7 @@ export default function Posts({ posts }) {
 				>
 					<List.Item.Meta
 						avatar={<Avatar src={item.avatar} />}
-						title={<Link to={item.id}>{item.author}</Link>}
+						title={<Link to={`${item.id}`}>{item.author}</Link>}
 						description={
 							item.media.length !== 0
 								? `With ${item.media.length} media content(s) attached`

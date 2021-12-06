@@ -1,5 +1,6 @@
 import React from "react";
 import Posts from "../../components/list/Posts";
+//import { Button } from "antd";
 
 const listData = [];
 for (let i = 0; i < 23; i++) {
@@ -25,5 +26,12 @@ for (let i = 0; i < 23; i++) {
 }
 
 export default function PostsList() {
-	return <Posts posts={listData} />;
+	return (
+		<>
+			{/* <Button type="primary" block>
+				Add new post
+			</Button> */}
+			<Posts posts={listData} />
+		</>
+	);
 }
