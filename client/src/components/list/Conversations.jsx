@@ -51,7 +51,7 @@ export default function Conversations({ conversations }) {
 								{conversation.partner.username}
 							</Link>
 						}
-						description={dayjs.unix(1638785915).fromNow()}
+						description={dayjs.unix(conversation.lastMessage.created).fromNow()}
 					/>
 					<Paragraph strong={conversation.lastMessage.unread}>
 						{conversation.lastMessage.message}

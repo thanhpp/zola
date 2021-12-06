@@ -13,7 +13,7 @@ const conversations = [
 		lastMessage: {
 			message: "this is a message",
 			created: "1638785955",
-			unread: 0,
+			unread: 0, // 0 : read; 1: unread
 		},
 		numNewMessage: "2",
 	},
