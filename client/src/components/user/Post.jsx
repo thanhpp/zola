@@ -5,17 +5,18 @@ import { LikeOutlined, MessageOutlined, LikeFilled } from "@ant-design/icons";
 
 export default function Post(props) {
 	const { post } = props;
+	const { is_liked, like, comment, author, described } = post;
 	const actions = [
 		<Tooltip key="comment-basic-like" title="Like">
 			<span>
-				{React.createElement(LikeOutlined)}
-				<span className="comment-action">{post.like}</span>
+				{React.createElement(parseInt(is_liked) ? LikeFilled : LikeOutlined)}
+				<span className="comment-action">{like}</span>
 			</span>
 		</Tooltip>,
 		<Tooltip key="comment-basic" title="Comment">
 			<span>
 				{React.createElement(MessageOutlined)}
-				<span className="comment-action">{post.comment}</span>
+				<span className="comment-action">{comment}</span>
 			</span>
 		</Tooltip>,
 	];
@@ -23,27 +24,27 @@ export default function Post(props) {
 	return (
 		<Comment
 			actions={actions}
-			author={post.author}
-			avatar={
-				<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
-			}
+			author={author.name}
+			avatar={<Avatar src={author.avatar} alt="Avatar" />}
 			content={
 				<>
-					<Typography.Paragraph>{post.content}</Typography.Paragraph>
-					{post.media[0]?.includes(".jpg") ||
-					post.media[0]?.includes(".png") ? (
+					<Typography.Paragraph>{described}</Typography.Paragraph>
+					{post.image ? (
 						<Image.PreviewGroup>
-							<Space size={"large"}>
-								{post.media.map((image) => {
-									return <Image key={image} width={300} src={image} />;
+							<Space size={"large"} wrap>
+								{post.image.map((image) => {
+									return <Image key={image.id} width={300} src={image.url} />;
 								})}
 							</Space>
 						</Image.PreviewGroup>
-					) : (
-						<video width="600" controls>
-							<source src={post.media[0]} type="video/mp4" />
-						</video>
-					)}
+					) : null}
+					{post.video ? (
+						<div style={{ display: "flex", justifyContent: "center" }}>
+							<video width="600" poster={post.video.thumb} controls>
+								<source src={post.video.url} type="video/mp4" />
+							</video>
+						</div>
+					) : null}
 				</>
 			}
 			// datetime={

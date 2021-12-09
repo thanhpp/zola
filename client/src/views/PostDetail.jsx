@@ -5,24 +5,44 @@ import Editor from "../components/chat/Editor";
 import { Comment, Avatar } from "antd";
 
 const post = {
-	author: "John Doe",
-	avatar: "https://joeschmoe.io/api/v1/random",
-	media: [
-		// "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
-		// "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
-		// "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
-		// "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
-		"https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4",
+	id: "0",
+	created: "1639036932",
+	modified: "",
+	author: {
+		id: "123443245",
+		name: "John Doe",
+		avatar: "https://joeschmoe.io/api/v1/random",
+	},
+	// video: {
+	// 	thumb:
+	// 		"https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
+	// 	url: "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4",
+	// },
+	image: [
+		{
+			id: "2",
+			url: "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
+		},
+		{
+			id: "3",
+			url: "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
+		},
+		{
+			id: "4",
+			url: "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
+		},
+		{
+			id: "5",
+			url: "https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png",
+		},
 	],
-	content:
-		"We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure),\
-        to help people create their product prototypes beautifully and efficiently.We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure),\
-        to help people create their product prototypes beautifully and efficiently.We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure),\
-        to help people create their product prototypes beautifully and efficiently.We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure),\
-        to help people create their product prototypes beautifully and efficiently.We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure),\
-        to help people create their product prototypes beautifully and efficiently.",
-	like: 126,
-	comment: 126,
+	described: "This is a post",
+	like: "126",
+	comment: "126",
+	is_liked: "1", // 0: not liked, 1: is liked
+	is_blocked: 0, //0: not blocked, 1: is blocked
+	can_edit: 1, //0: can not edit, 1: can edit
+	can_comment: "0", //0: can't, 1: can
 };
 
 const comments = [
@@ -67,19 +87,21 @@ export default function PostDetail() {
 			<Post post={post}>
 				<Comments comments={comments} />
 			</Post>
-			<Comment
-				avatar={
-					<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
-				}
-				content={
-					<Editor
-						onChange={handleChange}
-						onSubmit={handleSubmit}
-						submitting={comment.submitting}
-						value={comment.value}
-					/>
-				}
-			/>
+			{parseInt(post.can_comment) ? (
+				<Comment
+					avatar={
+						<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
+					}
+					content={
+						<Editor
+							onChange={handleChange}
+							onSubmit={handleSubmit}
+							submitting={comment.submitting}
+							value={comment.value}
+						/>
+					}
+				/>
+			) : null}
 		</>
 	);
 }
