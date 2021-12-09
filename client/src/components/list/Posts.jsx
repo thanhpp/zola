@@ -62,15 +62,11 @@ export default function Posts({ posts }) {
 						}
 					/>
 					<Paragraph
-						ellipsis={
-							true
-								? {
-										rows: 2,
-										expandable: true,
-										symbol: "more",
-								  }
-								: false
-						}
+						ellipsis={{
+							rows: 2,
+							expandable: true,
+							symbol: "more",
+						}}
 					>
 						{item.content}
 					</Paragraph>

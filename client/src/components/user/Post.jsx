@@ -2,10 +2,13 @@ import React from "react";
 import "antd/dist/antd.css";
 import { Comment, Tooltip, Avatar, Image, Space, Typography } from "antd";
 import { LikeOutlined, MessageOutlined, LikeFilled } from "@ant-design/icons";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export default function Post(props) {
 	const { post } = props;
-	const { is_liked, like, comment, author, described } = post;
+	const { is_liked, like, comment, author, described, created } = post;
 	const actions = [
 		<Tooltip key="comment-basic-like" title="Like">
 			<span>
@@ -47,11 +50,11 @@ export default function Post(props) {
 					) : null}
 				</>
 			}
-			// datetime={
-			// 	<Tooltip title={moment().format("YYYY-MM-DD HH:mm:ss")}>
-			// 		<span>{moment().fromNow()}</span>
-			// 	</Tooltip>
-			// }
+			datetime={
+				<Tooltip title={dayjs().format("DD-MM-YYYY HH:mm:ss")}>
+					<span>{dayjs.unix(created).fromNow()}</span>
+				</Tooltip>
+			}
 		>
 			{props.children}
 		</Comment>

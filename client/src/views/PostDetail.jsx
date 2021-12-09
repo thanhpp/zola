@@ -42,21 +42,29 @@ const post = {
 	is_liked: "1", // 0: not liked, 1: is liked
 	is_blocked: 0, //0: not blocked, 1: is blocked
 	can_edit: 1, //0: can not edit, 1: can edit
-	can_comment: "0", //0: can't, 1: can
+	can_comment: "1", //0: can't, 1: can
 };
 
 const comments = [
 	{
 		id: "2",
-		author: "Jane Doe",
-		avatar: "https://joeschmoe.io/api/v1/random",
-		content: "horrah",
+		created: "1639036942",
+		comment: "horrah",
+		poster: {
+			id: "124341343",
+			name: "Jane Doe",
+			avatar: "https://joeschmoe.io/api/v1/random",
+		},
 	},
 	{
 		id: "3",
-		author: "Ann Doe",
-		avatar: "https://joeschmoe.io/api/v1/random",
-		content: "horrah",
+		created: "1639036942",
+		comment: "horrah 2",
+		poster: {
+			id: "124341353",
+			name: "Joe Doe",
+			avatar: "https://joeschmoe.io/api/v1/random",
+		},
 	},
 ];
 
