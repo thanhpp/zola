@@ -1181,6 +1181,36 @@
 							"body": "{\n    \"code\": 9992,\n    \"message\": \"locked post\",\n    \"data\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "get_media",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}/media/117a6982-4242-42e8-b7de-c9106437ae31",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}",
+								"media",
+								"117a6982-4242-42e8-b7de-c9106437ae31"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

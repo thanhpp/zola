@@ -48,6 +48,10 @@ func (r relationGorm) unmarshal(relationDB *RelationDB) (*entity.Relation, error
 }
 
 func (r relationGorm) GetRelationBetween(ctx context.Context, userIDA, userIDB string) (*entity.Relation, error) {
+	if userIDA == userIDB {
+		return nil, repository.ErrSameUser
+	}
+
 	var relationDB = new(RelationDB)
 
 	if err := r.db.WithContext(ctx).Model(r.model).
