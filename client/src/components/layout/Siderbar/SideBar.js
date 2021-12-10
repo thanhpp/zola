@@ -1,9 +1,5 @@
 export const sider = [
 	{
-		navName: "Overview",
-		link: "overview",
-	},
-	{
 		navName: "Users List",
 		link: "users",
 	},

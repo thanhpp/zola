@@ -12,6 +12,7 @@ export default function Router() {
 	return (
 		<Routes>
 			<Route path="/" element={<AdminLayout />}>
+				<Route index element={<UserList />} />
 				<Route path="users" element={<UserList />} />
 				<Route path="users/:id" element={<UserDetail />} />
 				<Route path="posts" element={<PostsList />} />
