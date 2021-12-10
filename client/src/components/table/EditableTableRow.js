@@ -15,7 +15,7 @@ const { Option } = Select;
 
 const EditTableRow = (props) => {
 	const [form] = Form.useForm();
-	const { data, handleData, columnName, options, handleAdd, handleDelete } =
+	const { data, handleEdit, columnName, options, handleAdd, handleDelete } =
 		props;
 	const [editingKey, setEditingKey] = useState("");
 	const [visible, setVisible] = useState(false);
@@ -92,11 +92,11 @@ const EditTableRow = (props) => {
 			if (index > -1) {
 				const item = newData[index];
 				newData.splice(index, 1, { ...item, ...row });
-				handleData(newData);
+				handleEdit({ ...item, ...row });
 				setEditingKey("");
 			} else {
 				newData.push(row);
-				handleData(newData);
+				handleEdit(newData);
 				setEditingKey("");
 			}
 		} catch (errInfo) {
@@ -172,8 +172,7 @@ const EditTableRow = (props) => {
 	});
 
 	const onCreate = (values) => {
-		//handleAdd(values);
-		console.log("Received values of form: ", values);
+		handleAdd(values);
 		setVisible(false);
 	};
 
@@ -208,9 +207,6 @@ const EditTableRow = (props) => {
 			</Form>
 			<ModalFormUser
 				visible={visible}
-				title="Yêu cầu chức năng"
-				// inputsText={inputsText}
-				// inputsSelect={inputsSelect}
 				onCancel={() => {
 					setVisible(false);
 				}}

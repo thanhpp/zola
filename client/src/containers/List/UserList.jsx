@@ -1,35 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import EditTableRow from "../../components/table/EditableTableRow";
 import { Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 const columns = [
+	{
+		title: "User ID",
+		dataIndex: "user_id",
+		key: "user_id",
+	},
 	{
 		title: "Username",
 		dataIndex: "username",
 		key: "username",
 		render: (text, row) => {
-			const { url } = row;
+			const { avatar } = row;
 			return (
 				<>
-					{url ? (
-						<Avatar size="small" src={url} />
+					{avatar ? (
+						<Avatar size="small" src={avatar} />
 					) : (
 						<Avatar size="small" icon={<UserOutlined />} />
 					)}
-					{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
 					<Link to={`${text}`} style={{ marginLeft: 15 }}>
 						{text}
 					</Link>
 				</>
 			);
 		},
-	},
-	{
-		title: "Status",
-		dataIndex: "status",
-		key: "status",
 	},
 	{
 		title: "State",
@@ -39,8 +41,8 @@ const columns = [
 	},
 	{
 		title: "Last login",
-		dataIndex: "last_login",
-		key: "last_login",
+		dataIndex: "lastLogin",
+		key: "lastLogin",
 	},
 ];
 
@@ -49,25 +51,70 @@ const options = [
 	{ value: 1, text: "Active" },
 ];
 
-const data = [
+const users = [
 	{
+		user_id: "omg",
 		username: "omg",
-		key: "omg",
-		url: "",
-		status: "online",
-		state: "Inactive",
-		last_login: "6 hours ago",
+		avatar: "https://joeschmoe.io/api/v1/random",
+		is_active: "0",
+		lastLogin: "1639121121",
 	},
 	{
-		username: "omg2",
-		key: "omg2",
-		url: "https://joeschmoe.io/api/v1/random",
-		status: "online",
-		state: "Inactive",
-		last_login: "6 hours ago",
+		user_id: "omg 2",
+		username: "omg",
+		avatar: "https://joeschmoe.io/api/v1/random",
+		is_active: "1",
+		lastLogin: "1639121111",
 	},
 ];
 
+const isActive = (state) => {
+	return parseInt(state) ? "Active" : "Inactive";
+};
+
+const convertedData = users.map((user) => {
+	return {
+		key: user.user_id,
+		user_id: user.user_id,
+		username: user.username,
+		avatar: user.avatar,
+		state: isActive(user.is_active),
+		lastLogin: dayjs.unix(user.lastLogin).fromNow(),
+	};
+});
+
 export default function UserList() {
-	return <EditTableRow columnName={columns} data={data} options={options} />;
+	const [data, setData] = useState(convertedData);
+	const handleAdd = (values) => {
+		const { phoneNumber, password } = values;
+		console.log({
+			phoneNumber: phoneNumber,
+			password: password,
+		});
+	};
+	const handleDelete = (id) => {
+		console.log(id);
+	};
+	const handleEdit = (values) => {
+		//edit user state - send async request
+		const { user_id, state } = values;
+		console.log(user_id, state);
+		//handle array client
+		values = { ...values, state: isActive(state) };
+		const newData = data.map((data) => {
+			if (data.user_id === values.user_id) return values;
+			return data;
+		});
+		setData(newData);
+	};
+	return (
+		<EditTableRow
+			columnName={columns}
+			data={data}
+			handleAdd={handleAdd}
+			handleDelete={handleDelete}
+			handleEdit={handleEdit}
+			options={options}
+		/>
+	);
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Modal, Form, Input, Checkbox } from "antd";
+import { Modal, Form, Input } from "antd";
 
 export default function ModalFormUser(props) {
 	const { visible, onCreate, onCancel } = props;
@@ -39,7 +39,7 @@ export default function ModalFormUser(props) {
 			>
 				<Form.Item
 					label="Phone number"
-					name="username"
+					name="phoneNumber"
 					rules={[
 						{
 							required: true,
@@ -61,9 +61,6 @@ export default function ModalFormUser(props) {
 					]}
 				>
 					<Input.Password />
-				</Form.Item>
-				<Form.Item name="admin" valuePropName="checked">
-					<Checkbox>Admin</Checkbox>
 				</Form.Item>
 			</Form>
 		</Modal>
