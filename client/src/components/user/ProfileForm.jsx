@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Card, Form, Input, Button, Upload } from "antd";
+import { Card, Form, Input, Button, Upload, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 export default function ProfileForm({ user }) {
@@ -40,6 +40,7 @@ export default function ProfileForm({ user }) {
 
 		return e && e.fileList;
 	};
+
 	return (
 		<Card>
 			<Form
@@ -118,9 +119,18 @@ export default function ProfileForm({ user }) {
 					</Upload>
 				</Form.Item>
 				<Form.Item>
-					<Button type="primary" htmlType="submit">
-						Submit
-					</Button>
+					<Space>
+						<Button type="primary" htmlType="submit">
+							Submit
+						</Button>
+						<Button
+							type="primary"
+							htmlType="button"
+							onClick={() => form.resetFields()}
+						>
+							Cancel
+						</Button>
+					</Space>
 				</Form.Item>
 			</Form>
 		</Card>

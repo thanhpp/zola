@@ -17,7 +17,7 @@ export default function ProfileCard(props) {
 
 	const handleUserState = () => {
 		//async request here
-		console.log("current state", userState);
+		console.log(`new state: ${!userState ? "1" : "0"}, userId: ${userId}`);
 		// handle in client
 		setUserState(!userState);
 	};
