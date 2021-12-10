@@ -196,7 +196,10 @@ func (p postGorm) Delete(ctx context.Context, id string) error {
 			return err
 		}
 
-		// FIXME: delete comments
+		// delete comments
+		if err := tx.WithContext(ctx).Model(&CommentDB{}).Where("post_uuid = ?", id).Delete(&CommentDB{}).Error; err != nil {
+			return err
+		}
 
 		// delete media
 		if err := tx.WithContext(ctx).Model(p.mediaModel).Where("post_uuid = ?", id).Delete(p.mediaModel).Error; err != nil {
