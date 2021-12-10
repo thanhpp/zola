@@ -62,6 +62,9 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		postGr.POST("/:postid/comment", postCtrl.CreateComment)
 		postGr.PUT("/:postid/comment/:commentid", postCtrl.UpdateComment)
 		postGr.DELETE("/:postid/comment/:commentid", postCtrl.DeleteComment)
+
+		// media
+		postGr.GET("/:postid/media/:mediaid", postCtrl.GetMedia)
 	}
 
 	reportGr := r.Group("/report")

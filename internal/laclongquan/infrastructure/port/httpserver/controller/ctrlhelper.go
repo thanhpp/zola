@@ -22,6 +22,7 @@ var (
 	ErrInvalidPostID    = errors.New("invalid post id")
 	ErrInvalidUserID    = errors.New("invalid user id")
 	ErrInvalidCommentID = errors.New("invalid comment id")
+	ErrInvalidMediaID   = errors.New("invalid media id")
 )
 
 func getClaimsFromCtx(c *gin.Context) (*auth.Claims, error) {
@@ -79,6 +80,16 @@ func getPostID(c *gin.Context) (uuid.UUID, error) {
 	}
 
 	return postUUID, nil
+}
+
+func getMediaID(c *gin.Context) (uuid.UUID, error) {
+	mediaID := c.Param("mediaid")
+	mediaUUID, err := uuid.Parse(mediaID)
+	if err != nil {
+		return uuid.Nil, ErrInvalidMediaID
+	}
+
+	return mediaUUID, nil
 }
 
 func getCommentID(c *gin.Context) (uuid.UUID, error) {

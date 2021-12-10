@@ -116,6 +116,22 @@ func (p postGorm) getByIDTx(ctx context.Context, tx *gorm.DB, id string, expect 
 	return nil
 }
 
+func (p postGorm) GetMediaByID(ctx context.Context, id string) (*entity.Media, error) {
+	var (
+		mediaDB = new(MediaDB)
+	)
+
+	err := p.db.WithContext(ctx).Model(p.mediaModel).Where("media_uuid = ?", id).Take(mediaDB).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, repository.ErrMediaNotFound
+		}
+		return nil, err
+	}
+
+	return p.unmarshalMedia(mediaDB)
+}
+
 func (p postGorm) Create(ctx context.Context, post *entity.Post) error {
 	postDB := p.marshalPost(post)
 
@@ -180,7 +196,10 @@ func (p postGorm) Delete(ctx context.Context, id string) error {
 			return err
 		}
 
-		// FIXME: delete comments
+		// delete comments
+		if err := tx.WithContext(ctx).Model(&CommentDB{}).Where("post_uuid = ?", id).Delete(&CommentDB{}).Error; err != nil {
+			return err
+		}
 
 		// delete media
 		if err := tx.WithContext(ctx).Model(p.mediaModel).Where("post_uuid = ?", id).Delete(p.mediaModel).Error; err != nil {
