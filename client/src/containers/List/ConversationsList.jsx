@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Conversations from "../../components/list/Conversations";
 import { Button } from "antd";
+import ModalNewChat from "../../components/modal/ModalNewChat";
 
 const conversations = [
 	{
@@ -34,12 +35,14 @@ const conversations = [
 ];
 
 export default function ConversationsList() {
+	const [displayModal, setDisplayModal] = useState(false);
 	return (
 		<div>
-			<Button type="primary" block>
+			<Button type="primary" block onClick={() => setDisplayModal(true)}>
 				New Message
 			</Button>
 			<Conversations conversations={conversations} />
+			<ModalNewChat visible={displayModal} setVisible={setDisplayModal} />
 		</div>
 	);
 }

@@ -7,6 +7,7 @@ import PostsList from "../../containers/List/PostsList";
 import PostDetail from "../../views/PostDetail";
 import ConversationsList from "../../containers/List/ConversationsList";
 import Chat from "../../containers/Chat/Chat";
+import Search from "../../views/Search";
 
 export default function Router() {
 	return (
@@ -19,6 +20,7 @@ export default function Router() {
 				<Route path="posts/:id" element={<PostDetail />} />
 				<Route path="messages" element={<ConversationsList />} />
 				<Route path="messages/:id" element={<Chat />} />
+				<Route path="search" element={<Search />} />
 			</Route>
 		</Routes>
 	);
