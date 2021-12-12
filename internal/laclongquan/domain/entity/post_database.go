@@ -2,6 +2,7 @@ package entity
 
 import (
 	"os"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -30,7 +31,7 @@ func NewMediaFromDB(id, owner, mediaType, path string) (*Media, error) {
 	}, nil
 }
 
-func NewPostFromDB(id, creator, status, content string, media []Media) (*Post, error) {
+func NewPostFromDB(id, creator, status, content string, media []Media, createdAt, updatedAt time.Time) (*Post, error) {
 	postID, err := uuid.Parse(id)
 	if err != nil {
 		return nil, err
@@ -42,10 +43,12 @@ func NewPostFromDB(id, creator, status, content string, media []Media) (*Post, e
 	}
 
 	return &Post{
-		id:      postID,
-		creator: creatorID,
-		status:  PostStatus(status),
-		content: content,
-		media:   media,
+		id:        postID,
+		creator:   creatorID,
+		status:    PostStatus(status),
+		content:   content,
+		media:     media,
+		createdAt: createdAt,
+		updatedAt: updatedAt,
 	}, nil
 }

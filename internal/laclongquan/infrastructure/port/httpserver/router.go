@@ -1,9 +1,20 @@
 package httpserver
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
+	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/controller"
 )
+
+func (s HTTPServer) formURL() string {
+	return "http://" + s.cfg.Host + ":" + s.cfg.Port
+}
+
+func (s HTTPServer) formMediaURL(post entity.Post, media entity.Media) string {
+	return fmt.Sprintf("%s/%s/media/%s", s.formURL(), post.ID(), media.ID())
+}
 
 func (s *HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
@@ -18,6 +29,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	postCtrl := controller.NewPostCtrl(
 		s.app.PostHandler,
 		s.app.LikeHandler,
+		s.formMediaURL,
 	)
 	reportCtrl := controller.NewReportCtrl(
 		s.app.ReportHandler,
