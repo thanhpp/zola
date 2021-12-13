@@ -30,7 +30,7 @@ export default function Posts({ posts }) {
 
 	const mediaPreview = (post) => {
 		if (post.image) {
-			return <img width={272} alt="images" src={post.image[0]} />;
+			return <img width={272} alt="images" src={post.image[0].url} />;
 		} else if (post.video) {
 			return (
 				<video width={272} poster={post.video.thumb} controls>

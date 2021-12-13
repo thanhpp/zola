@@ -12,10 +12,12 @@ const datas = {
 for (let i = 0; i < 23; i++) {
 	datas.posts.push({
 		id: i,
-		name: ["Jane", "Joe", "Hoey", "Doey"],
-		// image: [
-		// 	"https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",
-		// ],
+		image: [
+			{
+				id: "1",
+				url: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",
+			},
+		],
 		// video: {
 		// 	url: "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4",
 		// 	thumb:
