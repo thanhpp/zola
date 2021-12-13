@@ -2,10 +2,8 @@ import React from "react";
 import "antd/dist/antd.css";
 import { Form, Input, Button } from "antd";
 
-export default function LoginForm() {
-	const onFinish = (values) => {
-		console.log("Success:", values);
-	};
+export default function LoginForm(props) {
+	const { handleLoginSubmit } = props;
 
 	const onFinishFailed = (errorInfo) => {
 		console.log("Failed:", errorInfo);
@@ -21,13 +19,13 @@ export default function LoginForm() {
 				span: 16,
 			}}
 			initialValues={{}}
-			onFinish={onFinish}
+			onFinish={handleLoginSubmit}
 			onFinishFailed={onFinishFailed}
 			autoComplete="off"
 		>
 			<Form.Item
-				label="Username"
-				name="username"
+				label="Phone Number"
+				name="phonenumber"
 				rules={[
 					{
 						required: true,
