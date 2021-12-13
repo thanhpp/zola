@@ -38,7 +38,7 @@ func (m *DaemonManager) Start(daemons ...Daemon) {
 
 		go func() {
 			if err := start(); err != nil {
-				logger.ErrorFmt(*logger.NewLogFormat("daemon manager").SetMsg("start daemon").SetError(err))
+				logger.FatalFmt(*logger.NewLogFormat("daemon manager").SetMsg("start daemon").SetError(err))
 				m.Terminated <- struct{}{}
 				return
 			}
