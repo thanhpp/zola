@@ -13,7 +13,8 @@ type Claims struct {
 }
 
 type JWTUserData struct {
-	ID string `json:"id"`
+	ID   string `json:"id"`
+	Role string `json:"role"`
 }
 
 func (c Claims) exportMapClaims() (*jwt.MapClaims, error) {

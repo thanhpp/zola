@@ -73,6 +73,10 @@ func (c *Comment) UpdateContent(updater *User, content string) error {
 }
 
 func (c *Comment) IsDeletable(deleter *User) error {
+	if deleter.IsAdmin() {
+		return nil
+	}
+
 	if deleter.IsLocked() {
 		return ErrLockedUser
 	}

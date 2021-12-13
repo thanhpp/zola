@@ -5,7 +5,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func NewUserFromDB(userUUID, name, avatar, phone, hashpass, state string) (*User, error) {
+func NewUserFromDB(userUUID, name, avatar, phone, hashpass, state, role string) (*User, error) {
 	userID, err := uuid.Parse(userUUID)
 	if err != nil {
 		return nil, errors.WithMessage(err, "parse uuid")
@@ -20,5 +20,6 @@ func NewUserFromDB(userUUID, name, avatar, phone, hashpass, state string) (*User
 			HashPass: hashpass,
 		},
 		state: UserState(state),
+		role:  UserRole(role),
 	}, nil
 }

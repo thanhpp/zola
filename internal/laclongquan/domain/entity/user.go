@@ -15,12 +15,24 @@ const (
 	UserStateLocked UserState = "locked"
 )
 
+type UserRole string
+
+func (r UserRole) String() string {
+	return string(r)
+}
+
+const (
+	UserRoleAdmin UserRole = "admin"
+	UserRoleUser  UserRole = "user"
+)
+
 type User struct {
 	id      uuid.UUID
 	name    string
 	avatar  string
 	state   UserState
 	account Account
+	role    UserRole
 }
 
 func (u User) ID() uuid.UUID {
@@ -41,6 +53,14 @@ func (u User) Account() Account {
 
 func (u User) PassEqual(pass string, accCipher AccountCipher) error {
 	return u.account.Equal(u.account.Phone, pass, accCipher)
+}
+
+func (u User) Role() string {
+	return u.role.String()
+}
+
+func (u User) IsAdmin() bool {
+	return u.role == UserRoleAdmin
 }
 
 func (u *User) UpdatePass(oldPass, newPass string, accCipher AccountCipher) error {
