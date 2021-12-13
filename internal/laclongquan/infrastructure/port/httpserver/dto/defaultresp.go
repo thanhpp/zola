@@ -1,20 +1,11 @@
 package dto
 
-type DefaultResp struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+type DefaultRespWithoutData struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 }
 
-func NewDefaultResp(code int, message string, data interface{}) *DefaultResp {
-	return &DefaultResp{
-		Code:    code,
-		Message: message,
-		Data:    data,
-	}
-}
-
-func (resp *DefaultResp) SetCode(code int) {
+func (resp *DefaultRespWithoutData) SetCode(code int) {
 	if resp == nil {
 		return
 	}
@@ -22,12 +13,17 @@ func (resp *DefaultResp) SetCode(code int) {
 	resp.Code = code
 }
 
-func (resp *DefaultResp) SetMsg(msg string) {
+func (resp *DefaultRespWithoutData) SetMsg(msg string) {
 	if resp == nil {
 		return
 	}
 
 	resp.Message = msg
+}
+
+type DefaultResp struct {
+	DefaultRespWithoutData
+	Data interface{} `json:"data"`
 }
 
 func (resp *DefaultResp) SetData(data interface{}) {
@@ -36,4 +32,14 @@ func (resp *DefaultResp) SetData(data interface{}) {
 	}
 
 	resp.Data = data
+}
+
+func NewDefaultResp(code int, message string, data interface{}) *DefaultResp {
+	return &DefaultResp{
+		DefaultRespWithoutData: DefaultRespWithoutData{
+			Code:    code,
+			Message: message,
+		},
+		Data: data,
+	}
 }

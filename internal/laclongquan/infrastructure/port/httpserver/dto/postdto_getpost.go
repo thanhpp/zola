@@ -21,8 +21,7 @@ type AuthorResponse struct {
 	Avatar string `json:"avatar"`
 }
 
-type GetPostResponse struct {
-	DefaultResp
+type GetPostResponseData struct {
 	// post data-section
 	ID           string          `json:"id"`
 	Described    string          `json:"described"`
@@ -44,6 +43,11 @@ type GetPostResponse struct {
 	CanComment string `json:"can_comment"`
 }
 
+type GetPostResponse struct {
+	DefaultRespWithoutData
+	Data GetPostResponseData `json:"data"`
+}
+
 type FormMediaURLFunc func(post entity.Post, media entity.Media) string
 
 func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, formMediaURLFn FormMediaURLFunc) {
@@ -53,21 +57,21 @@ func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, f
 
 	// post section
 	if getPostResult.Post != nil {
-		resp.ID = getPostResult.Post.ID()
-		resp.Described = getPostResult.Post.Content()
-		resp.CreatedAt = getPostResult.Post.CreatedAt()
-		resp.ModifiedAt = getPostResult.Post.UpdatedAt()
+		resp.Data.ID = getPostResult.Post.ID()
+		resp.Data.Described = getPostResult.Post.Content()
+		resp.Data.CreatedAt = getPostResult.Post.CreatedAt()
+		resp.Data.ModifiedAt = getPostResult.Post.UpdatedAt()
 
 		for _, media := range getPostResult.Post.Media() {
 			switch media.Type() {
 			case entity.MediaTypeImage:
-				resp.Images = append(resp.Images, ImageResponse{
+				resp.Data.Images = append(resp.Data.Images, ImageResponse{
 					ID:  media.ID(),
 					URL: formMediaURLFn(*getPostResult.Post, media),
 				})
 
 			case entity.MediaTypeVideo:
-				resp.Video = VideoResponse{
+				resp.Data.Video = VideoResponse{
 					URL: formMediaURLFn(*getPostResult.Post, media),
 					// FIXME: thumb
 				}
@@ -75,24 +79,24 @@ func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, f
 		}
 	}
 
-	resp.LikeCount = getPostResult.LikeCount
-	resp.CommentCount = getPostResult.CommentCount
+	resp.Data.LikeCount = getPostResult.LikeCount
+	resp.Data.CommentCount = getPostResult.CommentCount
 
 	// author section
 	if getPostResult.Author != nil {
-		resp.Author = AuthorResponse{
+		resp.Data.Author = AuthorResponse{
 			ID:   getPostResult.Author.ID().String(),
 			Name: getPostResult.Author.Name(),
 			// FIXME: avatar
 		}
-		resp.State = getPostResult.Author.State().String()
+		resp.Data.State = getPostResult.Author.State().String()
 	}
 
 	// issuer section
-	resp.IsLiked = boolTranslate(getPostResult.IsLiked)
-	resp.IsBlocked = boolTranslate(false)
-	resp.CanEdit = boolTranslate(getPostResult.CanEdit)
-	resp.CanComment = boolTranslate(getPostResult.CanComment)
+	resp.Data.IsLiked = boolTranslate(getPostResult.IsLiked)
+	resp.Data.IsBlocked = boolTranslate(false)
+	resp.Data.CanEdit = boolTranslate(getPostResult.CanEdit)
+	resp.Data.CanComment = boolTranslate(getPostResult.CanComment)
 }
 
 func (resp *GetPostResponse) SetBlockedResponse() {
@@ -100,5 +104,5 @@ func (resp *GetPostResponse) SetBlockedResponse() {
 		return
 	}
 
-	resp.IsBlocked = boolTranslate(true)
+	resp.Data.IsBlocked = boolTranslate(true)
 }
