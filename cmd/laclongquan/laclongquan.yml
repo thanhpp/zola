@@ -27,3 +27,7 @@ JWT:
 
 SaveDirectory: ./localstorage
 AESKey: idheysngor640udnwye385jtufhdbe6w
+
+Admins:
+  - Phone: "0965508091"
+    Pass:  "Ppt190898"

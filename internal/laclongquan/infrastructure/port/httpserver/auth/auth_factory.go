@@ -99,7 +99,8 @@ func (fac authFactory) NewClaimsFromUser(user *entity.User) (*Claims, error) {
 			ExpiresAt: now.Add(fac.expireDuration).Unix(),
 		},
 		User: JWTUserData{
-			ID: user.ID().String(),
+			ID:   user.ID().String(),
+			Role: user.Role(),
 		},
 	}, nil
 }

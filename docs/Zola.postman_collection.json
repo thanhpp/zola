@@ -1211,6 +1211,71 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get_post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get_post - 1000 | ok | get by the creator",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 13 Dec 2021 14:55:45 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "479"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"id\": \"116880b9-5c22-11ec-ab4e-2cf05d8903e3\",\n        \"described\": \"Hello there\",\n        \"created\": 1639406193,\n        \"modified\": 1639406193,\n        \"like\": 0,\n        \"comment\": 0,\n        \"images\": null,\n        \"video\": {\n            \"url\": \"http://0.0.0.0:12100/post/116880b9-5c22-11ec-ab4e-2cf05d8903e3/media/115e5e27-5c22-11ec-ab4e-2cf05d8903e3\",\n            \"thumb\": \"\"\n        },\n        \"author\": {\n            \"id\": \"ab05fe44-544b-11ec-b533-2cf05d8903e3\",\n            \"name\": \"\",\n            \"avatar\": \"\"\n        },\n        \"state\": \"active\",\n        \"is_liked\": \"0\",\n        \"is_blocked\": \"0\",\n        \"can_edit\": \"1\",\n        \"can_comment\": \"0\"\n    }\n}"
+						}
+					]
 				}
 			]
 		},
@@ -1978,6 +2043,104 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"code\": 1000,\n    \"message\": \"\",\n    \"data\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IkxhY0xvbmdRdWFuS2V5IiwidHlwIjoiSldUIn0.eyJleHAiOjE2MzU0MzIxODMsImlhdCI6MTYzNTQyODU4MywiaXNzIjoiTGFjTG9uZ1F1YW4iLCJqdGkiOiJmOTEwNzhkMi0zN2Y0LTExZWMtYTU3Ny0yY2YwNWQ4OTAzZTMiLCJ1c2VyIjp7ImlkIjoiYmQwYTk1ZmItMzVjMS0xMWVjLTk0ZjMtMmNmMDVkODkwM2UzIn19.JSpHkoReZuWxTR6ioB5CxQVHXyf0xQT6HmKtCCpTgi7Q0W0BUPLrqQQRIcL90twyhAcgBm1legsFvGicmUorrl8OUDlG_-EkDJtYoqBAIYKfmiuByvSc56dluxfX5FyIGBQxFzXZ7c_OZtNBbiJhyqsS4_EKuQqm03FVNMx8LBHYOZkwMjsTdMtEAYGyriB7nTnA4GNpX6Guzs1x-Aim7WLNPp5kFxb34ew64x-33SwDoMo2WAAR421-_ae-qYL3n1zYfsl4kwvfK0zXHwgFcht9LWGVpC20VZeL3nxgqK21t6OVGc9TCuAAW6SrxBPAJhW7j31JMdB-1o_XpAD0-lHZJWuIXueWeXCnMGcOZt3I6lTdIhE4nKONAzwkiJK24vXoe4LFmuyq6Smg7i1YxZDcwt_Sj7bASRTwL4PrDXBTSQPz5JvliKljsyZrwDyBJOcQOvuAQ5ub8uyDrOVqXXiaGoiq4A79siFhLPRvolItyp6B8Prtypxssw82uRKG\"\n}"
+				}
+			]
+		},
+		{
+			"name": "login - admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(pm.response);",
+							"var strData = pm.response.stream.toString('utf8');",
+							"var jsonData = JSON.parse(strData);",
+							"console.log(jsonData);",
+							"pm.environment.set(\"token\", jsonData.data);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "phonenumber",
+							"value": "{{adminphone}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{adminpass}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{zola}}/login",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "login - admin | 1000 | OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "phonenumber",
+									"value": "{{adminphone}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{adminpass}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/login",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 13 Dec 2021 15:35:45 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "841"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"\",\n    \"data\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IkxhY0xvbmdRdWFuS2V5IiwidHlwIjoiSldUIn0.eyJleHAiOjE2Mzk0NTI5NDUsImlhdCI6MTYzOTQwOTc0NSwiaXNzIjoiTGFjTG9uZ1F1YW4iLCJqdGkiOiI1Njc3MmFiNS01YzJhLTExZWMtYWZkZi0yY2YwNWQ4OTAzZTMiLCJ1c2VyIjp7ImlkIjoiMjdlZjUzOTMtNWMyYS0xMWVjLWE2NmMtMmNmMDVkODkwM2UzIiwicm9sZSI6ImFkbWluIn19.S3JttYgnKIwEY7jW45T5AB-m4JQT1GGLuiY_J7lhiur7o49UXMeeR9Ig0VZhcrw_6INPk7YZLk7Okou3tM2dbw5b1eLpzKiFJePp4aIvGBMh8ii0xcXtZEHPeoR83UdpgqBzR1nsRyFdiI06NRUCalfaw0hlihdDHLvLMZvAfIwbUFoReKIhjgrSzjNyfOiX74juMh9cNCfgTIJcJNszGvMU6vUCDs_7MH1RZ2kpVTWgAA4PH8y1ZVcZltfZaOxNPkjUSQ8fikUhsJXjOm6Psf9tRfqCHt51V2UToyFHeiEXzfKYEodEP1k2kZ-ey4Kj1FIR0FWt9cMSlwRgkanLEUkuw--CIlxh--uye8HQbvTh7vLI0IsHYCEFzz9_Ev2Evjaaz8j8gSBbEjTCJbu7u4gzoADupl293fou71rgRrWExEONGrwJ3K2YMZBQUmOq8R5skQ4OfEjtcN8pJO1IHCCrVvw7Owtuwkprn4F5_3pr1Gru0r5h0qCZRa1prJuJ\"\n}"
 				}
 			]
 		},

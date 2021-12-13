@@ -18,6 +18,12 @@ type MainConfig struct {
 	JWT           auth.Config             `mapstructure:"JWT"`
 	SaveDirectory string                  `mapstructure:"SaveDirectory"`
 	AESKey        string                  `mapstructure:"AESKey"`
+	Admins        []AdminAccount          `mapstructure:"Admins"`
+}
+
+type AdminAccount struct {
+	Phone string `mapstructure:"Phone"`
+	Pass  string `mapstructure:"Pass"`
 }
 
 func Set(path string) error {

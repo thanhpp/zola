@@ -1,17 +1,25 @@
 package entity
 
 import (
+	"errors"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 )
 
+var (
+	ErrNilUser = errors.New("nil user")
+)
+
 type Post struct {
-	id      uuid.UUID
-	creator uuid.UUID
-	content string
-	status  PostStatus
-	media   []Media
+	id        uuid.UUID
+	creator   uuid.UUID
+	content   string
+	status    PostStatus
+	media     []Media
+	createdAt time.Time
+	updatedAt time.Time
 }
 
 func (p Post) ID() string {
@@ -75,17 +83,27 @@ func (p *Post) AddMedia(m Media) error {
 	return nil
 }
 
+func (p Post) CreatedAt() int64 {
+	return p.createdAt.Unix()
+}
+
+func (p Post) UpdatedAt() int64 {
+	return p.updatedAt.Unix()
+}
+
 func (p Post) CanUserGetMedia(user *User, relation *Relation, mediaID string) (*Media, error) {
-	if user.IsLocked() {
-		return nil, ErrLockedUser
-	}
+	if !user.IsAdmin() {
+		if user.IsLocked() {
+			return nil, ErrLockedUser
+		}
 
-	if p.IsLocked() {
-		return nil, ErrLockedPost
-	}
+		if p.IsLocked() {
+			return nil, ErrLockedPost
+		}
 
-	if user.ID().String() != p.Creator() && relation == nil || (relation != nil && relation.IsFriend()) {
-		return nil, ErrPermissionDenied
+		if (user.ID().String() != p.Creator() && relation == nil) || (relation != nil && relation.IsFriend()) {
+			return nil, ErrPermissionDenied
+		}
 	}
 
 	for i := range p.media {
@@ -95,6 +113,46 @@ func (p Post) CanUserGetMedia(user *User, relation *Relation, mediaID string) (*
 	}
 
 	return nil, ErrPostNotContainsMedia
+}
+
+func (p Post) CanUserGetPost(user *User, relation *Relation) error {
+	if user.IsAdmin() {
+		return nil
+	}
+
+	if user.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if p.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if (user.ID().String() != p.Creator() && relation == nil) || (relation != nil && relation.IsFriend()) {
+		return ErrPermissionDenied
+	}
+
+	return nil
+}
+
+func (p Post) CanUserEditPost(user *User) error {
+	if user == nil {
+		return ErrNilUser
+	}
+
+	if user.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if p.IsLocked() {
+		return ErrLockedPost
+	}
+
+	if p.Creator() != user.ID().String() {
+		return ErrNotCreator
+	}
+
+	return nil
 }
 
 func (p *Post) RemoveMedia(ids ...string) ([]*Media, error) {
@@ -132,7 +190,10 @@ func contentLengthCheck(content string) bool {
 	return true
 }
 
-func (p *Post) CanBeDeletedBy(userID string) bool {
+func (p *Post) CanBeDeletedBy(user *User) bool {
+	if user.IsAdmin() {
+		return true
+	}
 
-	return p.Creator() == userID
+	return p.Creator() == user.ID().String()
 }

@@ -84,7 +84,15 @@ func (p postGorm) unmarshalPost(postDB *PostDB) (*entity.Post, error) {
 		mediaList = append(mediaList, *media)
 	}
 
-	return entity.NewPostFromDB(postDB.PostUUID, postDB.Creator, postDB.Status, postDB.Content, mediaList)
+	return entity.NewPostFromDB(
+		postDB.PostUUID,
+		postDB.Creator,
+		postDB.Status,
+		postDB.Content,
+		mediaList,
+		postDB.CreatedAt,
+		postDB.UpdatedAt,
+	)
 }
 
 func (p postGorm) GetByID(ctx context.Context, id string) (*entity.Post, error) {

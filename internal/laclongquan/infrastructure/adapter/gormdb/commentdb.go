@@ -77,6 +77,17 @@ func (c commentGorm) getByPostIDCommentID(ctx context.Context, tx *gorm.DB, post
 	return c.unmarshal(cmtDB, post, user), nil
 }
 
+func (c commentGorm) CountByPostID(ctx context.Context, postID string) (int, error) {
+	var commentCount int64
+	if err := c.db.WithContext(ctx).Model(c.cmtModel).
+		Where("post_uuid = ?", postID).Count(&commentCount).
+		Error; err != nil {
+		return 0, err
+	}
+
+	return int(commentCount), nil
+}
+
 func (c commentGorm) Create(ctx context.Context, comment *entity.Comment) error {
 	return c.db.WithContext(ctx).Model(c.cmtModel).
 		Create(c.marshal(comment)).Error

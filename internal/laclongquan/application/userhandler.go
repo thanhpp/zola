@@ -48,6 +48,19 @@ func (u UserHandler) CreateUser(ctx context.Context, phone, pass, name, avatar s
 	return nil
 }
 
+func (u UserHandler) CreateAdminUser(ctx context.Context, phone, pass, name, avatar string) error {
+	newUser, err := u.fac.NewAdmin(phone, pass, name, avatar)
+	if err != nil {
+		return err
+	}
+
+	if err := u.repo.Create(ctx, newUser); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (u UserHandler) GetUser(ctx context.Context, phone, pass string) (*entity.User, error) {
 	user, err := u.repo.GetByPhone(ctx, phone)
 	if err != nil {

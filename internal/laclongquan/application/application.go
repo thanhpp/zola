@@ -32,6 +32,7 @@ func NewApplication(
 		PostHandler: NewPostHandler(
 			postRepo,
 			saveDir,
+			likeRepo,
 			commentRepo,
 			relationRepo,
 			userRepo,

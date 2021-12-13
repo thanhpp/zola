@@ -20,6 +20,7 @@ var (
 
 type UserFactory interface {
 	NewUser(phone, pass, name, avatar string) (*User, error)
+	NewAdmin(phone, pass, name, avatar string) (*User, error)
 	NewFriendRequest(requestor, requestee *User) (*Relation, error)
 	NewBlockRelation(blocker, blocked *User) (*Relation, error)
 }
@@ -55,7 +56,18 @@ func (fac userFactoryImpl) NewUser(phone, pass, name, avatar string) (*User, err
 		avatar:  avatar,
 		account: *account,
 		state:   UserStateActive,
+		role:    UserRoleUser,
 	}, nil
+}
+
+func (fac userFactoryImpl) NewAdmin(phone, pass, name, avatar string) (*User, error) {
+	newUser, err := fac.NewUser(phone, pass, name, avatar)
+	if err != nil {
+		return nil, err
+	}
+	newUser.role = UserRoleAdmin
+
+	return newUser, nil
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------

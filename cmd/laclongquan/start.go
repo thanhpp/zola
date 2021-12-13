@@ -69,11 +69,20 @@ func start(configPath string) {
 	}
 	logger.Info("http server OK")
 
+	// ------------- Migrate data from config -------------
+	createAdminCtx := context.Background()
+	for _, adminAcc := range laclongquanconfig.Get().Admins {
+		if err := app.UserHandler.CreateAdminUser(createAdminCtx, adminAcc.Phone, adminAcc.Pass, "", ""); err != nil {
+			logger.Errorf("can't create admin user %s - err: %v", adminAcc.Phone, err)
+		}
+	}
+
+	// ------------- Daemons ---------------
 	mainCtx := context.Background()
 	daemonMan := booting.NewDaemonManeger(mainCtx)
 
 	logger.Info("starting daemons....")
-	daemonMan.Start(httpDaemon)
+	daemonMan.Start(httpDaemon, authSrv.DeleteExpiredDaemons())
 	booting.WaitSignals(mainCtx)
 	daemonMan.Stop()
 

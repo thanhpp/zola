@@ -12,6 +12,7 @@ import (
 type PostHandler struct {
 	fac          entity.PostFactory
 	repo         repository.PostRepository
+	likeRepo     repository.LikeRepository
 	commentRepo  repository.CommentRepository
 	relationRepo repository.RelationRepository
 	userRepo     repository.UserRepository
@@ -20,6 +21,7 @@ type PostHandler struct {
 }
 
 func NewPostHandler(repo repository.PostRepository, saveDir string,
+	likeRepo repository.LikeRepository,
 	commentRepo repository.CommentRepository,
 	relationRepo repository.RelationRepository,
 	userRepo repository.UserRepository,
@@ -27,6 +29,7 @@ func NewPostHandler(repo repository.PostRepository, saveDir string,
 	return PostHandler{
 		fac:          entity.NewPostFactory(),
 		repo:         repo,
+		likeRepo:     likeRepo,
 		commentRepo:  commentRepo,
 		relationRepo: relationRepo,
 		userRepo:     userRepo,
