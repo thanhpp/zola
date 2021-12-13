@@ -33,6 +33,30 @@ func (l likeGorm) unmarshal(likeDB *LikeDB) *entity.Like {
 	}
 }
 
+func (l likeGorm) Count(ctx context.Context, postID string) (int, error) {
+	var count = new(int64)
+
+	if err := l.db.WithContext(ctx).Model(l.model).
+		Where("post_uuid = ?", postID).
+		Count(count).Error; err != nil {
+		return 0, err
+	}
+
+	return int(*count), nil
+}
+
+func (l likeGorm) IsLiked(ctx context.Context, userID, postID string) bool {
+	var count = new(int64)
+
+	if err := l.db.WithContext(ctx).Model(l.model).
+		Where("post_uuid = ? AND creator_uuid = ?", postID, userID).
+		Count(count).Error; err != nil {
+		return false
+	}
+
+	return *count > 0
+}
+
 func (l likeGorm) CreateOrDelete(ctx context.Context, like *entity.Like) error {
 	likeDB := l.marshal(like)
 
@@ -50,16 +74,4 @@ func (l likeGorm) CreateOrDelete(ctx context.Context, like *entity.Like) error {
 	}
 
 	return nil
-}
-
-func (l likeGorm) Count(ctx context.Context, postID string) (int, error) {
-	var count = new(int64)
-
-	if err := l.db.WithContext(ctx).Model(l.model).
-		Where("post_uuid = ?", postID).
-		Count(count).Error; err != nil {
-		return 0, err
-	}
-
-	return int(*count), nil
 }

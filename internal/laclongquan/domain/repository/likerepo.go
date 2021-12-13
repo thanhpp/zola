@@ -7,6 +7,10 @@ import (
 )
 
 type LikeRepository interface {
-	CreateOrDelete(ctx context.Context, like *entity.Like) error
+	// read
 	Count(ctx context.Context, postID string) (int, error)
+	IsLiked(ctx context.Context, userID, postID string) bool
+
+	// write
+	CreateOrDelete(ctx context.Context, like *entity.Like) error
 }

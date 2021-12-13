@@ -37,8 +37,8 @@ func SetLog(cfg *LogConfig) error {
 
 	// encoder
 	zapCfg.EncoderConfig = zapcore.EncoderConfig{
-		MessageKey:  "message",
-		FunctionKey: "function",
+		MessageKey: "message",
+		// FunctionKey: "function",
 
 		NameKey:    "name",
 		EncodeName: zapcore.FullNameEncoder,

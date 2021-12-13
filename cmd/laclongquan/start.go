@@ -69,11 +69,12 @@ func start(configPath string) {
 	}
 	logger.Info("http server OK")
 
+	// ------------- Daemons ---------------
 	mainCtx := context.Background()
 	daemonMan := booting.NewDaemonManeger(mainCtx)
 
 	logger.Info("starting daemons....")
-	daemonMan.Start(httpDaemon)
+	daemonMan.Start(httpDaemon, authSrv.DeleteExpiredDaemons())
 	booting.WaitSignals(mainCtx)
 	daemonMan.Stop()
 
