@@ -1211,6 +1211,71 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get_post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get_post - 1000 | ok | get by the creator",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{zola}}/post/{{new_post_id}}",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"post",
+										"{{new_post_id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 13 Dec 2021 14:55:45 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "479"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"id\": \"116880b9-5c22-11ec-ab4e-2cf05d8903e3\",\n        \"described\": \"Hello there\",\n        \"created\": 1639406193,\n        \"modified\": 1639406193,\n        \"like\": 0,\n        \"comment\": 0,\n        \"images\": null,\n        \"video\": {\n            \"url\": \"http://0.0.0.0:12100/post/116880b9-5c22-11ec-ab4e-2cf05d8903e3/media/115e5e27-5c22-11ec-ab4e-2cf05d8903e3\",\n            \"thumb\": \"\"\n        },\n        \"author\": {\n            \"id\": \"ab05fe44-544b-11ec-b533-2cf05d8903e3\",\n            \"name\": \"\",\n            \"avatar\": \"\"\n        },\n        \"state\": \"active\",\n        \"is_liked\": \"0\",\n        \"is_blocked\": \"0\",\n        \"can_edit\": \"1\",\n        \"can_comment\": \"0\"\n    }\n}"
+						}
+					]
 				}
 			]
 		},
