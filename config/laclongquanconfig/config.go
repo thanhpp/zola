@@ -1,6 +1,8 @@
 package laclongquanconfig
 
 import (
+	"os"
+
 	"github.com/thanhpp/zola/config/shared"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/auth"
 	"github.com/thanhpp/zola/pkg/logger"
@@ -20,6 +22,34 @@ type MainConfig struct {
 
 func Set(path string) error {
 	return shared.ReadFromFile(path, cfg)
+}
+
+func SetFromENV(path string) error {
+	if err := Set(path); err != nil {
+		return err
+	}
+
+	dbHost := os.Getenv("LLQ_DB_HOST")
+	if dbHost != "" {
+		cfg.Database.Host = dbHost
+	}
+
+	dbPort := os.Getenv("LLQ_DB_PORT")
+	if dbPort != "" {
+		cfg.Database.Port = dbPort
+	}
+
+	dbUser := os.Getenv("LLQ_DB_USER")
+	if dbUser != "" {
+		cfg.Database.User = dbUser
+	}
+
+	dbPassword := os.Getenv("LLQ_DB_PASSWORD")
+	if dbPassword != "" {
+		cfg.Database.Pass = dbPassword
+	}
+
+	return nil
 }
 
 func Get() *MainConfig {
