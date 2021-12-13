@@ -15,7 +15,12 @@ func (p PostHandler) DeletePost(ctx context.Context, userID, postID string) erro
 		return err
 	}
 
-	if !post.CanBeDeletedBy(userID) {
+	user, err := p.userRepo.GetByID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	if !post.CanBeDeletedBy(user) {
 		return ErrPostCannotBeDeleted
 	}
 

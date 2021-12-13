@@ -2047,6 +2047,104 @@
 			]
 		},
 		{
+			"name": "login - admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(pm.response);",
+							"var strData = pm.response.stream.toString('utf8');",
+							"var jsonData = JSON.parse(strData);",
+							"console.log(jsonData);",
+							"pm.environment.set(\"token\", jsonData.data);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "phonenumber",
+							"value": "{{adminphone}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{adminpass}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{zola}}/login",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "login - admin | 1000 | OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "phonenumber",
+									"value": "{{adminphone}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{adminpass}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/login",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 13 Dec 2021 15:35:45 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "841"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"\",\n    \"data\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IkxhY0xvbmdRdWFuS2V5IiwidHlwIjoiSldUIn0.eyJleHAiOjE2Mzk0NTI5NDUsImlhdCI6MTYzOTQwOTc0NSwiaXNzIjoiTGFjTG9uZ1F1YW4iLCJqdGkiOiI1Njc3MmFiNS01YzJhLTExZWMtYWZkZi0yY2YwNWQ4OTAzZTMiLCJ1c2VyIjp7ImlkIjoiMjdlZjUzOTMtNWMyYS0xMWVjLWE2NmMtMmNmMDVkODkwM2UzIiwicm9sZSI6ImFkbWluIn19.S3JttYgnKIwEY7jW45T5AB-m4JQT1GGLuiY_J7lhiur7o49UXMeeR9Ig0VZhcrw_6INPk7YZLk7Okou3tM2dbw5b1eLpzKiFJePp4aIvGBMh8ii0xcXtZEHPeoR83UdpgqBzR1nsRyFdiI06NRUCalfaw0hlihdDHLvLMZvAfIwbUFoReKIhjgrSzjNyfOiX74juMh9cNCfgTIJcJNszGvMU6vUCDs_7MH1RZ2kpVTWgAA4PH8y1ZVcZltfZaOxNPkjUSQ8fikUhsJXjOm6Psf9tRfqCHt51V2UToyFHeiEXzfKYEodEP1k2kZ-ey4Kj1FIR0FWt9cMSlwRgkanLEUkuw--CIlxh--uye8HQbvTh7vLI0IsHYCEFzz9_Ev2Evjaaz8j8gSBbEjTCJbu7u4gzoADupl293fou71rgRrWExEONGrwJ3K2YMZBQUmOq8R5skQ4OfEjtcN8pJO1IHCCrVvw7Owtuwkprn4F5_3pr1Gru0r5h0qCZRa1prJuJ\"\n}"
+				}
+			]
+		},
+		{
 			"name": "logout",
 			"request": {
 				"auth": {
