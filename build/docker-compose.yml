@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  database:
+    container_name: pgdatabase
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER:      laclongquan_user
+      POSTGRES_PASSWORD:  laclongquan_pass
+      POSTGRES_MULTIPLE_DATABASES: laclongquan_db,laclongquan_user
+    networks:
+      - intranet
+
+  laclongquan:
+    container_name: laclongquanservice
+    build: 
+      context: ..
+      dockerfile: ./build/laclongquan/Dockerfile
+    depends_on:
+      - database
+    deploy:
+      restart_policy:
+          condition: on-failure
+          max_attempts: 5
+    environment:
+      WAIT_HOSTS:   database:5432
+      WAIT_AFTER:   5
+      LLQ_DB_HOST:  database
+      LLQ_DB_PORT:  5432
+    ports:
+      - 12100:12100
+    networks:
+      - intranet
+
+networks:
+  intranet:

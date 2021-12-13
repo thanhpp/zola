@@ -17,7 +17,7 @@ import (
 )
 
 func start(configPath string) {
-	if err := laclongquanconfig.Set(configPath); err != nil {
+	if err := laclongquanconfig.SetFromENV(configPath); err != nil {
 		panic(errors.WithMessage(err, "set config"))
 	}
 
