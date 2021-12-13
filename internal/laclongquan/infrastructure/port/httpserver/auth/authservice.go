@@ -2,8 +2,11 @@ package auth
 
 import (
 	"context"
+	"time"
 
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+	"github.com/thanhpp/zola/pkg/booting"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type AuthService struct {
@@ -66,4 +69,34 @@ func (s AuthService) NewClaimsFromToken(ctx context.Context, token string) (*Cla
 
 func (s AuthService) DeleteUserTokens(ctx context.Context, userID string) error {
 	return s.repo.DeleteByUserID(ctx, userID)
+}
+
+func (s AuthService) DeleteExpiredDaemons() booting.Daemon {
+	return func(ctx context.Context) (start func() error, cleanup func()) {
+		ticker := time.NewTicker(time.Hour)
+		start = func() error {
+			if err := s.repo.DeleteExpired(ctx); err != nil {
+				logger.Errorf("Delete expired token error: %v", err)
+			}
+
+			for {
+				select {
+				case <-ticker.C:
+					if err := s.repo.DeleteExpired(ctx); err != nil {
+						logger.Errorf("Delete expired token error: %v", err)
+					}
+					logger.Info("Delete expired token")
+
+				case <-ctx.Done():
+					return nil
+				}
+			}
+		}
+
+		cleanup = func() {
+			ticker.Stop()
+		}
+
+		return start, cleanup
+	}
 }

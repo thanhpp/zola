@@ -13,7 +13,7 @@ func (s HTTPServer) formURL() string {
 }
 
 func (s HTTPServer) formMediaURL(post entity.Post, media entity.Media) string {
-	return fmt.Sprintf("%s/%s/media/%s", s.formURL(), post.ID(), media.ID())
+	return fmt.Sprintf("%s/post/%s/media/%s", s.formURL(), post.ID(), media.ID())
 }
 
 func (s *HTTPServer) newRouter() *gin.Engine {
@@ -63,6 +63,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	postGr := r.Group("/post")
 	{
 		postGr.Use(s.AuthMiddleware())
+		postGr.GET("/:postid", postCtrl.GetPost)
 		postGr.POST("", postCtrl.CreatePost)
 		postGr.PUT("/:postid", postCtrl.EditPost)
 		postGr.DELETE("/:postid", postCtrl.DeletePost)
