@@ -2,7 +2,9 @@ package httpserver
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/controller"
@@ -35,6 +37,16 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		s.app.ReportHandler,
 	)
 	// ---------------------
+
+	// CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"*"},
+		AllowHeaders:     []string{"*"},
+		ExposeHeaders:    []string{"*"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// ---- ROUTES ----
 	r.POST("/signup", userCtrl.SignUp)
