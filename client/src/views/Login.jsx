@@ -12,6 +12,7 @@ export default function Login() {
 	const authCtx = useContext(AuthContext);
 	const { isLoading, isError, error, mutate } = useMutation(loginUser, {
 		onSuccess: (data) => {
+			//console.log(data);
 			authCtx.login(data.data);
 			navigate("/", { replace: true });
 		},

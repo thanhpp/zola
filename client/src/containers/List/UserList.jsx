@@ -5,6 +5,8 @@ import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useMutation } from "react-query";
+import { signUpUser } from "../../api/userAuthentication";
 dayjs.extend(relativeTime);
 
 const columns = [
@@ -85,13 +87,14 @@ const convertedData = users.map((user) => {
 
 export default function UserList() {
 	const [data, setData] = useState(convertedData);
-
+	const { mutate: addUserMutation } = useMutation(signUpUser, {
+		onSuccess: (data) => {
+			console.log("added user", data);
+		},
+	});
 	const handleAdd = (values) => {
-		const { phoneNumber, password } = values;
-		console.log({
-			phoneNumber: phoneNumber,
-			password: password,
-		});
+		console.log(values);
+		addUserMutation(values);
 	};
 	const handleDelete = (id) => {
 		console.log(id);

@@ -21,10 +21,10 @@ export default function HeaderMenu() {
 	}
 	const handleLogoutClick = () => {
 		refetch();
-		if (status === "success") {
-			authCtx.logout();
-		}
 	};
+	if (status === "success") {
+		authCtx.logout();
+	}
 	return (
 		<Header className={styles.header}>
 			<div className={styles.logo} />
