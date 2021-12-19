@@ -29,7 +29,7 @@ export default function LoginForm(props) {
 				rules={[
 					{
 						required: true,
-						message: "Please input your username!",
+						message: "Please input your phone number!",
 					},
 				]}
 			>

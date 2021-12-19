@@ -1,28 +1,28 @@
-import React, { useContext } from "react";
-import { Route, Redirect } from "react-router-dom";
-import AuthContext from "../../context/authContext";
+import React from "react";
+import { Navigate } from "react-router-dom";
+import AdminLayout from "../../containers/Layout/AdminLayout";
+import UserList from "../../containers/List/UserList";
+import UserDetail from "../../views/UserDetail";
+import PostsList from "../../containers/List/PostsList";
+import PostDetail from "../../views/PostDetail";
+import ConversationsList from "../../containers/List/ConversationsList";
+import Chat from "../../containers/Chat/Chat";
+import Search from "../../views/Search";
 
-const accessRole = "admin";
-
-export default function AdminRoute({ children, ...rest }) {
-	const authCtx = useContext(AuthContext);
-	const { isLogin, role } = authCtx.user;
-	const userHasPermission = role && accessRole;
-
-	if (!isLogin) {
-		return <Redirect to="/login" />;
-	}
-
-	return (
-		<Route
-			{...rest}
-			render={() => {
-				return userHasPermission === true ? (
-					children
-				) : (
-					<Redirect to="/error/401" />
-				);
-			}}
-		/>
-	);
-}
+export const adminRoutes = [
+	{
+		path: "/",
+		element: <AdminLayout />,
+		children: [
+			{ index: true, element: <UserList /> },
+			{ path: "users", element: <UserList /> },
+			{ path: "users/:id", element: <UserDetail /> },
+			{ path: "posts", element: <PostsList /> },
+			{ path: "posts/:id", element: <PostDetail /> },
+			{ path: "messages", element: <ConversationsList /> },
+			{ path: "messages/:id", element: <Chat /> },
+			{ path: "search", element: <Search /> },
+			{ path: "*", element: <Navigate to="." /> },
+		],
+	},
+];

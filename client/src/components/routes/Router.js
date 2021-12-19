@@ -1,36 +1,29 @@
-import React, { useContext } from "react";
-import { Route, Routes } from "react-router-dom";
-import AdminLayout from "../../containers/Layout/AdminLayout";
-import UserList from "../../containers/List/UserList";
-import UserDetail from "../../views/UserDetail";
-import PostsList from "../../containers/List/PostsList";
-import PostDetail from "../../views/PostDetail";
-import ConversationsList from "../../containers/List/ConversationsList";
-import Chat from "../../containers/Chat/Chat";
-import Search from "../../views/Search";
+import React, { useContext, useMemo } from "react";
+import { useRoutes } from "react-router-dom";
 import AuthContext from "../../context/authContext";
-import Login from "../../views/Login";
+//import Login from "../../views/Login";
+import { adminRoutes } from "./AdminRoute";
+import { userRoutes } from "./UserRoute";
+import { loginRoutes } from "./LoginRoute";
+
+const role = ["admin", "user"];
+
+const checkRoutes = (user) => {
+	console.log("checking routes");
+	if (!user) {
+		return loginRoutes;
+	} else if (user && user.role.includes(role[0])) {
+		return adminRoutes;
+	} else if (user && user.role.includes(role[1])) {
+		return userRoutes;
+	}
+};
 
 export default function Router() {
 	const authCtx = useContext(AuthContext);
-	let isLogin = authCtx.user.isLogin;
+	let user = authCtx.user;
+	const routes = useMemo(() => checkRoutes(user), [user]);
+	const element = useRoutes(routes);
 
-	return (
-		<Routes>
-			{isLogin ? (
-				<Route path="/" element={<AdminLayout />}>
-					<Route index element={<UserList />} />
-					<Route path="users" element={<UserList />} />
-					<Route path="users/:id" element={<UserDetail />} />
-					<Route path="posts" element={<PostsList />} />
-					<Route path="posts/:id" element={<PostDetail />} />
-					<Route path="messages" element={<ConversationsList />} />
-					<Route path="messages/:id" element={<Chat />} />
-					<Route path="search" element={<Search />} />
-				</Route>
-			) : (
-				<Route path="/" element={<Login />} />
-			)}
-		</Routes>
-	);
+	return <>{element}</>;
 }

@@ -1,34 +1,41 @@
-import React, { useState } from "react";
-//import { logoutUser } from "../api/userAuthentication";
+import React, { useState, useEffect } from "react";
+import jwt from "jsonwebtoken";
 
 const AuthContext = React.createContext({
-	user: {
-		isLogin: false,
-		//role: "user"
-	},
+	user: null,
 	login: (token) => {},
 	logout: () => {},
 });
 
+const getUserInfo = (token) => {
+	const { user } = jwt.decode(token);
+	const { id: userId, role } = user;
+	return { userId, role };
+};
+
 export const AuthContextProvider = (props) => {
-	const token = localStorage.getItem("token");
-	const [isLogin, setIsLogin] = useState(!!token);
-	//const [role, setRole] = useState("");
+	const [user, setUser] = useState(null);
+	const [token, setToken] = useState(localStorage.getItem("token"));
 
 	const loginHandler = (token) => {
 		localStorage.setItem("token", token);
-		setIsLogin(true);
-		//setRole(role);
+		setToken(token);
 	};
+
+	useEffect(() => {
+		if (token) {
+			const { userId, role } = getUserInfo(token);
+			setUser({ userId, role });
+		}
+	}, [token]);
 
 	const logoutHandler = () => {
 		localStorage.removeItem("token");
-		setIsLogin(false);
-		//setRole("");
+		setUser(null);
 	};
 
 	const contextValue = {
-		user: { isLogin },
+		user,
 		login: loginHandler,
 		logout: logoutHandler,
 	};

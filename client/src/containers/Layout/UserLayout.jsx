@@ -2,6 +2,7 @@ import React from "react";
 import "antd/dist/antd.css";
 import { Layout } from "antd";
 import HeaderMenu from "../../components/layout/Header/HeaderMenu";
+import { Outlet } from "react-router";
 
 const { Content } = Layout;
 
@@ -18,7 +19,7 @@ export default function UserLayout(props) {
 						minHeight: 280,
 					}}
 				>
-					{props.children}
+					<Outlet />
 				</Content>
 			</Layout>
 		</Layout>

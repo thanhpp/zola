@@ -1,21 +1,28 @@
 import React, { useContext } from "react";
 import "antd/dist/antd.css";
 import styles from "./Header.module.css";
+import Spinner from "../../spinner/Spinner";
 import { Menu, Layout } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { logoutUser } from "../../../api/userAuthentication";
 import AuthContext from "../../../context/authContext";
+import { useQuery } from "react-query";
 
 const { Header } = Layout;
 export default function HeaderMenu() {
 	const authCtx = useContext(AuthContext);
+	const { status, error, refetch } = useQuery("currentUser", logoutUser, {
+		enabled: false,
+	});
+
+	if (status === "loading") return <Spinner />;
+	if (status === "error") {
+		console.log(error);
+	}
 	const handleLogoutClick = () => {
-		try {
-			logoutUser();
-			console.log("clicked");
+		refetch();
+		if (status === "success") {
 			authCtx.logout();
-		} catch (err) {
-			console.log(err);
 		}
 	};
 	return (

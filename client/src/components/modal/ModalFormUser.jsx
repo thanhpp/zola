@@ -39,7 +39,7 @@ export default function ModalFormUser(props) {
 			>
 				<Form.Item
 					label="Phone number"
-					name="phoneNumber"
+					name="phonenumber"
 					rules={[
 						{
 							required: true,
