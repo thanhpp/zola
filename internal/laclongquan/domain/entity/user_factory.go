@@ -23,6 +23,7 @@ type UserFactory interface {
 	NewAdmin(phone, pass, name, avatar string) (*User, error)
 	NewFriendRequest(requestor, requestee *User) (*Relation, error)
 	NewBlockRelation(blocker, blocked *User) (*Relation, error)
+	NewAddress(address, city, country string) (*UserAddress, error)
 }
 
 func NewUserFactory(accountCipher AccountCipher) UserFactory {
@@ -48,6 +49,10 @@ func (fac userFactoryImpl) NewUser(phone, pass, name, avatar string) (*User, err
 	account, err := fac.newAccount(phone, pass)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(name) == 0 {
+		name = phone
 	}
 
 	return &User{
@@ -107,5 +112,16 @@ func (fac userFactoryImpl) newAccount(phone, pass string) (*Account, error) {
 	return &Account{
 		Phone:    phone,
 		HashPass: hashPass,
+	}, nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- USER VALUE OBJECTS ----------------------------------------------------------
+
+func (fac userFactoryImpl) NewAddress(address, city, country string) (*UserAddress, error) {
+	return &UserAddress{
+		Address: address,
+		City:    city,
+		Country: country,
 	}, nil
 }

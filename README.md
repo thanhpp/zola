@@ -38,6 +38,7 @@
 - [x] [change_password](https://github.com/thanhpp/zola/issues/26)
 - [x] [set_block_user](https://github.com/thanhpp/zola/issues/19)
 - [ ] set_block_diary
+- [ ] set_user_info
 #### Post
 - [x] [add_post](https://github.com/thanhpp/zola/issues/5)
 - [ ] get_post

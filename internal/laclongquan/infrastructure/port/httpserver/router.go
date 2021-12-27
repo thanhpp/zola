@@ -2,6 +2,7 @@ package httpserver
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -18,6 +19,30 @@ func (s HTTPServer) formMediaURL(post entity.Post, media entity.Media) string {
 	return fmt.Sprintf("%s/post/%s/media/%s", s.formURL(), post.ID(), media.ID())
 }
 
+func (s HTTPServer) resolveMediaURL(url string) (postID, mediaID string, err error) {
+	if len(url) == 0 {
+		return "", "", controller.ErrEmptyMediaURL
+	}
+
+	// remove the "http://" or "https://"
+	url = strings.Replace(url, "http://", "", 1)
+	url = strings.Replace(url, "https://", "", 1)
+
+	urlComponent := strings.Split(url, "/")
+	if len(urlComponent) != 5 {
+		return "", "", controller.ErrInvalidMediaURL
+	}
+
+	if urlComponent[1] != "post" || urlComponent[3] != "media" {
+		return "", "", controller.ErrInvalidMediaURL
+	}
+
+	postID = urlComponent[2]
+	mediaID = urlComponent[4]
+
+	return postID, mediaID, nil
+}
+
 func (s *HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Recovery())
@@ -26,7 +51,9 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	// ---- CONTROLLERS ----
 	userCtrl := controller.NewUserCtrl(
 		s.app.UserHandler,
+		s.app.PostHandler,
 		*s.auth,
+		s.resolveMediaURL,
 	)
 	postCtrl := controller.NewPostCtrl(
 		s.app.PostHandler,
@@ -56,6 +83,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	userGr := r.Group("/user")
 	{
 		userGr.Use(s.AuthMiddleware())
+		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 	}
 
