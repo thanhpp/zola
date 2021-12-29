@@ -3155,6 +3155,399 @@
 					"body": "{\n    \"code\": 1004,\n    \"message\": \"new password is too common with old password\",\n    \"data\": null\n}"
 				}
 			]
+		},
+		{
+			"name": "set_user_info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "username",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "description",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "address",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "city",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "country",
+							"type": "text"
+						},
+						{
+							"key": "avatar",
+							"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+							"type": "text"
+						},
+						{
+							"key": "cover_image",
+							"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+							"type": "text"
+						},
+						{
+							"key": "link",
+							"value": "link",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{zola}}/user",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "set_user_info - 1004 | invalid username",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "user123name",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "city",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "country",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "link",
+									"value": "link",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Dec 2021 15:37:52 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid request\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_user_info - 1000 | OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "username",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "city",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "country",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "link",
+									"value": "link",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Dec 2021 15:37:23 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "99"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"avatar\": \"\",\n        \"cover_image\": \"\",\n        \"link\": \"\",\n        \"city\": \"\",\n        \"country\": \"\"\n    }\n}"
+				},
+				{
+					"name": "set_user_info - 1004 | invalid country",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "username",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "city",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "forbiden country",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "link",
+									"value": "link",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Dec 2021 15:50:07 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid request\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_user_info - 1004 | description too long",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "username",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "ErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLong",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "city",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "country",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "link",
+									"value": "link",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Dec 2021 15:40:30 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid request\",\n    \"data\": null\n}"
+				}
+			]
 		}
 	]
 }

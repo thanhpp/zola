@@ -1,5 +1,0 @@
-package laclongquan
-
-func Start() {
-
-}

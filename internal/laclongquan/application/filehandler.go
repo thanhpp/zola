@@ -63,7 +63,7 @@ func (f FileHandler) Cleanup(paths ...string) {
 }
 
 func (f FileHandler) GetVideoDuration(path string) (float64, error) {
-	// ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 input.mp4
+	// ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 <input.mp4>
 	var (
 		duration float64
 	)
