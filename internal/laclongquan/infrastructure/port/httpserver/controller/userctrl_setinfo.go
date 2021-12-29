@@ -77,7 +77,7 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 		avatarMedia, coverMedia,
 	)
 	if err != nil {
-		logger.Errorf("set user info error: %v", err)
+		logger.Errorf("set user info %s: %v", userID.String(), err)
 		switch err {
 		case repository.ErrUserNotFound:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
@@ -87,7 +87,15 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
 			return
 
-		case entity.ErrInputTooLong:
+		case entity.ErrInvalidInputLength:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			return
+
+		case entity.ErrInvalidUsername:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			return
+
+		case entity.ErrInvalidCountry:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
 

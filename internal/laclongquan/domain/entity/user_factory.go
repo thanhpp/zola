@@ -119,6 +119,16 @@ func (fac userFactoryImpl) newAccount(phone, pass string) (*Account, error) {
 // -------------------------------------------------------- USER VALUE OBJECTS ----------------------------------------------------------
 
 func (fac userFactoryImpl) NewAddress(address, city, country string) (*UserAddress, error) {
+	if !stringLengthCheck(address, 0, 150) ||
+		!stringLengthCheck(city, 0, 150) ||
+		!stringLengthCheck(country, 0, 150) {
+		return nil, ErrInvalidInputLength
+	}
+
+	if err := countryCheck(country); err != nil {
+		return nil, err
+	}
+
 	return &UserAddress{
 		Address: address,
 		City:    city,

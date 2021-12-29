@@ -1,6 +1,11 @@
 package entity
 
-import "github.com/google/uuid"
+import (
+	"errors"
+	"strings"
+
+	"github.com/google/uuid"
+)
 
 type UserState string
 
@@ -24,10 +29,28 @@ const (
 	UserRoleUser  UserRole = "user"
 )
 
+// ---------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- ADDRESS ----------------------------------------------------------
 type UserAddress struct {
 	Address string
 	City    string
 	Country string
+}
+
+var (
+	ErrInvalidCountry = errors.New("invalid country")
+	notSupportCountry = map[string]struct{}{
+		"forbiden country": {},
+	}
+)
+
+func countryCheck(country string) error {
+	country = strings.ToLower(strings.TrimSpace(country))
+	if _, ok := notSupportCountry[country]; ok {
+		return ErrInvalidCountry
+	}
+
+	return nil
 }
 
 type UserProfileMediaType string

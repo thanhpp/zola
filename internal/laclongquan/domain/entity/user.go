@@ -1,12 +1,17 @@
 package entity
 
 import (
+	"unicode"
+
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
 
 var (
-	ErrInputTooLong = errors.New("input too long")
+	ErrInputTooLong       = errors.New("input too long")
+	ErrEmptyInput         = errors.New("empty input")
+	ErrInvalidUsername    = errors.New("invalid username")
+	ErrInvalidInputLength = errors.New("invalid input length")
 )
 
 type User struct {
@@ -57,11 +62,30 @@ func (u *User) UpdateUsername(username string) error {
 		return nil
 	}
 
-	if len(username) > 500 {
-		return ErrInputTooLong
+	if err := validateUsername(username); err != nil {
+		return err
 	}
 
 	u.Username = username
+
+	return nil
+}
+
+func validateUsername(username string) error {
+	if !stringLengthCheck(username, 1, 50) {
+		return ErrInvalidUsername
+	}
+
+	if !unicode.IsLetter(rune(username[0])) {
+		return ErrInvalidUsername
+	}
+
+	for _, c := range username {
+		if unicode.IsLetter(c) || c == '_' {
+			continue
+		}
+		return ErrInvalidUsername
+	}
 
 	return nil
 }
@@ -75,8 +99,8 @@ func (u *User) UpdateDescription(description string) error {
 		return nil
 	}
 
-	if len(description) > 500 {
-		return ErrInputTooLong
+	if !stringLengthCheck(description, 0, 150) {
+		return ErrInvalidInputLength
 	}
 
 	return nil
@@ -154,4 +178,8 @@ func (u User) GetCity() string {
 }
 func (u User) GetCountry() string {
 	return u.Address.Country
+}
+
+func stringLengthCheck(input string, min, max int) bool {
+	return len(input) >= min && len(input) <= max
 }
