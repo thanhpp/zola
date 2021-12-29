@@ -31,17 +31,24 @@
 - [x] [signup](https://github.com/thanhpp/zola/commit/1a1bef3d247af842f8c1a16e8a4abea2c158e953)
 - [x] [login](https://github.com/thanhpp/zola/issues/1)
 - [x] [logout](https://github.com/thanhpp/zola/issues/3)
+  
 - [x] [set_request_friend](https://github.com/thanhpp/zola/issues/21)
 - [ ] get_requested_friend
 - [x] [set_accept_friend](https://github.com/thanhpp/zola/issues/21)
 - [ ] get_user_friends
+
 - [x] [change_password](https://github.com/thanhpp/zola/issues/26)
+
 - [x] [set_block_user](https://github.com/thanhpp/zola/issues/19)
 - [ ] set_block_diary
-- [ ] set_user_info
+
+- [ ] [set_user_info](https://github.com/thanhpp/zola/issues/58)
+
 #### Post
 - [x] [add_post](https://github.com/thanhpp/zola/issues/5)
 - [ ] get_post
+  - [x] [Get post data](https://github.com/thanhpp/zola/issues/41)
+  - [ ] video thumbnails
 - [ ] get_list_posts
 - [ ] check_new_item
 - [x] [edit_post](https://github.com/thanhpp/zola/issues/7)
