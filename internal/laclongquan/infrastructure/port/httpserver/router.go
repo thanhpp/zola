@@ -83,6 +83,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	userGr := r.Group("/user")
 	{
 		userGr.Use(s.AuthMiddleware())
+		userGr.GET("/:userid")
 		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 	}
