@@ -43,7 +43,7 @@
 - [ ] set_block_diary
 
 - [ ] set_user_info
-  - [ ] [update info](https://github.com/thanhpp/zola/issues/58)
+  - [x] [update info](https://github.com/thanhpp/zola/issues/58)
 
 #### Post
 - [x] [add_post](https://github.com/thanhpp/zola/issues/5)
