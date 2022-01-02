@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
@@ -9,7 +11,8 @@ func NewUserFromDB(
 	userUUID, name, phone, hashpass, state, role,
 	link, avatar, coverImage,
 	username, description,
-	address, city, country string) (*User, error) {
+	address, city, country string,
+	createdAt time.Time) (*User, error) {
 	userID, err := uuid.Parse(userUUID)
 	if err != nil {
 		return nil, errors.WithMessage(err, "parse uuid")
@@ -34,5 +37,6 @@ func NewUserFromDB(
 			City:    city,
 			Country: country,
 		},
+		CreatedAt: createdAt,
 	}, nil
 }

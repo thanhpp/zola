@@ -3548,6 +3548,143 @@
 					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid request\",\n    \"data\": null\n}"
 				}
 			]
+		},
+		{
+			"name": "get_user_info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{zola}}/user/2c5ece68-6bda-11ec-a520-2cf05d8903e3",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"user",
+						"2c5ece68-6bda-11ec-a520-2cf05d8903e3"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get_user_info - 1000 | OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/user/2c5ece68-6bda-11ec-a520-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"2c5ece68-6bda-11ec-a520-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 02 Jan 2022 15:18:24 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "382"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"id\": \"2c5ece68-6bda-11ec-a520-2cf05d8903e3\",\n        \"username\": \"username\",\n        \"description\": \"description\",\n        \"avatar\": \"http://0.0.0.0:12100/user/2c5ece68-6bda-11ec-a520-2cf05d8903e3/media/a0b3a6f0-61b5-43a2-8f64-65769d0493df\",\n        \"cover_image\": \"\",\n        \"link\": \"link\",\n        \"address\": \"address\",\n        \"city\": \"city\",\n        \"country\": \"country\",\n        \"is_friend\": \"0\",\n        \"listing\": 0,\n        \"created\": 1641134533\n    }\n}"
+				},
+				{
+					"name": "get_user_info - 1004 | locked user",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/user/2c5ece68-6bda-11ec-a520-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"2c5ece68-6bda-11ec-a520-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 02 Jan 2022 15:19:40 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "52"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"user not found\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "get_user_info - 1004 | user not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/user/2c5ece68-6bdb-11ec-a520-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"2c5ece68-6bdb-11ec-a520-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 02 Jan 2022 15:18:49 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "52"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"user not found\",\n    \"data\": null\n}"
+				}
+			]
 		}
 	]
 }

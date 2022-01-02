@@ -15,6 +15,7 @@ var (
 type RelationRepository interface {
 	// read
 	GetRelationBetween(ctx context.Context, userIDA, userIDB string) (*entity.Relation, error)
+	CountFriends(ctx context.Context, userID string) (int, error)
 
 	// write
 	CreateRelation(ctx context.Context, relation *entity.Relation) error

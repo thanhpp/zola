@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"time"
 	"unicode"
 
 	"github.com/google/uuid"
@@ -19,7 +20,6 @@ type User struct {
 	Username    string
 	Description string
 	name        string
-	avatar      string
 	Link        string
 	state       UserState
 	account     Account
@@ -27,6 +27,7 @@ type User struct {
 	Address     UserAddress
 	Avatar      string
 	CoverImg    string
+	CreatedAt   time.Time
 }
 
 func (u User) ID() uuid.UUID {
@@ -102,6 +103,8 @@ func (u *User) UpdateDescription(description string) error {
 	if !stringLengthCheck(description, 0, 150) {
 		return ErrInvalidInputLength
 	}
+
+	u.Description = description
 
 	return nil
 }
@@ -182,4 +185,32 @@ func (u User) GetCountry() string {
 
 func stringLengthCheck(input string, min, max int) bool {
 	return len(input) >= min && len(input) <= max
+}
+
+func (u User) CanGetUserInfo(requestor *User, relation *Relation) error {
+	if requestor.IsAdmin() {
+		return nil
+	}
+
+	if u.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if requestor.ID().String() == u.ID().String() {
+		return nil
+	}
+
+	if relation != nil && relation.IsBlock() {
+		return ErrPermissionDenied
+	}
+
+	return nil
+}
+
+func (u User) Equal(user *User) bool {
+	return user != nil && u.ID().String() == user.ID().String()
+}
+
+func (u User) CreatedAtUnix() int64 {
+	return u.CreatedAt.Unix()
 }

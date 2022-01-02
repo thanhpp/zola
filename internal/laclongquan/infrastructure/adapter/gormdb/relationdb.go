@@ -66,6 +66,19 @@ func (r relationGorm) GetRelationBetween(ctx context.Context, userIDA, userIDB s
 	return r.unmarshal(relationDB)
 }
 
+func (r relationGorm) CountFriends(ctx context.Context, userID string) (int, error) {
+	var count int64
+
+	if err := r.db.WithContext(ctx).Model(r.model).
+		Where("user_a = ? OR user_b = ? AND status = ?",
+			userID, userID, entity.RelationFriend).
+		Count(&count).Error; err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
+}
+
 func (r relationGorm) CreateRelation(ctx context.Context, relation *entity.Relation) error {
 	if relation == nil {
 		return errors.New("nil input")
