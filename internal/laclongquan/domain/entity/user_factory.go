@@ -58,7 +58,7 @@ func (fac userFactoryImpl) NewUser(phone, pass, name, avatar string) (*User, err
 	return &User{
 		id:      userID,
 		name:    name,
-		avatar:  avatar,
+		Avatar:  avatar,
 		account: *account,
 		state:   UserStateActive,
 		role:    UserRoleUser,

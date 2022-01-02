@@ -80,6 +80,7 @@ func (u userGorm) unmarshalUser(userDB *UserDB) (*entity.User, error) {
 		userDB.Address,
 		userDB.City,
 		userDB.Country,
+		userDB.CreatedAt,
 	)
 }
 

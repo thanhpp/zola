@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"time"
 	"unicode"
 
 	"github.com/google/uuid"
@@ -19,7 +20,6 @@ type User struct {
 	Username    string
 	Description string
 	name        string
-	avatar      string
 	Link        string
 	state       UserState
 	account     Account
@@ -27,6 +27,7 @@ type User struct {
 	Address     UserAddress
 	Avatar      string
 	CoverImg    string
+	CreatedAt   time.Time
 }
 
 func (u User) ID() uuid.UUID {
@@ -206,4 +207,8 @@ func (u User) CanGetUserInfo(requestor *User, relation *Relation) error {
 
 func (u User) Equal(user *User) bool {
 	return user != nil && u.ID().String() == user.ID().String()
+}
+
+func (u User) CreatedAtUnix() int64 {
+	return u.CreatedAt.Unix()
 }

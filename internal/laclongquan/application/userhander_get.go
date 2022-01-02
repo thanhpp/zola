@@ -8,7 +8,13 @@ import (
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 )
 
-func (u UserHandler) GetUserByID(ctx context.Context, requestorID, requestedID string) (*entity.User, error) {
+type GetUserByIDRes struct {
+	FriendCount int
+	IsFriend    bool
+	User        *entity.User
+}
+
+func (u UserHandler) GetUserByID(ctx context.Context, requestorID, requestedID string) (*GetUserByIDRes, error) {
 	requestor, err := u.repo.GetByID(ctx, requestorID)
 	if err != nil {
 		return nil, err
@@ -36,5 +42,14 @@ func (u UserHandler) GetUserByID(ctx context.Context, requestorID, requestedID s
 		return nil, err
 	}
 
-	return requested, nil
+	friendCount, err := u.relationRepo.CountFriends(ctx, requestedID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GetUserByIDRes{
+		FriendCount: friendCount,
+		IsFriend:    (relation != nil && relation.IsFriend()),
+		User:        requested,
+	}, nil
 }

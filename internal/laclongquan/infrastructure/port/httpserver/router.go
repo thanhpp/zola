@@ -43,6 +43,18 @@ func (s HTTPServer) resolveMediaURL(url string) (postID, mediaID string, err err
 	return postID, mediaID, nil
 }
 
+func (s HTTPServer) formUserMediaURL(user *entity.User) (avatarURL, coverImgURL string) {
+	if len(user.GetAvatar()) != 0 {
+		avatarURL = fmt.Sprintf("%s/user/%s/media/%s", s.formURL(), user.ID().String(), user.GetAvatar())
+	}
+
+	if len(user.GetCoverImage()) != 0 {
+		coverImgURL = fmt.Sprintf("%s/user/%s/media/%s", s.formURL(), user.ID().String(), user.GetAvatar())
+	}
+
+	return avatarURL, coverImgURL
+}
+
 func (s *HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Recovery())
@@ -54,6 +66,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		s.app.PostHandler,
 		*s.auth,
 		s.resolveMediaURL,
+		s.formUserMediaURL,
 	)
 	postCtrl := controller.NewPostCtrl(
 		s.app.PostHandler,
@@ -83,7 +96,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	userGr := r.Group("/user")
 	{
 		userGr.Use(s.AuthMiddleware())
-		userGr.GET("/:userid")
+		userGr.GET("/:userid", userCtrl.GetUserInfo)
 		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 	}
