@@ -45,6 +45,8 @@
 - [ ] set_user_info
   - [x] [update info](https://github.com/thanhpp/zola/issues/58)
 
+- [x] [get_user_info](https://github.com/thanhpp/zola/issues/55)
+
 #### Post
 - [x] [add_post](https://github.com/thanhpp/zola/issues/5)
 - [ ] get_post
