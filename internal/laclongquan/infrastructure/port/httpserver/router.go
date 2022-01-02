@@ -1,59 +1,12 @@
 package httpserver
 
 import (
-	"fmt"
-	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/controller"
 )
-
-func (s HTTPServer) formURL() string {
-	return "http://" + s.cfg.Host + ":" + s.cfg.Port
-}
-
-func (s HTTPServer) formMediaURL(post entity.Post, media entity.Media) string {
-	return fmt.Sprintf("%s/post/%s/media/%s", s.formURL(), post.ID(), media.ID())
-}
-
-func (s HTTPServer) resolveMediaURL(url string) (postID, mediaID string, err error) {
-	if len(url) == 0 {
-		return "", "", controller.ErrEmptyMediaURL
-	}
-
-	// remove the "http://" or "https://"
-	url = strings.Replace(url, "http://", "", 1)
-	url = strings.Replace(url, "https://", "", 1)
-
-	urlComponent := strings.Split(url, "/")
-	if len(urlComponent) != 5 {
-		return "", "", controller.ErrInvalidMediaURL
-	}
-
-	if urlComponent[1] != "post" || urlComponent[3] != "media" {
-		return "", "", controller.ErrInvalidMediaURL
-	}
-
-	postID = urlComponent[2]
-	mediaID = urlComponent[4]
-
-	return postID, mediaID, nil
-}
-
-func (s HTTPServer) formUserMediaURL(user *entity.User) (avatarURL, coverImgURL string) {
-	if len(user.GetAvatar()) != 0 {
-		avatarURL = fmt.Sprintf("%s/user/%s/media/%s", s.formURL(), user.ID().String(), user.GetAvatar())
-	}
-
-	if len(user.GetCoverImage()) != 0 {
-		coverImgURL = fmt.Sprintf("%s/user/%s/media/%s", s.formURL(), user.ID().String(), user.GetAvatar())
-	}
-
-	return avatarURL, coverImgURL
-}
 
 func (s *HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
@@ -67,6 +20,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		*s.auth,
 		s.resolveMediaURL,
 		s.formUserMediaURL,
+		s.resolveUserMediaURL,
 	)
 	postCtrl := controller.NewPostCtrl(
 		s.app.PostHandler,
@@ -97,6 +51,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	{
 		userGr.Use(s.AuthMiddleware())
 		userGr.GET("/:userid", userCtrl.GetUserInfo)
+		userGr.GET("/:userid/media/:mediaid", userCtrl.GetUserMedia)
 		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 	}

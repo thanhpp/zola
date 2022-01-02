@@ -14,12 +14,15 @@ var (
 
 type ResolveMediaURLFn func(url string) (postID, mediaID string, err error)
 
+type ResolveUserMediaURLFn func(url string) (userID, mediaID string, err error)
+
 type UserController struct {
-	handler            application.UserHandler
-	postHdl            application.PostHandler
-	authsrv            auth.AuthService
-	resolveMediaUrlFn  ResolveMediaURLFn
-	formUserMediaUrlFn dto.FormUserMediaFn
+	handler               application.UserHandler
+	postHdl               application.PostHandler
+	authsrv               auth.AuthService
+	resolveMediaUrlFn     ResolveMediaURLFn
+	resolveUserMediaURLFn ResolveUserMediaURLFn
+	formUserMediaUrlFn    dto.FormUserMediaFn
 }
 
 func NewUserCtrl(
@@ -28,12 +31,14 @@ func NewUserCtrl(
 	authSrv auth.AuthService,
 	resolveMediaURLFn ResolveMediaURLFn,
 	formUserMediaUrlFn dto.FormUserMediaFn,
+	resolveUserMediaURLFn ResolveUserMediaURLFn,
 ) *UserController {
 	return &UserController{
-		handler:            userHandler,
-		postHdl:            postHandler,
-		authsrv:            authSrv,
-		resolveMediaUrlFn:  resolveMediaURLFn,
-		formUserMediaUrlFn: formUserMediaUrlFn,
+		handler:               userHandler,
+		postHdl:               postHandler,
+		authsrv:               authSrv,
+		resolveMediaUrlFn:     resolveMediaURLFn,
+		formUserMediaUrlFn:    formUserMediaUrlFn,
+		resolveUserMediaURLFn: resolveUserMediaURLFn,
 	}
 }

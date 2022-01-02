@@ -104,6 +104,8 @@ func (u *User) UpdateDescription(description string) error {
 		return ErrInvalidInputLength
 	}
 
+	u.Description = description
+
 	return nil
 }
 

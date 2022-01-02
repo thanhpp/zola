@@ -18,6 +18,7 @@ type UserHandler struct {
 	fac          entity.UserFactory
 	repo         repository.UserRepository
 	relationRepo repository.RelationRepository
+	postRepo     repository.PostRepository
 	accCipher    entity.AccountCipher
 }
 
@@ -25,12 +26,14 @@ func NewUserHandler(
 	fac entity.UserFactory,
 	repo repository.UserRepository,
 	relationRepo repository.RelationRepository,
+	postRepo repository.PostRepository,
 	accountCipher entity.AccountCipher,
 ) UserHandler {
 	return UserHandler{
 		fac:          fac,
 		repo:         repo,
 		relationRepo: relationRepo,
+		postRepo:     postRepo,
 		accCipher:    accountCipher,
 	}
 }
