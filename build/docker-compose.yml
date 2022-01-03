@@ -10,6 +10,8 @@ services:
       POSTGRES_USER:      laclongquan_user
       POSTGRES_PASSWORD:  laclongquan_pass
       POSTGRES_MULTIPLE_DATABASES: laclongquan_db,laclongquan_user
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
     networks:
       - intranet
 
@@ -29,6 +31,8 @@ services:
       WAIT_AFTER:   5
       LLQ_DB_HOST:  database
       LLQ_DB_PORT:  5432
+    volumes:
+      - ./localstorage:/run/localstorage/
     ports:
       - 12100:12100
     networks:

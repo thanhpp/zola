@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+
 type SetUserInfoReq struct {
 	Username    string `form:"username"`
 	Description string `form:"description"`
@@ -20,4 +22,17 @@ type SetUserInfoResp struct {
 		City    string `json:"city"`
 		Country string `json:"country"`
 	} `json:"data"`
+}
+
+func (resp *SetUserInfoResp) SetData(user *entity.User, formUserMediaURLFn FormUserMediaFn) {
+	if resp == nil || user == nil || formUserMediaURLFn == nil {
+		return
+	}
+
+	avatarURL, coverImgURL := formUserMediaURLFn(user)
+	resp.Data.Avatar = avatarURL
+	resp.Data.Cover = coverImgURL
+	resp.Data.Link = user.GetLink()
+	resp.Data.City = user.GetCity()
+	resp.Data.Country = user.GetCountry()
 }

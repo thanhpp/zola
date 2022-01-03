@@ -42,8 +42,9 @@
 - [x] [set_block_user](https://github.com/thanhpp/zola/issues/19)
 - [ ] set_block_diary
 
-- [ ] set_user_info
+- [x] set_user_info
   - [x] [update info](https://github.com/thanhpp/zola/issues/58)
+  - [x] [response](https://github.com/thanhpp/zola/issues/60)
 
 - [x] [get_user_info](https://github.com/thanhpp/zola/issues/55)
 

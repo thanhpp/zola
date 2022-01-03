@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -43,6 +44,9 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	}))
 
 	// ---- ROUTES ----
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusNoContent, nil)
+	})
 	r.POST("/signup", userCtrl.SignUp)
 	r.POST("/login", userCtrl.SignIn)
 	r.GET("/logout", s.AuthMiddleware(), userCtrl.Signout)
