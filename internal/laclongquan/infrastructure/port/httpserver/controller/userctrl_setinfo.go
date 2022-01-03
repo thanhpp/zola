@@ -107,8 +107,15 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 		return
 	}
 
+	res, err := ctrl.handler.GetUserByID(c, userID.String(), userID.String())
+	if err != nil {
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, req)
+		return
+	}
+
 	var resp = new(dto.SetUserInfoResp)
 	resp.SetCode(responsevalue.CodeOK)
 	resp.SetMsg(responsevalue.MsgOK)
+	resp.SetData(res.User, ctrl.formUserMediaUrlFn)
 	c.JSON(http.StatusOK, resp)
 }
