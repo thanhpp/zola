@@ -33,7 +33,7 @@
 - [x] [logout](https://github.com/thanhpp/zola/issues/3)
   
 - [x] [set_request_friend](https://github.com/thanhpp/zola/issues/21)
-- [ ] get_requested_friend
+- [x] [get_requested_friend](https://github.com/thanhpp/zola/issues/63)
 - [x] [set_accept_friend](https://github.com/thanhpp/zola/issues/21)
 - [ ] get_user_friends
 

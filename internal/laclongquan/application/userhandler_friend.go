@@ -84,3 +84,44 @@ func (u UserHandler) UpdateFriendRequest(ctx context.Context, userAID, userBID s
 
 	return nil
 }
+
+type GetRequestedFriendsRes struct {
+	Friend   *entity.User
+	Relation *entity.Relation
+}
+
+func (u UserHandler) GetRequestedFriends(ctx context.Context, requestorID, requestedID string, offset, limit int) ([]*GetRequestedFriendsRes, error) {
+	requestor, err := u.repo.GetByID(ctx, requestorID)
+	if err != nil {
+		return nil, err
+	}
+
+	requested, err := u.repo.GetByID(ctx, requestedID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := requested.CanGetUserRequestedFriend(requestor); err != nil {
+		return nil, err
+	}
+
+	relations, err := u.relationRepo.GetRequestedFriends(ctx, requestedID, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	var results = make([]*GetRequestedFriendsRes, 0, limit)
+	for i := range relations {
+		requestedFriend, err := u.repo.GetByID(ctx, relations[i].UserAIDStr())
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, &GetRequestedFriendsRes{
+			Friend:   requestedFriend,
+			Relation: relations[i],
+		})
+	}
+
+	return results, nil
+}

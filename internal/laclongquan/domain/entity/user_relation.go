@@ -2,6 +2,7 @@ package entity
 
 import (
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -27,9 +28,10 @@ const (
 // only the friend request need to specify
 // the requestor (userA) and the requestee (userB)
 type Relation struct {
-	UserA  uuid.UUID
-	UserB  uuid.UUID
-	Status RelationStatus
+	UserA     uuid.UUID
+	UserB     uuid.UUID
+	Status    RelationStatus
+	CreatedAt time.Time
 }
 
 func (r Relation) UserAID() uuid.UUID {
@@ -78,6 +80,10 @@ func (r *Relation) Block() {
 	r.Status = RelationBlocked
 }
 
+func (r Relation) CreatedAtUnix() int64 {
+	return r.CreatedAt.Unix()
+}
+
 var (
 	ErrLockedUser = errors.New("locked user")
 )
@@ -118,7 +124,7 @@ func (fac userFactoryImpl) NewBlockRelation(blocker, blocked *User) (*Relation, 
 	}, nil
 }
 
-func NewRelationFromDB(userAIDStr, userBIDStr, status string) (*Relation, error) {
+func NewRelationFromDB(userAIDStr, userBIDStr, status string, createdAt time.Time) (*Relation, error) {
 	userAID, err := uuid.Parse(userAIDStr)
 	if err != nil {
 		return nil, err
@@ -130,8 +136,9 @@ func NewRelationFromDB(userAIDStr, userBIDStr, status string) (*Relation, error)
 	}
 
 	return &Relation{
-		UserA:  userAID,
-		UserB:  userBID,
-		Status: RelationStatus(status),
+		UserA:     userAID,
+		UserB:     userBID,
+		Status:    RelationStatus(status),
+		CreatedAt: createdAt,
 	}, nil
 }

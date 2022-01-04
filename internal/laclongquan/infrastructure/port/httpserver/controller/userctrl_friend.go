@@ -1,7 +1,11 @@
 package controller
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/thanhpp/zola/internal/laclongquan/application"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
@@ -43,6 +47,10 @@ func (ctrl UserController) NewFriendRequest(c *gin.Context) {
 
 		case entity.ErrLockedUser:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "locked user", nil)
+			return
+
+		case repository.ErrSameUser:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "same user", nil)
 			return
 		}
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
@@ -111,4 +119,51 @@ func (ctrl UserController) UpdateFriendRequest(c *gin.Context) {
 	}
 
 	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+}
+
+func (ctrl UserController) GetRequestedFriends(c *gin.Context) {
+	requestorID, err := getUserUUIDFromClaims(c)
+	if err != nil {
+		logger.Errorf("get user id from ctx error: %v", err)
+		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", err)
+		return
+	}
+
+	var requestedID uuid.UUID
+	requestedIDStr := strings.ReplaceAll(c.Param("userid"), "/", "")
+	logger.Debugf("get requested friends - requested id str: %s", requestedIDStr)
+	if requestedIDStr == "" {
+		requestedID = requestorID
+	} else {
+		requestedID, err = uuid.Parse(requestedIDStr)
+		if err != nil {
+			logger.Errorf("parse user id from param error: %v", err)
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid user", err)
+			return
+		}
+	}
+
+	offset, limit := pagination(c)
+	results, err := ctrl.handler.GetRequestedFriends(c, requestorID.String(), requestedID.String(), offset, limit)
+	if err != nil {
+		logger.Errorf("Get requested friends of %s by %s error: %v", requestedID.String(), requestorID.String(), err)
+		switch err {
+		case repository.ErrUserNotFound:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
+			return
+
+		case entity.ErrPermissionDenied:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "permission denied", nil)
+			return
+		}
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		return
+	}
+
+	var resp = new(dto.GetRequestedFriendsResp)
+	resp.SetCode(responsevalue.CodeOK)
+	resp.SetMsg(responsevalue.MsgOK)
+	resp.SetData(results, ctrl.formUserMediaUrlFn)
+
+	c.JSON(http.StatusOK, resp)
 }

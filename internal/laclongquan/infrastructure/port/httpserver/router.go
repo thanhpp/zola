@@ -56,6 +56,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		userGr.Use(s.AuthMiddleware())
 		userGr.GET("/:userid", userCtrl.GetUserInfo)
 		userGr.GET("/:userid/media/:mediaid", userCtrl.GetUserMedia)
+
 		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 	}
@@ -63,6 +64,8 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	friendGr := r.Group("/friend")
 	{
 		friendGr.Use(s.AuthMiddleware())
+		friendGr.GET("/requested/*userid", userCtrl.GetRequestedFriends)
+
 		friendGr.POST("/request/:userid", userCtrl.NewFriendRequest)
 		friendGr.PUT("/request/:userid", userCtrl.UpdateFriendRequest)
 	}
