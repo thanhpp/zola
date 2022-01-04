@@ -214,3 +214,23 @@ func (u User) Equal(user *User) bool {
 func (u User) CreatedAtUnix() int64 {
 	return u.CreatedAt.Unix()
 }
+
+func (u User) CanGetUserRequestedFriend(user *User) error {
+	if user == nil {
+		return ErrPermissionDenied
+	}
+
+	if user.IsAdmin() {
+		return nil
+	}
+
+	if u.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if u.Equal(user) {
+		return nil
+	}
+
+	return ErrPermissionDenied
+}

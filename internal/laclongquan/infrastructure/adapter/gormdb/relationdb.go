@@ -44,6 +44,7 @@ func (r relationGorm) unmarshal(relationDB *RelationDB) (*entity.Relation, error
 		relationDB.UserA,
 		relationDB.UserB,
 		relationDB.Status,
+		relationDB.CreatedAt,
 	)
 }
 
@@ -77,6 +78,29 @@ func (r relationGorm) CountFriends(ctx context.Context, userID string) (int, err
 	}
 
 	return int(count), nil
+}
+
+func (r relationGorm) GetRequestedFriends(ctx context.Context, userID string, offset, limit int) ([]*entity.Relation, error) {
+	var list []*RelationDB
+
+	if err := r.db.WithContext(ctx).Model(r.model).
+		Where("user_b = ? AND status = ?", userID, entity.RelationRequesting).
+		Order("created_at desc").
+		Offset(offset).Limit(limit).
+		Find(&list).Error; err != nil {
+		return nil, err
+	}
+
+	var relations []*entity.Relation
+	for _, relationDB := range list {
+		relation, err := r.unmarshal(relationDB)
+		if err != nil {
+			return nil, err
+		}
+		relations = append(relations, relation)
+	}
+
+	return relations, nil
 }
 
 func (r relationGorm) CreateRelation(ctx context.Context, relation *entity.Relation) error {
