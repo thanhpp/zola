@@ -10,6 +10,8 @@ import (
 var (
 	ErrNotAFriendRequest = errors.New("not a friend request")
 	ErrSelfRelation      = errors.New("self relation")
+	ErrInvalidUser       = errors.New("invalid user")
+	ErrAlreadyBlocked    = errors.New("already blocked")
 )
 
 type RelationStatus string
@@ -19,9 +21,10 @@ func (rs RelationStatus) String() string {
 }
 
 const (
-	RelationRequesting RelationStatus = "requesting"
-	RelationFriend     RelationStatus = "friend"
-	RelationBlocked    RelationStatus = "blocked"
+	RelationRequesting   RelationStatus = "requesting"
+	RelationFriend       RelationStatus = "friend"
+	RelationBlocked      RelationStatus = "blocked"
+	RelationDiaryBlocked RelationStatus = "diary_blocked"
 )
 
 // Relation there are 3 relationshop within this application
@@ -58,6 +61,32 @@ func (r Relation) IsFriend() bool {
 	return r.Status == RelationFriend
 }
 
+func (r Relation) IsDiaryBlocked() bool {
+	return r.Status == RelationDiaryBlocked
+}
+
+func (r *Relation) SetDiaryBlock(blocker, blocked *User) error {
+	if r == nil || blocker == nil || blocked == nil {
+		return ErrNilUser
+	}
+
+	if r.UserA != blocker.ID() || r.UserB != blocked.ID() {
+		return ErrInvalidUser
+	}
+
+	if blocker.IsLocked() || blocked.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if r.IsBlock() {
+		return ErrAlreadyBlocked
+	}
+
+	r.Status = RelationDiaryBlocked
+
+	return nil
+}
+
 func (r *Relation) AcceptFriendRequest() error {
 	if r.Status != RelationRequesting {
 		return ErrNotAFriendRequest
@@ -89,11 +118,11 @@ var (
 )
 
 func (fac userFactoryImpl) preRelationCheck(userA, userB *User) error {
-	if userA.ID().String() == userB.ID().String() {
+	if userA.Equal(userB) {
 		return ErrSelfRelation
 	}
 
-	if userA.State() == UserStateLocked || userB.State() == UserStateLocked {
+	if userA.IsLocked() || userB.IsLocked() {
 		return ErrLockedUser
 	}
 
@@ -121,6 +150,18 @@ func (fac userFactoryImpl) NewBlockRelation(blocker, blocked *User) (*Relation, 
 		UserA:  blocker.ID(),
 		UserB:  blocked.ID(),
 		Status: RelationBlocked,
+	}, nil
+}
+
+func (fac userFactoryImpl) NewDiaryBlockRelation(blocker, blocked *User) (*Relation, error) {
+	if err := fac.preRelationCheck(blocker, blocked); err != nil {
+		return nil, err
+	}
+
+	return &Relation{
+		UserA:  blocker.ID(),
+		UserB:  blocked.ID(),
+		Status: RelationDiaryBlocked,
 	}, nil
 }
 
