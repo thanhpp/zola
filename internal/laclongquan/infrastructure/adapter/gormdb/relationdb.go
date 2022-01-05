@@ -80,12 +80,13 @@ func (r relationGorm) CountFriends(ctx context.Context, userID string) (int, err
 	return int(count), nil
 }
 
-func (r relationGorm) GetRequestedFriends(ctx context.Context, userID string, offset, limit int) ([]*entity.Relation, error) {
+func (r relationGorm) GetActiveRequestedFriends(ctx context.Context, userID string, offset, limit int) ([]*entity.Relation, error) {
 	var list []*RelationDB
 
 	if err := r.db.WithContext(ctx).Model(r.model).
 		Where("user_b = ? AND status = ?", userID, entity.RelationRequesting).
 		Order("created_at desc").
+		Joins("JOIN user_db ON user_db.user_uuid = user_a AND user_db.state = 'active'").
 		Offset(offset).Limit(limit).
 		Find(&list).Error; err != nil {
 		return nil, err

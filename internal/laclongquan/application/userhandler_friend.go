@@ -105,7 +105,7 @@ func (u UserHandler) GetRequestedFriends(ctx context.Context, requestorID, reque
 		return nil, err
 	}
 
-	relations, err := u.relationRepo.GetRequestedFriends(ctx, requestedID, offset, limit)
+	relations, err := u.relationRepo.GetActiveRequestedFriends(ctx, requestedID, offset, limit)
 	if err != nil {
 		return nil, err
 	}
