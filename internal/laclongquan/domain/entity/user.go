@@ -234,3 +234,15 @@ func (u User) CanGetUserRequestedFriend(user *User) error {
 
 	return ErrPermissionDenied
 }
+
+func (u User) CanGetUserFriends(user *User) error {
+	if user == nil {
+		return ErrNilUser
+	}
+
+	if u.Equal(user) || user.IsAdmin() {
+		return nil
+	}
+
+	return ErrPermissionDenied
+}
