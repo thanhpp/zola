@@ -3852,6 +3852,169 @@
 					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"id\": \"3de18c16-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"username\": \"\",\n                \"avatar\": \"\",\n                \"created\": 1641319206\n            }\n        ]\n    }\n}"
 				}
 			]
+		},
+		{
+			"name": "get_user_friends",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{zola}}/friend",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"friend"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get_user_friends - 1000 | user OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jan 2022 04:54:27 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=SHouUW%2BOnlmeadF9mZeTElKjhfu7Hu68KeCj26KD13q%2FcyZs4HtAF%2BKK2OdnzLS1LhaYI%2FPxNqboL9bzVLyZVNcs28I5SjrEymYFO1dbrUYu9UohX2y2wcnvnVrQy%2Bnj7BUFAkk%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "6c8a1bd45c818998-SIN"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"user_id\": \"5ba15938-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"user_name\": \"username\",\n                \"avatar\": \"https://zola.thanhpp.ninja/user/5ba15938-6cb0-11ec-a3a1-0242ac1c0003/media/50fd7afb-0c01-4463-8930-6e4bf78656f0\",\n                \"status\": \"\"\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "get_user_friends  - 1000 | admin OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jan 2022 04:29:36 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=Ev%2Ba86Jq5bQPhnBkgQUfjIhLoAJPK7aZe6EhNy%2BIp40p8F%2FOW0e%2B3YuR23kpDZ%2FI14hGTxwfnadEWkN%2B69PBkxzQV8e0e80CJfzTgJptoP0s%2Bf2M1lgc62yDymRCaM4WhSUpI24%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "6c89f76be97c881d-SIN"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"user_id\": \"3de18c16-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"user_name\": \"\",\n                \"avatar\": \"\",\n                \"status\": \"\"\n            }\n        ]\n    }\n}"
+				}
+			]
 		}
 	]
 }

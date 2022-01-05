@@ -125,3 +125,44 @@ func (u UserHandler) GetRequestedFriends(ctx context.Context, requestorID, reque
 
 	return results, nil
 }
+
+func (u UserHandler) GetUserFriends(ctx context.Context, requestorID, requestedID string, offset, limit int) ([]*entity.User, error) {
+	var res = make([]*entity.User, 0, limit)
+
+	requestor, err := u.repo.GetByID(ctx, requestorID)
+	if err != nil {
+		return nil, err
+	}
+
+	requested, err := u.repo.GetByID(ctx, requestedID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := requested.CanGetUserFriends(requestor); err != nil {
+		return nil, err
+	}
+
+	relations, err := u.relationRepo.GetActiveUserFriends(ctx, requestedID, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range relations {
+		var user *entity.User
+		if relations[i].UserAIDStr() == requestedID {
+			user, err = u.repo.GetByID(ctx, relations[i].UserBIDStr())
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			user, err = u.repo.GetByID(ctx, relations[i].UserAIDStr())
+			if err != nil {
+				return nil, err
+			}
+		}
+		res = append(res, user)
+	}
+
+	return res, nil
+}
