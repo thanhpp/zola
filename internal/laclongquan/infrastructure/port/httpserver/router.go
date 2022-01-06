@@ -1,22 +1,13 @@
 package httpserver
 
 import (
-	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/controller"
 )
-
-func (s HTTPServer) formURL() string {
-	return "http://" + s.cfg.Host + ":" + s.cfg.Port
-}
-
-func (s HTTPServer) formMediaURL(post entity.Post, media entity.Media) string {
-	return fmt.Sprintf("%s/post/%s/media/%s", s.formURL(), post.ID(), media.ID())
-}
 
 func (s *HTTPServer) newRouter() *gin.Engine {
 	r := gin.New()
@@ -26,7 +17,11 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	// ---- CONTROLLERS ----
 	userCtrl := controller.NewUserCtrl(
 		s.app.UserHandler,
+		s.app.PostHandler,
 		*s.auth,
+		s.resolveMediaURL,
+		s.formUserMediaURL,
+		s.resolveUserMediaURL,
 	)
 	postCtrl := controller.NewPostCtrl(
 		s.app.PostHandler,
@@ -49,6 +44,9 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	}))
 
 	// ---- ROUTES ----
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusNoContent, nil)
+	})
 	r.POST("/signup", userCtrl.SignUp)
 	r.POST("/login", userCtrl.SignIn)
 	r.GET("/logout", s.AuthMiddleware(), userCtrl.Signout)
@@ -56,12 +54,21 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	userGr := r.Group("/user")
 	{
 		userGr.Use(s.AuthMiddleware())
+		userGr.GET("/:userid", userCtrl.GetUserInfo)
+		userGr.GET("/:userid/media/:mediaid", userCtrl.GetUserMedia)
+
+		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 	}
 
 	friendGr := r.Group("/friend")
 	{
 		friendGr.Use(s.AuthMiddleware())
+		friendGr.GET("", userCtrl.GetFriends)
+		friendGr.GET("/:userid", userCtrl.GetFriends)
+		friendGr.GET("/requested", userCtrl.GetRequestedFriends)
+		friendGr.GET("/requested/:userid", userCtrl.GetRequestedFriends)
+
 		friendGr.POST("/request/:userid", userCtrl.NewFriendRequest)
 		friendGr.PUT("/request/:userid", userCtrl.UpdateFriendRequest)
 	}
@@ -70,6 +77,8 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	{
 		blockGr.Use(s.AuthMiddleware())
 		blockGr.POST("", userCtrl.BlockUser)
+
+		blockGr.POST("/diary", userCtrl.BlockDiary)
 	}
 
 	postGr := r.Group("/post")

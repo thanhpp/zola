@@ -1465,12 +1465,12 @@
 							"formdata": [
 								{
 									"key": "user_id",
-									"value": "c474e292-45df-11ec-8986-2cf05d8903e3",
+									"value": "3de18c16-6cb0-11ec-a3a1-0242ac1c0003",
 									"type": "text"
 								},
 								{
 									"key": "type",
-									"value": "0",
+									"value": "1",
 									"type": "text"
 								}
 							]
@@ -1687,6 +1687,524 @@
 							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "block/unblock diary",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "3de18c16-6cb0-11ec-a3a1-0242ac1c0003",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/block/diary",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"block",
+								"diary"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "block/unblock diary - 1004 | invalid block type",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block/diary",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block",
+										"diary"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 06 Jan 2022 04:31:32 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "56"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=kKKTW5yGFJ3cBECNuUPlregDtTBvkcGeP8qq61Fxj3i%2FmM3m3NxkaoPnmMAlpUcHYCrTQNQNRkXBeTdnllS3BVVupIBafZyDI%2F4Qx9ouhmVwgY1S2wlK57GQ%2FWwdFNUBUAkoEp8%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6c9237a5a8c001d9-SIN"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid block type\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "block/unblock diary - 1004 | same user",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block/diary",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block",
+										"diary"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 06 Jan 2022 04:31:09 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=oVq%2Bx45S5h6%2B3WcuEFa1gfOF4gkDfORBJd5Dwx2MrabpDkH5g6tjuziTxVG%2BA7ifoSLERJhgA6Rwa1HBtgcsb0NQDfS%2Ba3WyD233%2F7l%2Bz6tpAaM8aoQwdp6lrv71bXFuRd%2Fh8y4%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6c9237149c6d01d9-SIN"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1004,\n    \"message\": \"same user\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "block/unblock diary - 1004 | locked user",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "3de18c16-6cb0-11ec-a3a1-0242ac1c0003",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block/diary",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block",
+										"diary"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 06 Jan 2022 04:28:02 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "58"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=LyUkkF3tPFXkZ73Ze3CsJPgJuQlVF97q92d5F1e42tFYAjZ94%2FcOGRGfKHyWWtcb5ZEPOa17mO3tfN7zRwKnG4gRgby7eQqKlz%2B%2BGZ%2BE7YZbwHFxBxVFaQtscAEW4GtNBt8KRkI%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6c9232830dc101d9-SIN"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1004,\n    \"message\": \"user has been locked\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "block/unblock diary - 1004 | already blocked",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "3de18c16-6cb0-11ec-a3a1-0242ac1c0003",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block/diary",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block",
+										"diary"
+									]
+								}
+							},
+							"status": "Not Acceptable",
+							"code": 406,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 06 Jan 2022 04:34:59 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=gmSxmWeEvbWZ1UzKoJqBR9DwWjxFlqrvc%2FYyipJ3pbhaMGpa0Q%2BjFuhsFgxcz3zz5yC6%2FwH%2FjBrBwhqzSWiwlSz2Kx%2Brzxs0QTZY2k9U8a%2BM54GAPQF6nn1eNw%2FGK7Zcb3ty2q4%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6c923cb3fa0a01d9-SIN"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1010,\n    \"message\": \"user has already been blocked\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "block/unblock diary - 1000 | Block diary OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "3de18c16-6cb0-11ec-a3a1-0242ac1c0003",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block/diary",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block",
+										"diary"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 06 Jan 2022 04:21:03 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=dh1IPoID8AfVbS%2BesGBHwn%2Bi9P8AF0awSUCzjAupERRKGAA6JNbzi%2FZLvnaC7mYPcCUFi1qZtK9OVLZCXw9idoot9qOaRbcMZWSH%2BF2xAA%2B0oKTuwdHKwSn1i6YK1PCeweYLZ%2Bc%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6c9228490e2001d9-SIN"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "block/unblock diary - 1000 | unblock diary ok",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "3de18c16-6cb0-11ec-a3a1-0242ac1c0003",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{zola}}/block/diary",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"block",
+										"diary"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 06 Jan 2022 04:21:28 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=32aWhkTjB67GMhPLVaOfG0%2BuwC0T9AAkNHI7zHsK96AcmHnO6DJPCpVR2LHtVQhxVA2e6vB4WefcmZWxxoT0UDwV1WEo8ku4su0aMf9tW23ScW2C%2BjZz7G09eI9rQs9%2FlMdsOLk%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6c9228e6287f01d9-SIN"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": null\n}"
+						}
+					]
 				}
 			]
 		},
@@ -1716,7 +2234,8 @@
 					}
 				},
 				"url": {
-					"raw": "{{zola}}/signup",
+					"raw": "https://{{zola}}/signup",
+					"protocol": "https",
 					"host": [
 						"{{zola}}"
 					],
@@ -2483,20 +3002,19 @@
 					]
 				},
 				"url": {
-					"raw": "{{zola}}/friend/request/bd0a95fb-35c1-11ec-94f3-2cf05d8903e3",
+					"raw": "{{zola}}/friend/request/5ba15938-6cb0-11ec-a3a1-0242ac1c0003?is_accept=1",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
 						"friend",
 						"request",
-						"bd0a95fb-35c1-11ec-94f3-2cf05d8903e3"
+						"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
 					],
 					"query": [
 						{
 							"key": "is_accept",
-							"value": "1",
-							"disabled": true
+							"value": "1"
 						}
 					]
 				}
@@ -3153,6 +3671,865 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"code\": 1004,\n    \"message\": \"new password is too common with old password\",\n    \"data\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "set_user_info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "username",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "description",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "address",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "city",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "country",
+							"type": "text"
+						},
+						{
+							"key": "avatar",
+							"value": "https://zola.thanhpp.ninja/post/96a8effd-6cb0-11ec-a3a1-0242ac1c0003/media/50fd7afb-0c01-4463-8930-6e4bf78656f0",
+							"type": "text"
+						},
+						{
+							"key": "cover_image",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "link",
+							"value": "link",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{zola}}/user",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "set_user_info - 1004 | invalid username",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "user123name",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "city",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "country",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "link",
+									"value": "link",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Dec 2021 15:37:52 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid request\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_user_info - 1000 | OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "username",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "city",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "country",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "link",
+									"value": "link",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Dec 2021 15:37:23 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "99"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"avatar\": \"\",\n        \"cover_image\": \"\",\n        \"link\": \"\",\n        \"city\": \"\",\n        \"country\": \"\"\n    }\n}"
+				},
+				{
+					"name": "set_user_info - 1004 | invalid country",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "username",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "city",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "forbiden country",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "link",
+									"value": "link",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Dec 2021 15:50:07 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid request\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "set_user_info - 1004 | description too long",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "username",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "ErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLongErrDescriptionTooLong",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "city",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "country",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "cover_image",
+									"value": "http://0.0.0.0:12100/post/2b388737-68bd-11ec-9456-2cf05d8903e3/media/ef77c01e-1485-4dd4-b144-7ecf75be29be",
+									"type": "text"
+								},
+								{
+									"key": "link",
+									"value": "link",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/user",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 29 Dec 2021 15:40:30 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "53"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"invalid request\",\n    \"data\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "get_user_info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{zola}}/user/5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"user",
+						"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get_user_info - 1000 | OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/user/2c5ece68-6bda-11ec-a520-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"2c5ece68-6bda-11ec-a520-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 02 Jan 2022 15:18:24 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "382"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"id\": \"2c5ece68-6bda-11ec-a520-2cf05d8903e3\",\n        \"username\": \"username\",\n        \"description\": \"description\",\n        \"avatar\": \"http://0.0.0.0:12100/user/2c5ece68-6bda-11ec-a520-2cf05d8903e3/media/a0b3a6f0-61b5-43a2-8f64-65769d0493df\",\n        \"cover_image\": \"\",\n        \"link\": \"link\",\n        \"address\": \"address\",\n        \"city\": \"city\",\n        \"country\": \"country\",\n        \"is_friend\": \"0\",\n        \"listing\": 0,\n        \"created\": 1641134533\n    }\n}"
+				},
+				{
+					"name": "get_user_info - 1004 | locked user",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/user/2c5ece68-6bda-11ec-a520-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"2c5ece68-6bda-11ec-a520-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 02 Jan 2022 15:19:40 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "52"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"user not found\",\n    \"data\": null\n}"
+				},
+				{
+					"name": "get_user_info - 1004 | user not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/user/2c5ece68-6bdb-11ec-a520-2cf05d8903e3",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"user",
+								"2c5ece68-6bdb-11ec-a520-2cf05d8903e3"
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 02 Jan 2022 15:18:49 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "52"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1004,\n    \"message\": \"user not found\",\n    \"data\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "get_requested_friends",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{zola}}/friend/requested",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"friend",
+						"requested"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get_requested_friends - 1000 | admin OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/requested/5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"requested",
+								"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 04 Jan 2022 18:08:36 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=vt33Ck0oaDULXBWHw%2F1zAFz2W76MexgPzj5ES36iETvf3qzzBNtZN%2FDeDX61t9rcODP1DTZy3BfydJHO6jTXftbCVRnv%2FKnyZbebTwI5jwr%2Ftvb8C%2B6x5ctAaiKmfW2yPsrfJoI%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "6c8669c4ff5c89bc-SIN"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"id\": \"3de18c16-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"username\": \"\",\n                \"avatar\": \"\",\n                \"created\": 1641319206\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "get_requested_friends - 1000 | user OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/requested",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"requested"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 04 Jan 2022 18:09:32 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=HOahtmvUIdwE9o9Dy51cc7y3aNGDlbmxf5pHaD%2BkFfEJNDmb3wfjdtjC2fYATCVYwyJpHZ5NI0Ct3OoBIlucy9a30%2Fn2FvLdVI07eRnu7s9OQvOVB4B4OpaY0y6PXK9Hspupd5w%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "6c866b22f99089bc-SIN"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"id\": \"3de18c16-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"username\": \"\",\n                \"avatar\": \"\",\n                \"created\": 1641319206\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "get_user_friends",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{zola}}/friend",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"friend"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "get_user_friends - 1000 | user OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jan 2022 04:54:27 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=SHouUW%2BOnlmeadF9mZeTElKjhfu7Hu68KeCj26KD13q%2FcyZs4HtAF%2BKK2OdnzLS1LhaYI%2FPxNqboL9bzVLyZVNcs28I5SjrEymYFO1dbrUYu9UohX2y2wcnvnVrQy%2Bnj7BUFAkk%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "6c8a1bd45c818998-SIN"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"user_id\": \"5ba15938-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"user_name\": \"username\",\n                \"avatar\": \"https://zola.thanhpp.ninja/user/5ba15938-6cb0-11ec-a3a1-0242ac1c0003/media/50fd7afb-0c01-4463-8930-6e4bf78656f0\",\n                \"status\": \"\"\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "get_user_friends  - 1000 | admin OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/friend/5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"friend",
+								"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Wed, 05 Jan 2022 04:29:36 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "CF-Cache-Status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=Ev%2Ba86Jq5bQPhnBkgQUfjIhLoAJPK7aZe6EhNy%2BIp40p8F%2FOW0e%2B3YuR23kpDZ%2FI14hGTxwfnadEWkN%2B69PBkxzQV8e0e80CJfzTgJptoP0s%2Bf2M1lgc62yDymRCaM4WhSUpI24%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "6c89f76be97c881d-SIN"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"user_id\": \"3de18c16-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"user_name\": \"\",\n                \"avatar\": \"\",\n                \"status\": \"\"\n            }\n        ]\n    }\n}"
 				}
 			]
 		}

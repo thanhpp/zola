@@ -41,6 +41,10 @@ func (m Media) Size() int64 {
 	return m.size
 }
 
+func (m Media) IsOwner(user *User) bool {
+	return m.owner.String() == user.ID().String()
+}
+
 func extensionCheck(path string, exts ...string) bool {
 	ext := filepath.Ext(path)
 

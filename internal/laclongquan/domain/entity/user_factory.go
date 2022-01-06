@@ -21,8 +21,12 @@ var (
 type UserFactory interface {
 	NewUser(phone, pass, name, avatar string) (*User, error)
 	NewAdmin(phone, pass, name, avatar string) (*User, error)
+	NewAddress(address, city, country string) (*UserAddress, error)
+
+	// relation
 	NewFriendRequest(requestor, requestee *User) (*Relation, error)
 	NewBlockRelation(blocker, blocked *User) (*Relation, error)
+	NewDiaryBlockRelation(blocker, blocked *User) (*Relation, error)
 }
 
 func NewUserFactory(accountCipher AccountCipher) UserFactory {
@@ -50,10 +54,14 @@ func (fac userFactoryImpl) NewUser(phone, pass, name, avatar string) (*User, err
 		return nil, err
 	}
 
+	if len(name) == 0 {
+		name = phone
+	}
+
 	return &User{
 		id:      userID,
 		name:    name,
-		avatar:  avatar,
+		Avatar:  avatar,
 		account: *account,
 		state:   UserStateActive,
 		role:    UserRoleUser,
@@ -107,5 +115,26 @@ func (fac userFactoryImpl) newAccount(phone, pass string) (*Account, error) {
 	return &Account{
 		Phone:    phone,
 		HashPass: hashPass,
+	}, nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------- USER VALUE OBJECTS ----------------------------------------------------------
+
+func (fac userFactoryImpl) NewAddress(address, city, country string) (*UserAddress, error) {
+	if !stringLengthCheck(address, 0, 150) ||
+		!stringLengthCheck(city, 0, 150) ||
+		!stringLengthCheck(country, 0, 150) {
+		return nil, ErrInvalidInputLength
+	}
+
+	if err := countryCheck(country); err != nil {
+		return nil, err
+	}
+
+	return &UserAddress{
+		Address: address,
+		City:    city,
+		Country: country,
 	}, nil
 }

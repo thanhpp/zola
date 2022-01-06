@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
@@ -68,6 +66,5 @@ func (ctrl PostController) GetMedia(c *gin.Context) {
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
 	}
 
-	fmt.Println(media.Path())
 	c.File(media.Path())
 }

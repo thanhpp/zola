@@ -27,6 +27,7 @@ func NewApplication(
 			entity.NewUserFactory(accCipher),
 			userRepo,
 			relationRepo,
+			postRepo,
 			accCipher,
 		),
 		PostHandler: NewPostHandler(

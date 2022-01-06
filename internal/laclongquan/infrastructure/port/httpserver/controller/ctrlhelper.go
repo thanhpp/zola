@@ -3,6 +3,7 @@ package controller
 import (
 	"errors"
 	"math/rand"
+	"strconv"
 	"strings"
 	"time"
 
@@ -132,4 +133,43 @@ func genRandomString(length int) string {
 	}
 
 	return strB.String()
+}
+
+const (
+	paginationMinOffset    = 0
+	paginationMinLimit     = 1
+	paginationDefaultLimit = 10
+	paginationMaxLimit     = 100
+)
+
+func pagination(c *gin.Context) (offset, limit int) {
+	indexStr := c.Query("index")
+	if indexStr == "" {
+		return paginationMinOffset, paginationDefaultLimit
+	}
+
+	index, err := strconv.Atoi(indexStr)
+	if err != nil {
+		return paginationMinOffset, paginationDefaultLimit
+	}
+
+	if index < 1 {
+		return paginationMinOffset, paginationDefaultLimit
+	}
+
+	limitStr := c.Query("limit")
+	if limitStr == "" {
+		return (index - 1) * paginationDefaultLimit, paginationDefaultLimit
+	}
+
+	limit, err = strconv.Atoi(limitStr)
+	if err != nil {
+		return (index - 1) * paginationDefaultLimit, paginationDefaultLimit
+	}
+
+	if limit < paginationMinLimit || limit > paginationMaxLimit {
+		return (index - 1) * paginationDefaultLimit, paginationDefaultLimit
+	}
+
+	return (index - 1) * limit, limit
 }
