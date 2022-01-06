@@ -88,6 +88,10 @@ func (s HTTPServer) resolveMediaURL(url string) (postID, mediaID string, err err
 		return "", "", controller.ErrInvalidMediaURL
 	}
 
+	if urlComponent[0] != s.cfg.Domain {
+		return "", "", controller.ErrInvalidMediaURL
+	}
+
 	if urlComponent[1] != "post" || urlComponent[3] != "media" {
 		return "", "", controller.ErrInvalidMediaURL
 	}
@@ -102,12 +106,10 @@ func (s HTTPServer) formUserMediaURL(user *entity.User) (avatarURL, coverImgURL 
 	if len(user.GetAvatar()) != 0 {
 		avatarURL = fmt.Sprintf("%s/user/%s/media/%s", s.cfg.Domain, user.ID().String(), user.GetAvatar())
 	}
-	logger.Debugf("avatarURL: %s - avatar: %s", avatarURL, user.GetAvatar())
 
 	if len(user.GetCoverImage()) != 0 {
 		coverImgURL = fmt.Sprintf("%s/user/%s/media/%s", s.cfg.Domain, user.ID().String(), user.GetAvatar())
 	}
-	logger.Debugf("coverImgURL: %s - coverImg: %s", coverImgURL, user.GetCoverImage())
 
 	return avatarURL, coverImgURL
 }
@@ -120,6 +122,10 @@ func (s HTTPServer) resolveUserMediaURL(url string) (userID, mediaID string, err
 
 	urlComponents := strings.Split(url, "/")
 	if len(urlComponents) != 5 {
+		return "", "", controller.ErrInvalidMediaURL
+	}
+
+	if urlComponents[0] != s.cfg.Domain {
 		return "", "", controller.ErrInvalidMediaURL
 	}
 

@@ -117,6 +117,57 @@ func (u userGorm) GetByPhone(ctx context.Context, phone string) (*entity.User, e
 	return u.unmarshalUser(userDB)
 }
 
+func (u userGorm) GetAllUsers(ctx context.Context, offset, limit int, sortBy, order, usernameLike, phoneLike string) ([]*entity.User, int, error) {
+	var (
+		list  []*UserDB
+		total = new(int64)
+	)
+
+	stmt := u.db.WithContext(ctx).Model(u.model)
+
+	if len(sortBy) != 0 {
+		if len(order) == 0 {
+			order = "asc"
+		}
+		stmt.Order(sortBy + " " + order)
+	}
+
+	if len(usernameLike) != 0 {
+		stmt.Where("username LIKE ?", "%"+usernameLike+"%")
+	}
+
+	if len(phoneLike) != 0 {
+		stmt.Where("phone LIKE ?", "%"+phoneLike+"%")
+	}
+
+	if err := stmt.Count(total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	if offset >= 0 {
+		stmt.Offset(offset)
+	}
+
+	if limit > 0 {
+		stmt.Limit(limit)
+	}
+
+	if err := stmt.Find(&list).Error; err != nil {
+		return nil, 0, err
+	}
+
+	users := make([]*entity.User, 0, len(list))
+	for i := range list {
+		user, err := u.unmarshalUser(list[i])
+		if err != nil {
+			return nil, 0, err
+		}
+		users = append(users, user)
+	}
+
+	return users, int(*total), nil
+}
+
 func (u userGorm) Create(ctx context.Context, user *entity.User) error {
 	userDB, err := u.marshalUser(user)
 	if err != nil {
