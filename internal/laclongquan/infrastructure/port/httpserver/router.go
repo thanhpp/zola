@@ -106,6 +106,12 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		reportGr.Use(s.AuthMiddleware())
 		reportGr.POST("", reportCtrl.Create)
 	}
+
+	adminGr := r.Group("/admin")
+	{
+		adminGr.Use(s.AuthMiddleware())
+		adminGr.GET("/users", userCtrl.AdminGetUsers)
+	}
 	// ---------------
 
 	return r

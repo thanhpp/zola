@@ -39,21 +39,16 @@
 - [x] [signup](https://github.com/thanhpp/zola/commit/1a1bef3d247af842f8c1a16e8a4abea2c158e953)
 - [x] [login](https://github.com/thanhpp/zola/issues/1)
 - [x] [logout](https://github.com/thanhpp/zola/issues/3)
-  
 - [x] [set_request_friend](https://github.com/thanhpp/zola/issues/21)
 - [x] [get_requested_friend](https://github.com/thanhpp/zola/issues/63)
 - [x] [set_accept_friend](https://github.com/thanhpp/zola/issues/21)
-- [ ] get_user_friends
-
+- [x] [get_user_friends](https://github.com/thanhpp/zola/issues/65)
 - [x] [change_password](https://github.com/thanhpp/zola/issues/26)
-
 - [x] [set_block_user](https://github.com/thanhpp/zola/issues/19)
-- [ ] [set_block_diary](https://github.com/thanhpp/zola/issues/67)
-
-- [x] set_user_info
+- [x] [set_block_diary](https://github.com/thanhpp/zola/issues/67)
+- [x] [set_user_info](https://github.com/thanhpp/zola/issues/58)
   - [x] [update info](https://github.com/thanhpp/zola/issues/58)
   - [x] [response](https://github.com/thanhpp/zola/issues/60)
-
 - [x] [get_user_info](https://github.com/thanhpp/zola/issues/55)
 
 #### Post
@@ -92,7 +87,7 @@
 
 #### Admin APIs
 - [ ] get_admin_permission
-- [ ] get_user_list
+- [ ] [get_user_list](https://github.com/thanhpp/zola/issues/69)
 - [ ] set_role
 - [ ] get_analyst_result
 - [ ] set_user_state, delete_user
