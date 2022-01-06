@@ -200,11 +200,11 @@ func (u User) CanGetUserInfo(requestor *User, relation *Relation) error {
 		return nil
 	}
 
-	if relation != nil && relation.IsBlock() {
-		return ErrPermissionDenied
+	if relation != nil && relation.IsFriend() {
+		return nil
 	}
 
-	return nil
+	return ErrPermissionDenied
 }
 
 func (u User) Equal(user *User) bool {

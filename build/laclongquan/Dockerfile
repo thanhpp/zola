@@ -1,5 +1,5 @@
 ## ----------------------------------------------------------------------------
-FROM golang:1.17-alpine AS builder
+FROM ghcr.io/thanhpp/zola/laclongquan:builder AS builder
 
 # set ENV variables
 ENV GO111MODULE=on \

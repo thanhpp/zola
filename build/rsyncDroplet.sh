@@ -1,1 +1,1 @@
-rsync -v -P -r /home/thanhpp/go/src/github.com/thanhpp/zola HauPCDroplet:/root/thanhpp/
+rsync -rzh --progress --exclude 'postgres-data' /home/thanhpp/go/src/github.com/thanhpp/zola HauPCDroplet:/root/thanhpp/

@@ -12,6 +12,7 @@ var (
 	ErrSelfRelation      = errors.New("self relation")
 	ErrInvalidUser       = errors.New("invalid user")
 	ErrAlreadyBlocked    = errors.New("already blocked")
+	ErrInvalidRelation   = errors.New("invalid relation")
 )
 
 type RelationStatus string
@@ -65,7 +66,7 @@ func (r Relation) IsDiaryBlocked() bool {
 	return r.Status == RelationDiaryBlocked
 }
 
-func (r *Relation) SetDiaryBlock(blocker, blocked *User) error {
+func (r *Relation) BlockDiary(blocker, blocked *User) error {
 	if r == nil || blocker == nil || blocked == nil {
 		return ErrNilUser
 	}
@@ -82,7 +83,33 @@ func (r *Relation) SetDiaryBlock(blocker, blocked *User) error {
 		return ErrAlreadyBlocked
 	}
 
+	if !r.IsFriend() {
+		return ErrInvalidRelation
+	}
+
 	r.Status = RelationDiaryBlocked
+
+	return nil
+}
+
+func (r *Relation) UnblockDiary(blocker, blocked *User) error {
+	if r == nil || blocker == nil || blocked == nil {
+		return ErrNilUser
+	}
+
+	if r.UserA != blocker.ID() || r.UserB != blocked.ID() {
+		return ErrInvalidUser
+	}
+
+	if blocker.IsLocked() || blocked.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if !r.IsDiaryBlocked() {
+		return ErrInvalidRelation
+	}
+
+	r.Status = RelationFriend
 
 	return nil
 }

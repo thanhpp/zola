@@ -5,6 +5,7 @@
     - [Requirements](#requirements)
     - [Database](#database)
     - [Services](#services)
+    - [Relations](#relations)
     - [APIs](#apis)
       - [User](#user)
       - [Post](#post)
@@ -25,6 +26,13 @@
 1. Lạc Long Quân - Manage users, posts
    1. [Postman](docs/Zola.postman_collection.json)
 2. Âu Cơ - Manage chats, messages
+
+### Relations
+- Users can only **block diary** from each other if they were a friend
+- **Block message** means block everything, including
+  - Remove the friend relationship
+  - Remove all likes, comments
+- Only friends can see each other posts, comments, likes
 
 ### APIs
 #### User 
