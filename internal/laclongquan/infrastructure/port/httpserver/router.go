@@ -77,6 +77,8 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	{
 		blockGr.Use(s.AuthMiddleware())
 		blockGr.POST("", userCtrl.BlockUser)
+
+		blockGr.POST("/diary", userCtrl.BlockDiary)
 	}
 
 	postGr := r.Group("/post")

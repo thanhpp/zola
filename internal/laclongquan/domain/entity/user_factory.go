@@ -21,9 +21,12 @@ var (
 type UserFactory interface {
 	NewUser(phone, pass, name, avatar string) (*User, error)
 	NewAdmin(phone, pass, name, avatar string) (*User, error)
+	NewAddress(address, city, country string) (*UserAddress, error)
+
+	// relation
 	NewFriendRequest(requestor, requestee *User) (*Relation, error)
 	NewBlockRelation(blocker, blocked *User) (*Relation, error)
-	NewAddress(address, city, country string) (*UserAddress, error)
+	NewDiaryBlockRelation(blocker, blocked *User) (*Relation, error)
 }
 
 func NewUserFactory(accountCipher AccountCipher) UserFactory {

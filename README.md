@@ -5,6 +5,7 @@
     - [Requirements](#requirements)
     - [Database](#database)
     - [Services](#services)
+    - [Relations](#relations)
     - [APIs](#apis)
       - [User](#user)
       - [Post](#post)
@@ -26,6 +27,13 @@
    1. [Postman](docs/Zola.postman_collection.json)
 2. Âu Cơ - Manage chats, messages
 
+### Relations
+- Users can only **block diary** from each other if they were a friend
+- **Block message** means block everything, including
+  - Remove the friend relationship
+  - Remove all likes, comments
+- Only friends can see each other posts, comments, likes
+
 ### APIs
 #### User 
 - [x] [signup](https://github.com/thanhpp/zola/commit/1a1bef3d247af842f8c1a16e8a4abea2c158e953)
@@ -40,7 +48,7 @@
 - [x] [change_password](https://github.com/thanhpp/zola/issues/26)
 
 - [x] [set_block_user](https://github.com/thanhpp/zola/issues/19)
-- [ ] set_block_diary
+- [ ] [set_block_diary](https://github.com/thanhpp/zola/issues/67)
 
 - [x] set_user_info
   - [x] [update info](https://github.com/thanhpp/zola/issues/58)
