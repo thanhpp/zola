@@ -200,11 +200,11 @@ func (u User) CanGetUserInfo(requestor *User, relation *Relation) error {
 		return nil
 	}
 
-	if relation != nil && relation.IsBlock() {
-		return ErrPermissionDenied
+	if relation != nil && relation.IsFriend() {
+		return nil
 	}
 
-	return nil
+	return ErrPermissionDenied
 }
 
 func (u User) Equal(user *User) bool {
@@ -213,4 +213,36 @@ func (u User) Equal(user *User) bool {
 
 func (u User) CreatedAtUnix() int64 {
 	return u.CreatedAt.Unix()
+}
+
+func (u User) CanGetUserRequestedFriend(user *User) error {
+	if user == nil {
+		return ErrPermissionDenied
+	}
+
+	if user.IsAdmin() {
+		return nil
+	}
+
+	if u.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if u.Equal(user) {
+		return nil
+	}
+
+	return ErrPermissionDenied
+}
+
+func (u User) CanGetUserFriends(user *User) error {
+	if user == nil {
+		return ErrNilUser
+	}
+
+	if u.Equal(user) || user.IsAdmin() {
+		return nil
+	}
+
+	return ErrPermissionDenied
 }

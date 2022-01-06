@@ -74,7 +74,7 @@ func (s HTTPServer) formURL() string {
 }
 
 func (s HTTPServer) formMediaURL(post entity.Post, media entity.Media) string {
-	return fmt.Sprintf("%s/post/%s/media/%s", s.formURL(), post.ID(), media.ID())
+	return fmt.Sprintf("%s/post/%s/media/%s", s.cfg.Domain, post.ID(), media.ID())
 }
 
 func (s HTTPServer) resolveMediaURL(url string) (postID, mediaID string, err error) {
@@ -100,12 +100,12 @@ func (s HTTPServer) resolveMediaURL(url string) (postID, mediaID string, err err
 
 func (s HTTPServer) formUserMediaURL(user *entity.User) (avatarURL, coverImgURL string) {
 	if len(user.GetAvatar()) != 0 {
-		avatarURL = fmt.Sprintf("%s/user/%s/media/%s", s.formURL(), user.ID().String(), user.GetAvatar())
+		avatarURL = fmt.Sprintf("%s/user/%s/media/%s", s.cfg.Domain, user.ID().String(), user.GetAvatar())
 	}
 	logger.Debugf("avatarURL: %s - avatar: %s", avatarURL, user.GetAvatar())
 
 	if len(user.GetCoverImage()) != 0 {
-		coverImgURL = fmt.Sprintf("%s/user/%s/media/%s", s.formURL(), user.ID().String(), user.GetAvatar())
+		coverImgURL = fmt.Sprintf("%s/user/%s/media/%s", s.cfg.Domain, user.ID().String(), user.GetAvatar())
 	}
 	logger.Debugf("coverImgURL: %s - coverImg: %s", coverImgURL, user.GetCoverImage())
 

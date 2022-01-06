@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -43,6 +44,9 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	}))
 
 	// ---- ROUTES ----
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusNoContent, nil)
+	})
 	r.POST("/signup", userCtrl.SignUp)
 	r.POST("/login", userCtrl.SignIn)
 	r.GET("/logout", s.AuthMiddleware(), userCtrl.Signout)
@@ -52,6 +56,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		userGr.Use(s.AuthMiddleware())
 		userGr.GET("/:userid", userCtrl.GetUserInfo)
 		userGr.GET("/:userid/media/:mediaid", userCtrl.GetUserMedia)
+
 		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 	}
@@ -59,6 +64,11 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	friendGr := r.Group("/friend")
 	{
 		friendGr.Use(s.AuthMiddleware())
+		friendGr.GET("", userCtrl.GetFriends)
+		friendGr.GET("/:userid", userCtrl.GetFriends)
+		friendGr.GET("/requested", userCtrl.GetRequestedFriends)
+		friendGr.GET("/requested/:userid", userCtrl.GetRequestedFriends)
+
 		friendGr.POST("/request/:userid", userCtrl.NewFriendRequest)
 		friendGr.PUT("/request/:userid", userCtrl.UpdateFriendRequest)
 	}
@@ -67,6 +77,8 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	{
 		blockGr.Use(s.AuthMiddleware())
 		blockGr.POST("", userCtrl.BlockUser)
+
+		blockGr.POST("/diary", userCtrl.BlockDiary)
 	}
 
 	postGr := r.Group("/post")
