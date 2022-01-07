@@ -1,11 +1,17 @@
 package controller
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
 	"github.com/thanhpp/zola/pkg/logger"
 	"github.com/thanhpp/zola/pkg/responsevalue"
+)
+
+const (
+	ThumbPostfix = "-thumb"
 )
 
 func (ctrl PostController) GetMedia(c *gin.Context) {
@@ -30,9 +36,16 @@ func (ctrl PostController) GetMedia(c *gin.Context) {
 		return
 	}
 
-	media, err := ctrl.handler.GetMedia(c, userID.String(), postID.String(), mediaID.String())
+	var (
+		videoThumbFlags bool
+	)
+	if strings.Contains(mediaID, ThumbPostfix) {
+		videoThumbFlags = true
+		mediaID = mediaID[:len(mediaID)-len(ThumbPostfix)]
+	}
+	media, err := ctrl.handler.GetMedia(c, userID.String(), postID.String(), mediaID)
 	if err != nil {
-		logger.Errorf("get media error: %v", err)
+		logger.Errorf("get media %s error: %v", mediaID, err)
 		switch err {
 		case repository.ErrUserNotFound:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "user not found", nil)
@@ -64,6 +77,13 @@ func (ctrl PostController) GetMedia(c *gin.Context) {
 		}
 
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		return
+	}
+
+	if videoThumbFlags {
+		// logger.Debugf("media %s, thumb %s", mediaID, media.ThumbPath())
+		c.File(media.ThumbPath())
+		return
 	}
 
 	c.File(media.Path())

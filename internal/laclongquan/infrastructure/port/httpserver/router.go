@@ -27,6 +27,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		s.app.PostHandler,
 		s.app.LikeHandler,
 		s.formMediaURL,
+		s.formVideoThumbnailURL,
 	)
 	reportCtrl := controller.NewReportCtrl(
 		s.app.ReportHandler,

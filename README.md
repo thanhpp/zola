@@ -35,7 +35,7 @@
 - Only friends can see each other posts, comments, likes
 
 ### APIs
-#### User 
+#### User
 - [x] [signup](https://github.com/thanhpp/zola/commit/1a1bef3d247af842f8c1a16e8a4abea2c158e953)
 - [x] [login](https://github.com/thanhpp/zola/issues/1)
 - [x] [logout](https://github.com/thanhpp/zola/issues/3)
@@ -53,9 +53,9 @@
 
 #### Post
 - [x] [add_post](https://github.com/thanhpp/zola/issues/5)
-- [ ] get_post
+- [x] get_post
   - [x] [Get post data](https://github.com/thanhpp/zola/issues/41)
-  - [ ] video thumbnails
+  - [x] [video thumbnails](https://github.com/thanhpp/zola/issues/42)
 - [ ] get_list_posts
 - [ ] check_new_item
 - [x] [edit_post](https://github.com/thanhpp/zola/issues/7)
@@ -87,7 +87,7 @@
 
 #### Admin APIs
 - [ ] get_admin_permission
-- [ ] [get_user_list](https://github.com/thanhpp/zola/issues/69)
+- [x] [get_user_list](https://github.com/thanhpp/zola/issues/69)
 - [ ] set_role
 - [ ] get_analyst_result
 - [ ] set_user_state, delete_user

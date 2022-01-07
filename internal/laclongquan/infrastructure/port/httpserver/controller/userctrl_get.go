@@ -72,9 +72,9 @@ func (ctrl UserController) GetUserMedia(c *gin.Context) {
 		return
 	}
 
-	media, err := ctrl.handler.GetUserMedia(c, requestorID.String(), requestedID.String(), mediaID.String())
+	media, err := ctrl.handler.GetUserMedia(c, requestorID.String(), requestedID.String(), mediaID)
 	if err != nil {
-		logger.Errorf("can not get user %s media %s: %v", requestorID.String(), mediaID.String(), err)
+		logger.Errorf("can not get user %s media %s: %v", requestorID.String(), mediaID, err)
 		switch err {
 		case repository.ErrUserNotFound:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "media not found", nil)

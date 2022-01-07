@@ -83,14 +83,10 @@ func getPostID(c *gin.Context) (uuid.UUID, error) {
 	return postUUID, nil
 }
 
-func getMediaID(c *gin.Context) (uuid.UUID, error) {
+func getMediaID(c *gin.Context) (string, error) {
 	mediaID := c.Param("mediaid")
-	mediaUUID, err := uuid.Parse(mediaID)
-	if err != nil {
-		return uuid.Nil, ErrInvalidMediaID
-	}
 
-	return mediaUUID, nil
+	return mediaID, nil
 }
 
 func getCommentID(c *gin.Context) (uuid.UUID, error) {

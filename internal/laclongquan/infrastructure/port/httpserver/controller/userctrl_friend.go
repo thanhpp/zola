@@ -131,7 +131,7 @@ func (ctrl UserController) GetRequestedFriends(c *gin.Context) {
 
 	var requestedID uuid.UUID
 	requestedIDStr := strings.ReplaceAll(c.Param("userid"), "/", "")
-	logger.Debugf("get requested friends - requested id str: %s", requestedIDStr)
+	// logger.Debugf("get requested friends - requested id str: %s", requestedIDStr)
 	if requestedIDStr == "" {
 		requestedID = requestorID
 	} else {

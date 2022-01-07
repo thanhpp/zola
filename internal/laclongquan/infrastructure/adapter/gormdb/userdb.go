@@ -8,7 +8,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
-	"github.com/thanhpp/zola/pkg/logger"
 	"gorm.io/gorm"
 )
 
@@ -200,7 +199,7 @@ func (u userGorm) Update(ctx context.Context, id string, fn repository.UserUpdat
 	if err != nil {
 		return err
 	}
-	logger.Debugf("userDB - avatar: %s", userDB.Avatar)
+	// logger.Debugf("userDB - avatar: %s", userDB.Avatar)
 
 	return u.db.WithContext(ctx).Model(u.model).
 		Where("user_uuid = ?", id).
