@@ -48,9 +48,11 @@ type GetPostResponse struct {
 	Data GetPostResponseData `json:"data"`
 }
 
+type FormVideoThumbURLFunc func(post entity.Post, video entity.Media) string
+
 type FormMediaURLFunc func(post entity.Post, media entity.Media) string
 
-func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, formMediaURLFn FormMediaURLFunc) {
+func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, formMediaURLFn FormMediaURLFunc, formVideoThumbFn FormVideoThumbURLFunc) {
 	if resp == nil || getPostResult == nil {
 		return
 	}
@@ -72,8 +74,8 @@ func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, f
 
 			case entity.MediaTypeVideo:
 				resp.Data.Video = VideoResponse{
-					URL: formMediaURLFn(*getPostResult.Post, media),
-					// FIXME: thumb
+					URL:   formMediaURLFn(*getPostResult.Post, media),
+					Thumb: formVideoThumbFn(*getPostResult.Post, media),
 				}
 			}
 		}

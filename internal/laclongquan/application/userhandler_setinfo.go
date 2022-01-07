@@ -7,7 +7,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
-	"github.com/thanhpp/zola/pkg/logger"
 )
 
 var (
@@ -56,7 +55,7 @@ func (u UserHandler) SetUserInfo(
 				return nil, ErrCanNotUseMedia
 			}
 			user.UpdateAvatar(avatar.ID())
-			logger.Debugf("set user info - update avatar: %s", avatar.ID())
+			// logger.Debugf("set user info - update avatar: %s", avatar.ID())
 		}
 
 		if coverImage != nil {

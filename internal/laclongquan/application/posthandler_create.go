@@ -18,8 +18,9 @@ func (p PostHandler) CreatePostWithMultipart(ctx context.Context, creator uuid.U
 	}
 
 	var (
-		post *entity.Post
-		err  error
+		post               *entity.Post
+		err                error
+		videoThumbnailPath string
 	)
 	switch {
 	case cfg.haveImages():
@@ -88,6 +89,14 @@ func (p PostHandler) CreatePostWithMultipart(ctx context.Context, creator uuid.U
 			return nil, err
 		}
 
+		videoThumbnailPath = videoMedia.ThumbPath()
+		err = p.filehdl.GenerateVideoThumbnail(videoPath, videoThumbnailPath)
+		if err != nil {
+			p.filehdl.Cleanup(videoPath)
+			p.filehdl.Cleanup(videoThumbnailPath)
+			return nil, err
+		}
+
 	default:
 		post, err = p.fac.NewPost(creator, content)
 		if err != nil {
@@ -100,6 +109,7 @@ func (p PostHandler) CreatePostWithMultipart(ctx context.Context, creator uuid.U
 		for i := range mediaList {
 			p.filehdl.Cleanup(mediaList[i].Path())
 		}
+		p.filehdl.Cleanup(videoThumbnailPath)
 		return nil, err
 	}
 
