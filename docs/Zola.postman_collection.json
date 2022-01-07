@@ -2209,6 +2209,108 @@
 			]
 		},
 		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "get_user_list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/admin/users",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get_user_list - 1000 | OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{zola}}/admin/users",
+									"host": [
+										"{{zola}}"
+									],
+									"path": [
+										"admin",
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Thu, 06 Jan 2022 09:38:27 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=5aJzwoJ%2FmlUOgo1A39QRGeOmByRHNMuvzfpFHxRjhqBHzQuKePLqc%2FiA72gDJUXVkrtT47iViTgME8q0jHxw%2BAZNT4Qd9DsVIez74QmvRNf2yoGIwdebfyXCgRMNWFjtGQbUdLs%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "6c93f93c1a6218f4-SIN"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "alt-svc",
+									"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400, h3-28=\":443\"; ma=86400, h3-27=\":443\"; ma=86400"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"users\": [\n            {\n                \"user_id\": \"5ba15938-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"phone\": \"0954482733\",\n                \"username\": \"username\",\n                \"name\": \"0954482733\",\n                \"avatar\": \"https://zola.thanhpp.ninja/user/5ba15938-6cb0-11ec-a3a1-0242ac1c0003/media/50fd7afb-0c01-4463-8930-6e4bf78656f0\",\n                \"state\": \"active\",\n                \"last_login\": \"\"\n            },\n            {\n                \"user_id\": \"0596a256-6cb1-11ec-a3a1-0242ac1c0003\",\n                \"phone\": \"0915258989\",\n                \"username\": \"\",\n                \"name\": \"0915258989\",\n                \"avatar\": \"\",\n                \"state\": \"active\",\n                \"last_login\": \"\"\n            },\n            {\n                \"user_id\": \"3de18c16-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"phone\": \"0965508091\",\n                \"username\": \"\",\n                \"name\": \"0965508091\",\n                \"avatar\": \"\",\n                \"state\": \"active\",\n                \"last_login\": \"\"\n            }\n        ],\n        \"total\": \"3\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
 			"name": "Signup",
 			"request": {
 				"method": "POST",

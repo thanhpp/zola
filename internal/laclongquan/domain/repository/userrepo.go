@@ -18,6 +18,7 @@ type UserRepository interface {
 	// read
 	GetByID(ctx context.Context, id string) (*entity.User, error)
 	GetByPhone(ctx context.Context, phone string) (*entity.User, error)
+	GetAllUsers(ctx context.Context, offset, limit int, sortBy, order, usernameLike, phoneLike string) ([]*entity.User, int, error)
 
 	// write
 	Create(ctx context.Context, user *entity.User) error
