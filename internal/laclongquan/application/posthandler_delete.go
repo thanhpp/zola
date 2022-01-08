@@ -31,6 +31,8 @@ func (p PostHandler) DeletePost(ctx context.Context, userID, postID string) erro
 	// clean related media
 	for i := range post.Media() {
 		p.filehdl.Cleanup(post.Media()[i].Path())
+		p.filehdl.Cleanup(post.Media()[i].ThumbPath())
+
 	}
 
 	return nil

@@ -6,15 +6,24 @@ import (
 )
 
 type PostController struct {
-	handler          application.PostHandler
-	likeHandler      application.LikeHandler
-	formMediaURLFunc dto.FormMediaURLFunc
+	handler               application.PostHandler
+	likeHandler           application.LikeHandler
+	formMediaURLFunc      dto.FormMediaURLFunc
+	formVideoThumbURLFunc dto.FormVideoThumbURLFunc
+	formUserMediaURLFunc  dto.FormUserMediaFn
 }
 
-func NewPostCtrl(h application.PostHandler, likeHdl application.LikeHandler, formURLFn dto.FormMediaURLFunc) *PostController {
+func NewPostCtrl(
+	h application.PostHandler,
+	likeHdl application.LikeHandler,
+	formURLFn dto.FormMediaURLFunc,
+	formVideoThumbURLFn dto.FormVideoThumbURLFunc,
+	formUserMediaURLFunc dto.FormUserMediaFn) *PostController {
 	return &PostController{
-		handler:          h,
-		likeHandler:      likeHdl,
-		formMediaURLFunc: formURLFn,
+		handler:               h,
+		likeHandler:           likeHdl,
+		formMediaURLFunc:      formURLFn,
+		formVideoThumbURLFunc: formVideoThumbURLFn,
+		formUserMediaURLFunc:  formUserMediaURLFunc,
 	}
 }

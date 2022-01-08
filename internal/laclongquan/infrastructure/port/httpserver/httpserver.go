@@ -77,6 +77,13 @@ func (s HTTPServer) formMediaURL(post entity.Post, media entity.Media) string {
 	return fmt.Sprintf("%s/post/%s/media/%s", s.cfg.Domain, post.ID(), media.ID())
 }
 
+func (s HTTPServer) formVideoThumbnailURL(post entity.Post, video entity.Media) string {
+	if !video.IsVideo() {
+		return ""
+	}
+	return fmt.Sprintf("%s/post/%s/media/%s%s", s.cfg.Domain, post.ID(), video.ID(), controller.ThumbPostfix)
+}
+
 func (s HTTPServer) resolveMediaURL(url string) (postID, mediaID string, err error) {
 	url, err = s.preProcessURL(url)
 	if err != nil {

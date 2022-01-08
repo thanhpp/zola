@@ -13,7 +13,6 @@ type GetPostResult struct {
 	CommentCount int
 	IsLiked      bool
 	CanEdit      bool
-	CanComment   bool
 }
 
 func (p PostHandler) GetPost(ctx context.Context, userID, postID string) (*GetPostResult, error) {
@@ -66,7 +65,6 @@ func (p PostHandler) GetPost(ctx context.Context, userID, postID string) (*GetPo
 	// form response
 	var (
 		canEdit bool
-		// FIXME: canComment bool
 	)
 	if err := post.CanUserEditPost(user); err == nil {
 		canEdit = true

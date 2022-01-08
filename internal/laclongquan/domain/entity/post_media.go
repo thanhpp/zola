@@ -29,8 +29,20 @@ func (m Media) Type() MediaType {
 	return m.mediaType
 }
 
+func (m Media) IsVideo() bool {
+	return m.mediaType == MediaTypeVideo
+}
+
 func (m Media) Path() string {
 	return m.path
+}
+
+func (m Media) ThumbPath() string {
+	if !m.IsVideo() {
+		return ""
+	}
+
+	return m.path + "-thumb.jpg"
 }
 
 func (m Media) Owner() string {

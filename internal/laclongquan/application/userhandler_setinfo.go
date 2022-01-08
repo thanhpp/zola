@@ -7,7 +7,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
-	"github.com/thanhpp/zola/pkg/logger"
 )
 
 var (
@@ -56,7 +55,7 @@ func (u UserHandler) SetUserInfo(
 				return nil, ErrCanNotUseMedia
 			}
 			user.UpdateAvatar(avatar.ID())
-			logger.Debugf("set user info - update avatar: %s", avatar.ID())
+			// logger.Debugf("set user info - update avatar: %s", avatar.ID())
 		}
 
 		if coverImage != nil {
@@ -64,6 +63,16 @@ func (u UserHandler) SetUserInfo(
 				return nil, ErrCanNotUseMedia
 			}
 			user.UpdateCoverImage(coverImage.ID())
+		}
+
+		return user, nil
+	})
+}
+
+func (u UserHandler) SetOnline(ctx context.Context, userID string) error {
+	return u.repo.Update(ctx, userID, func(ctx context.Context, user *entity.User) (*entity.User, error) {
+		if err := user.SetOnline(user); err != nil {
+			return nil, err
 		}
 
 		return user, nil

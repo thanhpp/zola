@@ -55,7 +55,7 @@ func (ctrl PostController) CreateComment(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "not a friend", nil)
 			return
 
-		case application.ErrNotFriend:
+		case entity.ErrNotFriend:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "not a friend", nil)
 			return
 
@@ -104,7 +104,7 @@ func (ctrl PostController) UpdateComment(c *gin.Context) {
 		return
 	}
 
-	logger.Debugf("lenght new content: %d", len(req.NewContent))
+	// logger.Debugf("lenght new content: %d", len(req.NewContent))
 	if len(req.NewContent) == 0 {
 		logger.Errorf("nil content")
 		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid content", req)
@@ -152,7 +152,7 @@ func (ctrl PostController) UpdateComment(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "not a friend", nil)
 			return
 
-		case application.ErrNotFriend:
+		case entity.ErrNotFriend:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "not a friend", nil)
 			return
 

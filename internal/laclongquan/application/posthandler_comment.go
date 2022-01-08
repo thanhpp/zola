@@ -2,13 +2,8 @@ package application
 
 import (
 	"context"
-	"errors"
 
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
-)
-
-var (
-	ErrNotFriend = errors.New("not friend")
 )
 
 func (p PostHandler) CreateComment(ctx context.Context, postID, creatorID, content string) error {
@@ -17,23 +12,25 @@ func (p PostHandler) CreateComment(ctx context.Context, postID, creatorID, conte
 		return err
 	}
 
-	if post.Creator() != creatorID {
-		relation, err := p.relationRepo.GetRelationBetween(ctx, creatorID, post.CreatorUUID().String())
-		if err != nil {
-			return err
-		}
-
-		if relation.IsBlock() {
-			return ErrAlreadyBlocked
-		}
-
-		if !relation.IsFriend() {
-			return ErrNotFriend
-		}
+	postCreator, err := p.userRepo.GetByID(ctx, post.Creator())
+	if err != nil {
+		return err
 	}
 
 	creator, err := p.userRepo.GetByID(ctx, creatorID)
 	if err != nil {
+		return err
+	}
+
+	var relation *entity.Relation
+	if !postCreator.Equal(creator) {
+		relation, err = p.relationRepo.GetRelationBetween(ctx, postCreator.ID().String(), creator.ID().String())
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := post.CanCreateComment(postCreator, creator, relation); err != nil {
 		return err
 	}
 
@@ -58,7 +55,7 @@ func (p PostHandler) UpdateComment(ctx context.Context, updaterID, postID, comme
 			}
 
 			if !relation.IsFriend() {
-				return nil, ErrNotFriend
+				return nil, entity.ErrNotFriend
 			}
 		}
 

@@ -8,7 +8,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
-	"github.com/thanhpp/zola/pkg/logger"
 	"gorm.io/gorm"
 )
 
@@ -27,6 +26,7 @@ type UserDB struct {
 	Address     string       `gorm:"Column:address; Type:text"`
 	City        string       `gorm:"Column:city; Type:text"`
 	Country     string       `gorm:"Column:country; Type:text"`
+	LastOnline  time.Time    `gorm:"Column:last_online"`
 	CreatedAt   time.Time    `gorm:"Column:created_at"`
 	UpdatedAt   time.Time    `gorm:"Column:updated_at"`
 	DeletedAt   sql.NullTime `gorm:"Column:deleted_at"`
@@ -57,6 +57,7 @@ func (u userGorm) marshalUser(user *entity.User) (*UserDB, error) {
 		Address:     user.GetAddress(),
 		City:        user.GetCity(),
 		Country:     user.GetCountry(),
+		LastOnline:  user.GetLastOnline(),
 	}, nil
 }
 
@@ -80,6 +81,7 @@ func (u userGorm) unmarshalUser(userDB *UserDB) (*entity.User, error) {
 		userDB.Address,
 		userDB.City,
 		userDB.Country,
+		userDB.LastOnline,
 		userDB.CreatedAt,
 	)
 }
@@ -200,7 +202,7 @@ func (u userGorm) Update(ctx context.Context, id string, fn repository.UserUpdat
 	if err != nil {
 		return err
 	}
-	logger.Debugf("userDB - avatar: %s", userDB.Avatar)
+	// logger.Debugf("userDB - avatar: %s", userDB.Avatar)
 
 	return u.db.WithContext(ctx).Model(u.model).
 		Where("user_uuid = ?", id).
