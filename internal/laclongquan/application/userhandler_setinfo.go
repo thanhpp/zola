@@ -68,3 +68,13 @@ func (u UserHandler) SetUserInfo(
 		return user, nil
 	})
 }
+
+func (u UserHandler) SetOnline(ctx context.Context, userID string) error {
+	return u.repo.Update(ctx, userID, func(ctx context.Context, user *entity.User) (*entity.User, error) {
+		if err := user.SetOnline(user); err != nil {
+			return nil, err
+		}
+
+		return user, nil
+	})
+}

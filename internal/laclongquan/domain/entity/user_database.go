@@ -12,7 +12,7 @@ func NewUserFromDB(
 	link, avatar, coverImage,
 	username, description,
 	address, city, country string,
-	createdAt time.Time) (*User, error) {
+	lastOnline, createdAt time.Time) (*User, error) {
 	userID, err := uuid.Parse(userUUID)
 	if err != nil {
 		return nil, errors.WithMessage(err, "parse uuid")
@@ -37,6 +37,7 @@ func NewUserFromDB(
 			City:    city,
 			Country: country,
 		},
-		CreatedAt: createdAt,
+		LastOnline: lastOnline,
+		CreatedAt:  createdAt,
 	}, nil
 }

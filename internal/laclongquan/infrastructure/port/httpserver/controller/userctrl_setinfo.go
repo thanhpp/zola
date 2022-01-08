@@ -119,3 +119,34 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 	resp.SetData(res.User, ctrl.formUserMediaUrlFn)
 	c.JSON(http.StatusOK, resp)
 }
+
+func (ctrl UserController) SetOnline(c *gin.Context) {
+	userID, err := getUserUUIDFromClaims(c)
+	if err != nil {
+		logger.Errorf("Error while getting userID: %v", err)
+		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		return
+	}
+
+	if err := ctrl.handler.SetOnline(c, userID.String()); err != nil {
+		logger.Errorf("set online %s: %v", userID.String(), err)
+		switch err {
+		case repository.ErrUserNotFound:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			return
+
+		case entity.ErrPermissionDenied:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			return
+
+		case entity.ErrLockedUser:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			return
+		}
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		return
+	}
+
+	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	return
+}

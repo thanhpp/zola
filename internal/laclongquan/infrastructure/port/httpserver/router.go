@@ -61,6 +61,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 
 		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
+		userGr.PUT("/online", userCtrl.SetOnline)
 	}
 
 	friendGr := r.Group("/friend")
