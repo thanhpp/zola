@@ -70,7 +70,7 @@ func (ctrl PostController) GetPost(c *gin.Context) {
 	resp := new(dto.GetPostResponse)
 	resp.SetCode(responsevalue.CodeOK)
 	resp.SetMsg(responsevalue.MsgOK)
-	resp.SetData(result, ctrl.formMediaURLFunc, ctrl.formVideoThumbURLFunc)
+	resp.SetData(result, ctrl.formMediaURLFunc, ctrl.formVideoThumbURLFunc, ctrl.formUserMediaURLFunc)
 
 	c.JSON(http.StatusOK, resp)
 }

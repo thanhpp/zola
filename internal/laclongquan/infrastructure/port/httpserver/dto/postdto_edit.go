@@ -5,3 +5,7 @@ type EditPostReq struct {
 	MediaDel  []string `form:"media_del"`
 	ImageSort []string `form:"image_sort"`
 }
+
+type EditPostPermReq struct {
+	CanComment string `form:"can_comment"`
+}

@@ -28,6 +28,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		s.app.LikeHandler,
 		s.formMediaURL,
 		s.formVideoThumbnailURL,
+		s.formUserMediaURL,
 	)
 	reportCtrl := controller.NewReportCtrl(
 		s.app.ReportHandler,
@@ -88,6 +89,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		postGr.GET("/:postid", postCtrl.GetPost)
 		postGr.POST("", postCtrl.CreatePost)
 		postGr.PUT("/:postid", postCtrl.EditPost)
+		postGr.PUT("/:postid/perm", postCtrl.EditPerm)
 		postGr.DELETE("/:postid", postCtrl.DeletePost)
 
 		// like

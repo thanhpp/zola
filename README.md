@@ -62,7 +62,7 @@
   - [ ] missing images order
 - [x] [delete_post](https://github.com/thanhpp/zola/issues/17)
 - [x] [report](https://github.com/thanhpp/zola/issues/10)
-- [ ] set_comment
+- [x] [set_comment](https://github.com/thanhpp/zola/issues/28)
   - [x] [Create comment](https://github.com/thanhpp/zola/issues/28)
   - [ ] Get comment
 - [ ] get_comment
