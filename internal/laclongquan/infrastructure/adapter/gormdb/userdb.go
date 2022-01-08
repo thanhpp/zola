@@ -26,6 +26,7 @@ type UserDB struct {
 	Address     string       `gorm:"Column:address; Type:text"`
 	City        string       `gorm:"Column:city; Type:text"`
 	Country     string       `gorm:"Column:country; Type:text"`
+	LastOnline  time.Time    `gorm:"Column:last_online"`
 	CreatedAt   time.Time    `gorm:"Column:created_at"`
 	UpdatedAt   time.Time    `gorm:"Column:updated_at"`
 	DeletedAt   sql.NullTime `gorm:"Column:deleted_at"`
@@ -56,6 +57,7 @@ func (u userGorm) marshalUser(user *entity.User) (*UserDB, error) {
 		Address:     user.GetAddress(),
 		City:        user.GetCity(),
 		Country:     user.GetCountry(),
+		LastOnline:  user.GetLastOnline(),
 	}, nil
 }
 
@@ -79,6 +81,7 @@ func (u userGorm) unmarshalUser(userDB *UserDB) (*entity.User, error) {
 		userDB.Address,
 		userDB.City,
 		userDB.Country,
+		userDB.LastOnline,
 		userDB.CreatedAt,
 	)
 }

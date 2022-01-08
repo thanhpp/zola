@@ -15,6 +15,10 @@ var (
 	ErrInvalidInputLength = errors.New("invalid input length")
 )
 
+const (
+	OnlineDuration = time.Minute * -5
+)
+
 type User struct {
 	id          uuid.UUID
 	Username    string
@@ -27,6 +31,7 @@ type User struct {
 	Address     UserAddress
 	Avatar      string
 	CoverImg    string
+	LastOnline  time.Time
 	CreatedAt   time.Time
 }
 
@@ -233,6 +238,32 @@ func (u User) CanGetUserRequestedFriend(user *User) error {
 	}
 
 	return ErrPermissionDenied
+}
+
+func (u *User) SetOnline(user *User) error {
+	if u == nil || user == nil {
+		return ErrNilUser
+	}
+
+	if !u.Equal(user) {
+		return ErrPermissionDenied
+	}
+
+	if u.IsLocked() {
+		return ErrLockedUser
+	}
+
+	u.LastOnline = time.Now()
+
+	return nil
+}
+
+func (u User) IsOnline() bool {
+	return u.LastOnline.After(time.Now().Add(OnlineDuration))
+}
+
+func (u User) GetLastOnline() time.Time {
+	return u.LastOnline
 }
 
 func (u User) CanGetUserFriends(user *User) error {

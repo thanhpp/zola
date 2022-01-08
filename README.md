@@ -50,6 +50,7 @@
   - [x] [update info](https://github.com/thanhpp/zola/issues/58)
   - [x] [response](https://github.com/thanhpp/zola/issues/60)
 - [x] [get_user_info](https://github.com/thanhpp/zola/issues/55)
+- [x] [set_user_online](https://github.com/thanhpp/zola/issues/73)
 
 #### Post
 - [x] [add_post](https://github.com/thanhpp/zola/issues/5)

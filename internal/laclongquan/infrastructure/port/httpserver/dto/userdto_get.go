@@ -20,6 +20,7 @@ type GetUserResp struct {
 		City        string `json:"city"`
 		Country     string `json:"country"`
 		IsFriend    string `json:"is_friend"`
+		IsOnline    string `json:"is_online"`
 		Listing     int64  `json:"listing"`
 		Created     int64  `json:"created"`
 	} `json:"data"`
@@ -43,6 +44,7 @@ func (resp *GetUserResp) SetData(user *entity.User, friendCount int, isFriend bo
 	resp.Data.City = user.GetCity()
 	resp.Data.Country = user.GetCountry()
 	resp.Data.IsFriend = boolTranslate(isFriend)
+	resp.Data.IsOnline = boolTranslate(user.IsOnline())
 	resp.Data.Listing = int64(friendCount)
 	resp.Data.Created = user.CreatedAtUnix()
 }

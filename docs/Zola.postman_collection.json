@@ -49,12 +49,12 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/thanhpp/go/src/github.com/thanhpp/zola/test/add_post/2021-11-01_22-53.png"
+									"src": []
 								},
 								{
 									"key": "video",
 									"type": "file",
-									"src": []
+									"src": "/home/thanhpp/go/src/github.com/thanhpp/zola/test/add_post/sample-5s.mp4.mp4"
 								}
 							]
 						},
@@ -1276,6 +1276,52 @@
 							"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"id\": \"116880b9-5c22-11ec-ab4e-2cf05d8903e3\",\n        \"described\": \"Hello there\",\n        \"created\": 1639406193,\n        \"modified\": 1639406193,\n        \"like\": 0,\n        \"comment\": 0,\n        \"images\": null,\n        \"video\": {\n            \"url\": \"http://0.0.0.0:12100/post/116880b9-5c22-11ec-ab4e-2cf05d8903e3/media/115e5e27-5c22-11ec-ab4e-2cf05d8903e3\",\n            \"thumb\": \"\"\n        },\n        \"author\": {\n            \"id\": \"ab05fe44-544b-11ec-b533-2cf05d8903e3\",\n            \"name\": \"\",\n            \"avatar\": \"\"\n        },\n        \"state\": \"active\",\n        \"is_liked\": \"0\",\n        \"is_blocked\": \"0\",\n        \"can_edit\": \"1\",\n        \"can_comment\": \"0\"\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "edit post permissions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "can_comment",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/post/{{new_post_id}}/perm",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"{{new_post_id}}",
+								"perm"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "\"0\"",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2879,14 +2925,14 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{zola}}/friend/request/bd0a95fb-35c1-11ec-94f3-2cf05d8903e3",
+					"raw": "{{zola}}/friend/request/5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
 						"friend",
 						"request",
-						"bd0a95fb-35c1-11ec-94f3-2cf05d8903e3"
+						"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
 					]
 				}
 			},
@@ -3104,20 +3150,14 @@
 					]
 				},
 				"url": {
-					"raw": "{{zola}}/friend/request/5ba15938-6cb0-11ec-a3a1-0242ac1c0003?is_accept=1",
+					"raw": "{{zola}}/friend/request/3de18c16-6cb0-11ec-a3a1-0242ac1c0003",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
 						"friend",
 						"request",
-						"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
-					],
-					"query": [
-						{
-							"key": "is_accept",
-							"value": "1"
-						}
+						"3de18c16-6cb0-11ec-a3a1-0242ac1c0003"
 					]
 				}
 			},
@@ -4185,13 +4225,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{zola}}/user/5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+					"raw": "{{zola}}/user/ea033d22-708d-11ec-bd01-0242c0a83003",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
 						"user",
-						"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
+						"ea033d22-708d-11ec-bd01-0242c0a83003"
 					]
 				}
 			},
@@ -4634,6 +4674,34 @@
 					"body": "{\n    \"code\": 1000,\n    \"message\": \"OK\",\n    \"data\": {\n        \"friends\": [\n            {\n                \"user_id\": \"3de18c16-6cb0-11ec-a3a1-0242ac1c0003\",\n                \"user_name\": \"\",\n                \"avatar\": \"\",\n                \"status\": \"\"\n            }\n        ]\n    }\n}"
 				}
 			]
+		},
+		{
+			"name": "set_user_online",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{zola}}/user/online",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"user",
+						"online"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
