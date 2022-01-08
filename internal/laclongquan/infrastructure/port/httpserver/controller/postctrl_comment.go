@@ -55,7 +55,7 @@ func (ctrl PostController) CreateComment(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "not a friend", nil)
 			return
 
-		case application.ErrNotFriend:
+		case entity.ErrNotFriend:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "not a friend", nil)
 			return
 
@@ -152,7 +152,7 @@ func (ctrl PostController) UpdateComment(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "not a friend", nil)
 			return
 
-		case application.ErrNotFriend:
+		case entity.ErrNotFriend:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "not a friend", nil)
 			return
 

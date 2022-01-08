@@ -9,17 +9,19 @@ import (
 )
 
 var (
-	ErrNilUser = errors.New("nil user")
+	ErrNilUser   = errors.New("nil user")
+	ErrNotFriend = errors.New("not friend")
 )
 
 type Post struct {
-	id        uuid.UUID
-	creator   uuid.UUID
-	content   string
-	status    PostStatus
-	media     []Media
-	createdAt time.Time
-	updatedAt time.Time
+	id         uuid.UUID
+	creator    uuid.UUID
+	content    string
+	status     PostStatus
+	media      []Media
+	CanComment bool
+	createdAt  time.Time
+	updatedAt  time.Time
 }
 
 func (p Post) ID() string {
@@ -40,6 +42,46 @@ func (p Post) CreatorUUID() uuid.UUID {
 
 func (p Post) Content() string {
 	return p.content
+}
+
+func (p Post) GetCanComment() bool {
+	return p.CanComment
+}
+
+func (p Post) CanCreateComment(postCreator, commentCreator *User, relation *Relation) error {
+	if postCreator == nil || commentCreator == nil {
+		return ErrEmptyInput
+	}
+
+	if postCreator.Equal(commentCreator) {
+		return nil
+	}
+
+	if relation == nil {
+		return ErrEmptyInput
+	}
+
+	if commentCreator.IsLocked() {
+		return ErrLockedUser
+	}
+
+	if p.IsLocked() {
+		return ErrLockedPost
+	}
+
+	if !p.CanComment {
+		return ErrPermissionDenied
+	}
+
+	if relation.IsBlock() {
+		return ErrAlreadyBlocked
+	}
+
+	if !relation.IsFriend() {
+		return ErrNotFriend
+	}
+
+	return nil
 }
 
 func (p *Post) UpdateContent(content string) error {
@@ -196,4 +238,30 @@ func (p *Post) CanBeDeletedBy(user *User) bool {
 	}
 
 	return p.Creator() == user.ID().String()
+}
+
+func (p *Post) UpdateCanComment(user *User, value bool) error {
+	if p == nil || user == nil {
+		return ErrEmptyInput
+	}
+
+	if user.IsAdmin() {
+		p.CanComment = value
+		return nil
+	}
+
+	if !p.IsCreator(user.ID()) {
+		return ErrNotCreator
+	}
+
+	if p.IsLocked() {
+		return ErrLockedPost
+	}
+
+	if user.IsLocked() {
+		return ErrLockedUser
+	}
+
+	p.CanComment = value
+	return nil
 }

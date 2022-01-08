@@ -31,7 +31,7 @@ func NewMediaFromDB(id, owner, mediaType, path string) (*Media, error) {
 	}, nil
 }
 
-func NewPostFromDB(id, creator, status, content string, media []Media, createdAt, updatedAt time.Time) (*Post, error) {
+func NewPostFromDB(id, creator, status, content string, media []Media, canComment bool, createdAt, updatedAt time.Time) (*Post, error) {
 	postID, err := uuid.Parse(id)
 	if err != nil {
 		return nil, err
@@ -43,12 +43,13 @@ func NewPostFromDB(id, creator, status, content string, media []Media, createdAt
 	}
 
 	return &Post{
-		id:        postID,
-		creator:   creatorID,
-		status:    PostStatus(status),
-		content:   content,
-		media:     media,
-		createdAt: createdAt,
-		updatedAt: updatedAt,
+		id:         postID,
+		creator:    creatorID,
+		status:     PostStatus(status),
+		content:    content,
+		media:      media,
+		createdAt:  createdAt,
+		updatedAt:  updatedAt,
+		CanComment: canComment,
 	}, nil
 }

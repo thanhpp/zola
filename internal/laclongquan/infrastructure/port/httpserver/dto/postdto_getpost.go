@@ -52,7 +52,11 @@ type FormVideoThumbURLFunc func(post entity.Post, video entity.Media) string
 
 type FormMediaURLFunc func(post entity.Post, media entity.Media) string
 
-func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, formMediaURLFn FormMediaURLFunc, formVideoThumbFn FormVideoThumbURLFunc) {
+func (resp *GetPostResponse) SetData(
+	getPostResult *application.GetPostResult,
+	formMediaURLFn FormMediaURLFunc,
+	formVideoThumbFn FormVideoThumbURLFunc,
+	formUserMediaFN FormUserMediaFn) {
 	if resp == nil || getPostResult == nil {
 		return
 	}
@@ -86,10 +90,11 @@ func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, f
 
 	// author section
 	if getPostResult.Author != nil {
+		avatarURL, _ := formUserMediaFN(getPostResult.Author)
 		resp.Data.Author = AuthorResponse{
-			ID:   getPostResult.Author.ID().String(),
-			Name: getPostResult.Author.Name(),
-			// FIXME: avatar
+			ID:     getPostResult.Author.ID().String(),
+			Name:   getPostResult.Author.Name(),
+			Avatar: avatarURL,
 		}
 		resp.Data.State = getPostResult.Author.State().String()
 	}
@@ -98,7 +103,8 @@ func (resp *GetPostResponse) SetData(getPostResult *application.GetPostResult, f
 	resp.Data.IsLiked = boolTranslate(getPostResult.IsLiked)
 	resp.Data.IsBlocked = boolTranslate(false)
 	resp.Data.CanEdit = boolTranslate(getPostResult.CanEdit)
-	resp.Data.CanComment = boolTranslate(getPostResult.CanComment)
+	// logger.Debugf("post %s can comment: %v", getPostResult.Post.ID(), getPostResult.Post.GetCanComment())
+	resp.Data.CanComment = boolTranslate(getPostResult.Post.GetCanComment())
 }
 
 func (resp *GetPostResponse) SetBlockedResponse() {

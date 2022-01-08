@@ -12,14 +12,14 @@ import (
 )
 
 type PostDB struct {
-	PostUUID  string    `gorm:"Column:post_uuid; Type:text; primaryKey"`
-	Status    string    `gorm:"Column:status; Type:text"`
-	Content   string    `gorm:"Column:context; Type:text"`
-	Creator   string    `gorm:"Column:creator; Type:text; index"`
-	CreatedAt time.Time `gorm:"Column:created_at"`
-	UpdatedAt time.Time `gorm:"Column:updated_at"`
-
-	MediaDB []*MediaDB `gorm:"foreignKey:PostUUID"`
+	PostUUID   string     `gorm:"Column:post_uuid; Type:text; primaryKey"`
+	Status     string     `gorm:"Column:status; Type:text"`
+	Content    string     `gorm:"Column:context; Type:text"`
+	Creator    string     `gorm:"Column:creator; Type:text; index"`
+	CanComment bool       `gorm:"Column:can_comment; Type:boolean; default:true"`
+	CreatedAt  time.Time  `gorm:"Column:created_at"`
+	UpdatedAt  time.Time  `gorm:"Column:updated_at"`
+	MediaDB    []*MediaDB `gorm:"foreignKey:PostUUID"`
 }
 
 type MediaDB struct {
@@ -59,11 +59,12 @@ func (p postGorm) marshalPost(post *entity.Post) *PostDB {
 	}
 
 	return &PostDB{
-		PostUUID: post.ID(),
-		Content:  post.Content(),
-		Status:   post.Status().String(),
-		Creator:  post.Creator(),
-		MediaDB:  mediaDB,
+		PostUUID:   post.ID(),
+		Content:    post.Content(),
+		Status:     post.Status().String(),
+		Creator:    post.Creator(),
+		MediaDB:    mediaDB,
+		CanComment: post.GetCanComment(),
 	}
 }
 
@@ -90,6 +91,7 @@ func (p postGorm) unmarshalPost(postDB *PostDB) (*entity.Post, error) {
 		postDB.Status,
 		postDB.Content,
 		mediaList,
+		postDB.CanComment,
 		postDB.CreatedAt,
 		postDB.UpdatedAt,
 	)
@@ -174,7 +176,8 @@ func (p postGorm) Update(ctx context.Context, id string, fn repository.PostUpdat
 		// add media records
 		var existMediaIDs = make([]string, 0, len(postDB.MediaDB))
 		for i := range postDB.MediaDB {
-			if err := tx.WithContext(ctx).Model(p.mediaModel).Create(postDB.MediaDB[i]).Error; err != nil {
+			// if the media is already exist, ignore the error
+			if err := tx.WithContext(ctx).Model(p.mediaModel).FirstOrCreate(postDB.MediaDB[i]).Error; err != nil {
 				return err
 			}
 			existMediaIDs = append(existMediaIDs, postDB.MediaDB[i].MediaUUID)

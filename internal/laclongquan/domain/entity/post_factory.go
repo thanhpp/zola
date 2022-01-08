@@ -42,10 +42,11 @@ func (fac postFactoryImpl) NewPost(creator uuid.UUID, content string) (*Post, er
 	}
 
 	return &Post{
-		id:      postID,
-		status:  fac.defaultStatus(),
-		creator: creator,
-		content: content,
+		id:         postID,
+		status:     fac.defaultStatus(),
+		creator:    creator,
+		content:    content,
+		CanComment: true,
 	}, nil
 }
 
@@ -66,11 +67,12 @@ func (fac postFactoryImpl) NewPostWithImages(creator uuid.UUID, content string, 
 	}
 
 	return &Post{
-		id:      postID,
-		status:  fac.defaultStatus(),
-		creator: creator,
-		content: content,
-		media:   images,
+		id:         postID,
+		status:     fac.defaultStatus(),
+		creator:    creator,
+		content:    content,
+		media:      images,
+		CanComment: true,
 	}, nil
 }
 
@@ -85,11 +87,12 @@ func (fac postFactoryImpl) NewPostWithVideo(creator uuid.UUID, content string, v
 	}
 
 	return &Post{
-		id:      postID,
-		status:  fac.defaultStatus(),
-		creator: creator,
-		content: content,
-		media:   []Media{video},
+		id:         postID,
+		status:     fac.defaultStatus(),
+		creator:    creator,
+		content:    content,
+		media:      []Media{video},
+		CanComment: true,
 	}, nil
 }
 
