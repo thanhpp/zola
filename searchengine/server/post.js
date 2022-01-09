@@ -35,12 +35,17 @@ async function addManyPosts(posts) {
   }
 }
 
-async function editPost({ id, ...editedPost }) {
+async function editPost(editedPost) {
+  let postObj = {
+    id: editedPost.id,
+    described: editedPost.described,
+    author: editedPost.author.name,
+  };
   return await client.update({
     index,
-    id: id,
+    id: editedPost.id,
     body: {
-      doc: editedPost,
+      doc: postObj,
     },
   });
 }

@@ -27,11 +27,21 @@ exports.update = wrapAsync(async (req, res, next) => {
 });
 
 exports.getAll = wrapAsync(async (req, res, next) => {
-  const result = await post.getPosts();
-  return res.status(200).send(result.body.hits.hits);
+  const response = await post.getPosts();
+  const result = response.body.hits.total.value
+    ? response.body.hits.hits.map((hit) => {
+        return hit._source;
+      })
+    : 'there is no post';
+  return res.status(200).send(result);
 });
 
 exports.search = wrapAsync(async (req, res, next) => {
-  const result = await post.searchPosts(req.body);
-  return res.status(200).send(result.body.hits.hits);
+  const response = await post.searchPosts(req.body);
+  const result = response.body.hits.total.value
+    ? response.body.hits.hits.map((hit) => {
+        return hit._source;
+      })
+    : 'no result was found';
+  return res.status(200).send(result);
 });
