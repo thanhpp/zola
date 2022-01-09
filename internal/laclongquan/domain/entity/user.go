@@ -154,6 +154,10 @@ func (u User) IsLocked() bool {
 	return u.state == UserStateLocked
 }
 
+func (u User) IsActive() bool {
+	return u.state == UserStateActive
+}
+
 func (u User) GetAvatar() string {
 	return u.Avatar
 }
