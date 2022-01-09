@@ -32,6 +32,6 @@ exports.getAll = wrapAsync(async (req, res, next) => {
 });
 
 exports.search = wrapAsync(async (req, res, next) => {
-  const result = await post.getPosts(req.body);
+  const result = await post.searchPosts(req.body);
   return res.status(200).send(result.body.hits.hits);
 });

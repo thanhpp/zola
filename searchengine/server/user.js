@@ -10,7 +10,7 @@ async function addUser(user) {
   };
   return await client.index({
     index,
-    id: user.id,
+    id: user.user_id,
     refresh: 'true',
     body: userObj,
   });
@@ -47,13 +47,19 @@ async function addManyUsers(users) {
   }
 }
 
-async function editUser({ id, ...editedUser }) {
+async function editUser(editedUser) {
+  let userObj = {
+    id: editedUser.user_id,
+    name: editedUser.name,
+    username: editedUser.username,
+    phonenumber: editedUser.phone,
+  };
   return await client.update({
     index,
     refresh: 'true',
-    id: id,
+    id: editedUser.user_id,
     body: {
-      doc: editedUser,
+      doc: userObj,
     },
   });
 }
