@@ -56,6 +56,7 @@ type UserData struct {
 	Name      string `json:"name"`
 	Avatar    string `json:"avatar"`
 	State     string `json:"state"`
+	IsActive  string `json:"is_active"`
 	LastLogin string `json:"last_login"`
 }
 
@@ -82,6 +83,7 @@ func (resp *GetUserListResp) SetData(res *application.GetUserRes, formUserMediaU
 			Username:  user.GetUsername(),
 			Name:      user.Name(),
 			Avatar:    avatarURL,
+			IsActive:  boolTranslate(user.IsActive()),
 			State:     user.State().String(),
 			LastLogin: "",
 		})

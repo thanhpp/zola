@@ -24,7 +24,8 @@ func (s HTTPServer) AuthMiddleware() gin.HandlerFunc {
 
 		claims, err := s.auth.NewClaimsFromToken(c, token)
 		if err != nil {
-			logger.Errorf("generate claims %v", err)
+			logger.Debugf("error token %s", token)
+			logger.Errorf("get claims %v", err)
 			resp := new(dto.DefaultResp)
 			resp.SetCode(responsevalue.CodeInvalidToken)
 			resp.SetMsg(responsevalue.MsgUnauthorized)
