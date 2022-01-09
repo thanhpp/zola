@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import EditTableRow from "../../components/table/EditableTableRow";
-import { Avatar } from "antd";
+import { Avatar, Space } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useMutation } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { signUpUser } from "../../api/userAuthentication";
+import { getUserList, deleteUser } from "../../api/userApi";
 dayjs.extend(relativeTime);
 
 const columns = [
@@ -14,24 +15,26 @@ const columns = [
 		title: "User ID",
 		dataIndex: "user_id",
 		key: "user_id",
+		render: (text) => {
+			return <Link to={`${text}`}>{text}</Link>;
+		},
 	},
 	{
-		title: "Username",
-		dataIndex: "username",
-		key: "username",
+		title: "Name",
+		dataIndex: "name",
+		key: "name",
 		render: (text, row) => {
 			const { avatar } = row;
 			return (
-				<>
+				<Space>
 					{avatar ? (
 						<Avatar size="small" src={avatar} />
 					) : (
 						<Avatar size="small" icon={<UserOutlined />} />
 					)}
-					<Link to={`${text}`} style={{ marginLeft: 15 }}>
-						{text}
-					</Link>
-				</>
+
+					{text}
+				</Space>
 			);
 		},
 	},
@@ -74,30 +77,43 @@ const isActive = (state) => {
 	return parseInt(state) ? "Active" : "Inactive";
 };
 
-const convertedData = users.map((user) => {
-	return {
-		key: user.user_id,
-		user_id: user.user_id,
-		username: user.username,
-		avatar: user.avatar,
-		state: isActive(user.is_active),
-		lastLogin: dayjs.unix(user.lastLogin).fromNow(),
-	};
-});
+const convertedData = (query) => {
+	if (!query) return;
+	return query.data.users.map((user) => {
+		return {
+			key: user.user_id,
+			user_id: user.user_id,
+			name: user.name,
+			avatar: user.avatar,
+			state: isActive(user.is_active),
+			lastLogin: !user.lastLogin ? "" : dayjs.unix(user.lastLogin).fromNow(),
+		};
+	});
+};
 
 export default function UserList() {
-	const [data, setData] = useState(convertedData);
+	const queryClient = useQueryClient();
+	const [data, setData] = useState(users);
+	const { data: query, isLoading } = useQuery("users", getUserList);
+	//console.log(query);
 	const { mutate: addUserMutation } = useMutation(signUpUser, {
 		onSuccess: (data) => {
 			console.log("added user", data);
+			queryClient.invalidateQueries("users");
+		},
+	});
+	const { mutate: deleteUserMutation } = useMutation(deleteUser, {
+		onSuccess: (data) => {
+			console.log("deleted", data);
+			queryClient.invalidateQueries("users");
 		},
 	});
 	const handleAdd = (values) => {
-		console.log(values);
 		addUserMutation(values);
 	};
 	const handleDelete = (id) => {
 		console.log(id);
+		deleteUserMutation(id);
 	};
 	const handleEdit = (values) => {
 		//edit user state - send async request
@@ -114,7 +130,8 @@ export default function UserList() {
 	return (
 		<EditTableRow
 			columnName={columns}
-			data={data}
+			loading={isLoading}
+			data={convertedData(query)}
 			handleAdd={handleAdd}
 			handleDelete={handleDelete}
 			handleEdit={handleEdit}

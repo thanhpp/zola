@@ -14,7 +14,8 @@ export const adminRoutes = [
 		path: "/",
 		element: <AdminLayout />,
 		children: [
-			{ index: true, element: <UserList /> },
+			//{ index: true, element: <UserList /> },
+			{ path: "/", element: <Navigate to="/users" /> },
 			{ path: "users", element: <UserList /> },
 			{ path: "users/:id", element: <UserDetail /> },
 			{ path: "posts", element: <PostsList /> },
@@ -22,7 +23,7 @@ export const adminRoutes = [
 			{ path: "messages", element: <ConversationsList /> },
 			{ path: "messages/:id", element: <Chat /> },
 			{ path: "search", element: <Search /> },
-			{ path: "*", element: <Navigate to="." /> },
+			//{ path: "*", element: <Navigate to="." /> },
 		],
 	},
 ];

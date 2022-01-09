@@ -5,6 +5,10 @@ import ProfileCard from "../components/user/ProfileCard";
 import ProfileForm from "../components/user/ProfileForm";
 import Friends from "../components/user/Friends";
 import PostsList from "../containers/List/PostsList";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useParams } from "react-router-dom";
+import { getUserInfo } from "../api/userApi";
+import Spinner from "../components/spinner/Spinner";
 
 const { TabPane } = Tabs;
 
@@ -88,6 +92,11 @@ const userFriendList = {
 };
 
 export default function UserDetail() {
+	const { id } = useParams();
+	const { data, isLoading } = useQuery(["users", id], () => getUserInfo(id));
+
+	if (isLoading) return <Spinner />;
+	console.log(data);
 	return (
 		<Row gutter={[16, 16]}>
 			<Col span={18} push={6}>

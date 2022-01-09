@@ -15,8 +15,15 @@ const { Option } = Select;
 
 const EditTableRow = (props) => {
 	const [form] = Form.useForm();
-	const { data, handleEdit, columnName, options, handleAdd, handleDelete } =
-		props;
+	const {
+		data,
+		handleEdit,
+		columnName,
+		options,
+		handleAdd,
+		handleDelete,
+		loading,
+	} = props;
 	const [editingKey, setEditingKey] = useState("");
 	const [visible, setVisible] = useState(false);
 	const isEditing = (record) => record.key === editingKey;
@@ -196,6 +203,7 @@ const EditTableRow = (props) => {
 							cell: EditableCell,
 						},
 					}}
+					loading={loading}
 					bordered
 					dataSource={data}
 					columns={mergedColumns}
