@@ -19,6 +19,7 @@ type MainConfig struct {
 	SaveDirectory string                  `mapstructure:"SaveDirectory"`
 	AESKey        string                  `mapstructure:"AESKey"`
 	Admins        []AdminAccount          `mapstructure:"Admins"`
+	ESClient      ESClientConfig          `mapstructure:"ESClient"`
 }
 
 type AdminAccount struct {

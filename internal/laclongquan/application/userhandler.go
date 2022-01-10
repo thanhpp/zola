@@ -6,6 +6,8 @@ import (
 
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/adapter/esclient"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 var (
@@ -19,6 +21,7 @@ type UserHandler struct {
 	relationRepo repository.RelationRepository
 	postRepo     repository.PostRepository
 	accCipher    entity.AccountCipher
+	esClient     *esclient.EsClient
 }
 
 func NewUserHandler(
@@ -27,6 +30,7 @@ func NewUserHandler(
 	relationRepo repository.RelationRepository,
 	postRepo repository.PostRepository,
 	accountCipher entity.AccountCipher,
+	esClient *esclient.EsClient,
 ) UserHandler {
 	return UserHandler{
 		fac:          fac,
@@ -34,6 +38,7 @@ func NewUserHandler(
 		relationRepo: relationRepo,
 		postRepo:     postRepo,
 		accCipher:    accountCipher,
+		esClient:     esClient,
 	}
 }
 
@@ -47,6 +52,14 @@ func (u UserHandler) CreateUser(ctx context.Context, phone, pass, name, avatar s
 		return err
 	}
 
+	go func() {
+		if err := u.esClient.CreateOrUpdateUser(newUser); err != nil {
+			logger.Errorf("add user %s to ES failed: %v", newUser.ID(), err)
+			return
+		}
+		logger.Infof("add user %s to ES success", newUser.ID())
+	}()
+
 	return nil
 }
 
@@ -59,6 +72,14 @@ func (u UserHandler) CreateAdminUser(ctx context.Context, phone, pass, name, ava
 	if err := u.repo.Create(ctx, newUser); err != nil {
 		return err
 	}
+
+	go func() {
+		if err := u.esClient.CreateOrUpdateUser(newUser); err != nil {
+			logger.Errorf("add user %s to ES failed: %v", newUser.ID(), err)
+			return
+		}
+		logger.Infof("add user %s to ES success", newUser.ID())
+	}()
 
 	return nil
 }
@@ -78,4 +99,39 @@ func (u UserHandler) GetUser(ctx context.Context, phone, pass string) (*entity.U
 	}
 
 	return user, nil
+}
+
+func (u UserHandler) SyncAllUser() error {
+	// get all user from es
+	usersIDs, err := u.esClient.SearchUser("")
+	if err != nil {
+		logger.Errorf("get all user from ES failed: %v", err)
+	}
+
+	users, _, err := u.repo.GetAllUsers(context.Background(), -1, -1, "", "", "", "")
+	if err != nil {
+		return err
+	}
+
+	var userIDsMap = make(map[string]struct{})
+	for _, user := range users {
+		userIDsMap[user.ID().String()] = struct{}{}
+		if err := u.esClient.CreateOrUpdateUser(user); err != nil {
+			logger.Errorf("add user %s to ES failed: %v", user.ID(), err)
+			continue
+		}
+		logger.Infof("add user %s to ES success", user.ID())
+	}
+
+	for i := range usersIDs {
+		if _, ok := userIDsMap[usersIDs[i]]; !ok {
+			if err := u.esClient.DeleteUser(usersIDs[i]); err != nil {
+				logger.Errorf("delete user %s from ES failed: %v", usersIDs[i], err)
+				continue
+			}
+			logger.Infof("delete user %s from ES success", usersIDs[i])
+		}
+	}
+
+	return nil
 }
