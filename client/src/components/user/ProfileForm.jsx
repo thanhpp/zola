@@ -4,6 +4,7 @@ import { Card, Form, Input, Button, Upload, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 export default function ProfileForm({ user }) {
+	console.log(user);
 	const {
 		id,
 		username,

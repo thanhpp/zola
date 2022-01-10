@@ -9,7 +9,7 @@ import { loginRoutes } from "./LoginRoute";
 const role = ["admin", "user"];
 
 const checkRoutes = (user) => {
-	console.log("checking routes");
+	//console.log("checking routes");
 	if (!user) {
 		return loginRoutes;
 	} else if (user && user.role.includes(role[0])) {

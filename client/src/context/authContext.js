@@ -14,6 +14,7 @@ const getUserInfo = (token) => {
 };
 
 export const AuthContextProvider = (props) => {
+	//const initalToken = localStorage.getItem("token");
 	const [user, setUser] = useState(null);
 	const [token, setToken] = useState(localStorage.getItem("token"));
 
@@ -23,16 +24,19 @@ export const AuthContextProvider = (props) => {
 	};
 
 	useEffect(() => {
+		//console.log(token);
 		if (token) {
 			const { userId, role } = getUserInfo(token);
 			setUser({ userId, role });
+		} else {
+			setUser(null);
 		}
 	}, [token]);
 
 	const logoutHandler = () => {
-		localStorage.removeItem("token");
 		setToken(null);
-		setUser(null);
+		localStorage.removeItem("token");
+		//setUser(null);
 	};
 
 	const contextValue = {

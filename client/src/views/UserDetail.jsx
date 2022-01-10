@@ -93,16 +93,18 @@ const userFriendList = {
 
 export default function UserDetail() {
 	const { id } = useParams();
-	const { data, isLoading } = useQuery(["users", id], () => getUserInfo(id));
+	const { data: userInfos, isLoading } = useQuery(["users", id], () =>
+		getUserInfo(id)
+	);
 
 	if (isLoading) return <Spinner />;
-	console.log(data);
+	//console.log(userInfos.data.data);
 	return (
 		<Row gutter={[16, 16]}>
 			<Col span={18} push={6}>
 				<Tabs defaultActiveKey="1" type="card" size={"middle"}>
 					<TabPane tab="Presonal Info" key="1">
-						<ProfileForm user={userInfo} />
+						<ProfileForm user={userInfos.data.data} />
 					</TabPane>
 					<TabPane tab="Posts" key="2">
 						<PostsList />
@@ -114,13 +116,13 @@ export default function UserDetail() {
 			<Col span={6} pull={18}>
 				<Space direction="vertical">
 					<ProfileCard
-						userId={userInfo.id}
-						online={userInfo.online}
-						description={userInfo.description}
-						username={userInfo.username}
-						coverImg={userInfo.cover_img}
-						avatar={userInfo.avatar}
-						state={userInfo.state}
+						userId={userInfos.data.data.id}
+						online={userInfos.data.data.online}
+						description={userInfos.data.data.description}
+						username={userInfos.data.data.username}
+						coverImg={userInfos.data.data.cover_img}
+						avatar={userInfos.data.data.avatar}
+						state={userInfos.data.data.state}
 					/>
 					<Friends data={userFriendList} />
 				</Space>
