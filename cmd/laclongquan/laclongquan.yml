@@ -29,6 +29,9 @@ JWT:
 SaveDirectory: ./localstorage
 AESKey: idheysngor640udnwye385jtufhdbe6w
 
+ESClient:
+  Host: https://zola-search.herokuapp.com
+
 Admins:
   - Phone: "0965508091"
     Pass:  "Ppt190898"

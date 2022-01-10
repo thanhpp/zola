@@ -9,6 +9,7 @@ import (
 	"github.com/thanhpp/zola/config/laclongquanconfig"
 	"github.com/thanhpp/zola/internal/laclongquan/application"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/accountcipher"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/adapter/esclient"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/adapter/gormdb"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/auth"
@@ -38,6 +39,7 @@ func start(configPath string) {
 	}
 	logger.Info("account cipher OK")
 
+	esClient := esclient.NewEsClient(laclongquanconfig.Get().ESClient.Host)
 	app := application.NewApplication(
 		accountCipher,
 		dbao.User,
@@ -46,6 +48,7 @@ func start(configPath string) {
 		dbao.Like,
 		dbao.Relation,
 		dbao.Comment,
+		esClient,
 	)
 	logger.Info("application OK")
 
@@ -75,6 +78,11 @@ func start(configPath string) {
 		if err := app.UserHandler.CreateAdminUser(createAdminCtx, adminAcc.Phone, adminAcc.Pass, "", ""); err != nil {
 			logger.Errorf("can't create admin user %s - err: %v", adminAcc.Phone, err)
 		}
+	}
+
+	// ---------------------- Sync all user to ES ----------------------
+	if err := app.UserHandler.SyncAllUser(); err != nil {
+		logger.Errorf("can't sync all user to ES - err: %v", err)
 	}
 
 	// ------------- Daemons ---------------
