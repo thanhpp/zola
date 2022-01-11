@@ -11,6 +11,7 @@ type GetUserResp struct {
 	DefaultRespWithoutData
 	Data struct {
 		ID          string `json:"id"`
+		Phone       string `json:"phone"`
 		Username    string `json:"username"`
 		Description string `json:"description"`
 		Name        string `json:"name"`
@@ -21,6 +22,8 @@ type GetUserResp struct {
 		City        string `json:"city"`
 		Country     string `json:"country"`
 		IsFriend    string `json:"is_friend"`
+		State       string `json:"state"`
+		IsActive    string `json:"is_active"`
 		IsOnline    string `json:"is_online"`
 		Listing     int64  `json:"listing"`
 		Created     int64  `json:"created"`
@@ -35,6 +38,7 @@ func (resp *GetUserResp) SetData(user *entity.User, friendCount int, isFriend bo
 	}
 
 	resp.Data.ID = user.ID().String()
+	resp.Data.Phone = user.Account().Phone
 	resp.Data.Username = user.GetUsername()
 	resp.Data.Description = user.GetDescription()
 	resp.Data.Name = user.GetName()
@@ -46,6 +50,8 @@ func (resp *GetUserResp) SetData(user *entity.User, friendCount int, isFriend bo
 	resp.Data.City = user.GetCity()
 	resp.Data.Country = user.GetCountry()
 	resp.Data.IsFriend = boolTranslate(isFriend)
+	resp.Data.State = user.State().String()
+	resp.Data.IsActive = boolTranslate(user.IsActive())
 	resp.Data.IsOnline = boolTranslate(user.IsOnline())
 	resp.Data.Listing = int64(friendCount)
 	resp.Data.Created = user.CreatedAtUnix()
