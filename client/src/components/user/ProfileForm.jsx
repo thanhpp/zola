@@ -1,46 +1,59 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "antd/dist/antd.css";
-import { Card, Form, Input, Button, Upload, Space } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Card, Form, Input, Button, Space } from "antd";
 
-export default function ProfileForm({ user }) {
-	console.log(user);
+//import { UploadOutlined } from "@ant-design/icons";
+//import AuthContext from "../../context/authContext";
+
+export default function ProfileForm(props) {
+	//console.log(props.user);
+
 	const {
-		id,
+		//id,
 		username,
-		phoneNumber,
+		phone,
 		description,
-		avatar,
-		cover_img,
+		// avatar,
+		// cover_image,
 		link,
 		address,
 		city,
 		country,
-	} = user;
+		name,
+	} = props.user;
+	// const [files, setFiles] = useState({
+	// 	avatar: avatar,
+	// 	cover_img: cover_img,
+	// });
 	const [form] = Form.useForm();
 
 	//clean up form values and validate
 	const onFinish = (values) => {
-		//const {avatar,cover_img} = values
-		if (!values.avatar || values.avatar.length === 0) {
-			values = { ...values, avatar: avatar };
+		//create formData
+		const formData = new FormData();
+		for (const property in values) {
+			formData.append(`${property}`, values[`${property}`]);
 		}
-		if (!values.cover_img || values.cover_img.length === 0) {
-			values = { ...values, cover_img: cover_img };
-		}
-		console.log(values, id);
+		// for (var value of formData.values()) {
+		// 	console.log(value);
+		// }
+		props.editUserHandler(formData);
 	};
+
+	useEffect(() => {
+		form.resetFields();
+	}, [props.user, form]);
 
 	//get file name?
-	const normFile = (e) => {
-		console.log("Upload event:", e);
+	// const normFile = (e) => {
+	// 	console.log("Upload event:", e, e.fileList);
+	// 	//e.fileList[0].originFileObj
+	// 	if (Array.isArray(e)) {
+	// 		return e;
+	// 	}
 
-		if (Array.isArray(e)) {
-			return e;
-		}
-
-		return e && e.fileList;
-	};
+	// 	return e && e.fileList;
+	// };
 
 	return (
 		<Card>
@@ -50,9 +63,10 @@ export default function ProfileForm({ user }) {
 				layout="vertical"
 				name="profile_form"
 				initialValues={{
-					name: username,
-					phone: phoneNumber,
-					website: link,
+					name: name,
+					username: username,
+					phone: phone,
+					link: link,
 					address: address,
 					city: city,
 					country: country,
@@ -62,20 +76,11 @@ export default function ProfileForm({ user }) {
 				<Form.Item label="Name" name="name">
 					<Input />
 				</Form.Item>
-				<Form.Item name="website" label="Website">
+				<Form.Item label="Username" name="username">
 					<Input />
 				</Form.Item>
-				<Form.Item
-					label="Phone number"
-					name="phone"
-					rules={[
-						{
-							required: true,
-							message: "Please input phone number!",
-						},
-					]}
-				>
-					<Input />
+				<Form.Item label="Phone number" name="phone">
+					<Input disabled />
 				</Form.Item>
 				<Form.Item label="Address" name="address">
 					<Input />
@@ -86,10 +91,13 @@ export default function ProfileForm({ user }) {
 				<Form.Item label="Country" name="country">
 					<Input />
 				</Form.Item>
+				<Form.Item name="link" label="Website">
+					<Input />
+				</Form.Item>
 				<Form.Item name="description" label="Description">
 					<Input.TextArea maxLength={150} />
 				</Form.Item>
-				<Form.Item
+				{/* <Form.Item
 					name="avatar"
 					label="Avatar"
 					valuePropName="fileList"
@@ -100,12 +108,15 @@ export default function ProfileForm({ user }) {
 						name="logo"
 						// action="/upload.do"
 						listType="picture"
+						beforeUpload={() => {
+							return false;
+						}}
 					>
 						<Button icon={<UploadOutlined />}>Click to upload</Button>
 					</Upload>
-				</Form.Item>{" "}
+				</Form.Item>
 				<Form.Item
-					name="cover_img"
+					name="cover_image"
 					label="Cover Image"
 					valuePropName="fileList"
 					getValueFromEvent={normFile}
@@ -113,12 +124,14 @@ export default function ProfileForm({ user }) {
 					<Upload
 						maxCount={1}
 						name="logo"
-						// action="/upload.do"
 						listType="picture"
+						beforeUpload={() => {
+							return false;
+						}}
 					>
 						<Button icon={<UploadOutlined />}>Click to upload</Button>
 					</Upload>
-				</Form.Item>
+				</Form.Item> */}
 				<Form.Item>
 					<Space>
 						<Button type="primary" htmlType="submit">

@@ -13,6 +13,19 @@ export async function deleteUser(id) {
 }
 
 export async function getUserInfo(id) {
-	const res = axiosClient.get(`/user/${id}`);
+	const res = await axiosClient.get(`/user/${id}`);
 	return res;
+}
+
+export async function editUserInfo(formData) {
+	const { data } = await axiosClient.put(`/user`, formData);
+	return data;
+}
+
+export async function getUserFriend({ pageParam = 1 }) {
+	const { data } = await axiosClient.get(`/friend?index=${pageParam}`);
+	return {
+		data,
+		nextPage: pageParam + 1,
+	};
 }

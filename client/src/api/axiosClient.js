@@ -16,6 +16,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use((config) => {
 	config.headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
+	config.headers["content-type"] = "multipart/form-data";
 	return config;
 });
 

@@ -3,12 +3,9 @@ import EditTableRow from "../../components/table/EditableTableRow";
 import { Avatar, Space } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { signUpUser } from "../../api/userAuthentication";
 import { getUserList, deleteUser } from "../../api/userApi";
-dayjs.extend(relativeTime);
 
 const columns = [
 	{
@@ -39,38 +36,21 @@ const columns = [
 		},
 	},
 	{
+		title: "Phone number",
+		dataIndex: "phonenumber",
+		key: "phonenumber",
+	},
+	{
 		title: "State",
 		dataIndex: "state",
 		key: "state",
 		editable: true,
-	},
-	{
-		title: "Last login",
-		dataIndex: "lastLogin",
-		key: "lastLogin",
 	},
 ];
 
 const options = [
 	{ value: 0, text: "Inactive" },
 	{ value: 1, text: "Active" },
-];
-
-const users = [
-	{
-		user_id: "omg",
-		username: "omg",
-		avatar: "https://joeschmoe.io/api/v1/random",
-		is_active: "0",
-		lastLogin: "1639121121",
-	},
-	{
-		user_id: "omg 2",
-		username: "omg",
-		avatar: "https://joeschmoe.io/api/v1/random",
-		is_active: "1",
-		lastLogin: "1639121111",
-	},
 ];
 
 const isActive = (state) => {
@@ -86,14 +66,14 @@ const convertedData = (query) => {
 			name: user.name,
 			avatar: user.avatar,
 			state: isActive(user.is_active),
-			lastLogin: !user.lastLogin ? "" : dayjs.unix(user.lastLogin).fromNow(),
+			phonenumber: user.phone,
 		};
 	});
 };
 
 export default function UserList() {
 	const queryClient = useQueryClient();
-	const [data, setData] = useState(users);
+	//const [data, setData] = useState(users);
 	const { data: query, isLoading } = useQuery("users", getUserList);
 	//console.log(query);
 	const { mutate: addUserMutation } = useMutation(signUpUser, {
@@ -121,11 +101,11 @@ export default function UserList() {
 		console.log(user_id, state);
 		//handle array client
 		values = { ...values, state: isActive(state) };
-		const newData = data.map((data) => {
-			if (data.user_id === values.user_id) return values;
-			return data;
-		});
-		setData(newData);
+		// const newData = data.map((data) => {
+		// 	if (data.user_id === values.user_id) return values;
+		// 	return data;
+		// });
+		// setData(newData);
 	};
 	return (
 		<EditTableRow
