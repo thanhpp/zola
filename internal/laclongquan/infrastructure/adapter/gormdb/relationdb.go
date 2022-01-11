@@ -104,32 +104,38 @@ func (r relationGorm) GetActiveRequestedFriends(ctx context.Context, userID stri
 	return relations, nil
 }
 
-func (r relationGorm) GetActiveUserFriends(ctx context.Context, userID string, offset, limit int) ([]*entity.Relation, error) {
-	var list []*RelationDB
-
-	err := r.db.WithContext(ctx).Model(r.model).
+func (r relationGorm) GetActiveUserFriends(ctx context.Context, userID string, offset, limit int) ([]*entity.Relation, int, error) {
+	var (
+		list  []*RelationDB
+		total = new(int64)
+	)
+	stmt := r.db.WithContext(ctx).Model(r.model).
 		Where("(user_a = ? OR user_b = ?) AND status = ?", userID, userID, entity.RelationFriend).
 		Order("created_at desc").
 		Joins(`
 			LEFT JOIN user_db 
 				ON (user_db.user_uuid = user_a OR user_db.user_uuid = user_b)
-					AND user_db.state = ? AND user_db.user_uuid <> ?`, entity.UserStateActive, userID).
-		Offset(offset).Limit(limit).
-		Find(&list).Error
-	if err != nil {
-		return nil, err
+					AND user_db.state = ? AND user_db.user_uuid <> ?`, entity.UserStateActive, userID)
+
+	if err := stmt.Count(total).Error; err != nil {
+		return nil, -1, err
+	}
+
+	if err := stmt.Offset(offset).Limit(limit).
+		Find(&list).Error; err != nil {
+		return nil, -1, err
 	}
 
 	var relations []*entity.Relation
 	for _, relationDB := range list {
 		relation, err := r.unmarshal(relationDB)
 		if err != nil {
-			return nil, err
+			return nil, -1, err
 		}
 		relations = append(relations, relation)
 	}
 
-	return relations, nil
+	return relations, int(*total), nil
 }
 
 func (r relationGorm) CreateRelation(ctx context.Context, relation *entity.Relation) error {

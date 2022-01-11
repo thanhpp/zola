@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 var (
@@ -22,7 +23,8 @@ type SetUserInfoResult struct {
 func (u UserHandler) SetUserInfo(
 	ctx context.Context,
 	userID uuid.UUID,
-	username, description, address, city, country, link string,
+	username, description, name,
+	address, city, country, link string,
 	avatar, coverImage *entity.Media,
 ) error {
 	return u.repo.Update(ctx, userID.String(), func(ctx context.Context, user *entity.User) (*entity.User, error) {
@@ -39,6 +41,10 @@ func (u UserHandler) SetUserInfo(
 		}
 
 		if err := user.UpdateDescription(description); err != nil {
+			return nil, err
+		}
+
+		if err := user.UpdateName(name); err != nil {
 			return nil, err
 		}
 
@@ -64,6 +70,14 @@ func (u UserHandler) SetUserInfo(
 			}
 			user.UpdateCoverImage(coverImage.ID())
 		}
+
+		go func(esUser entity.User) {
+			if err := u.esClient.CreateOrUpdateUser(&esUser); err != nil {
+				logger.Errorf("update user %s to ES failed: %v", esUser.ID(), err)
+				return
+			}
+			logger.Infof("update user %s to ES success", esUser.ID())
+		}(*user)
 
 		return user, nil
 	})

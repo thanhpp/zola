@@ -3862,7 +3862,8 @@
 						{
 							"key": "avatar",
 							"value": "https://zola.thanhpp.ninja/post/96a8effd-6cb0-11ec-a3a1-0242ac1c0003/media/50fd7afb-0c01-4463-8930-6e4bf78656f0",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						},
 						{
 							"key": "cover_image",
@@ -3872,6 +3873,11 @@
 						{
 							"key": "link",
 							"value": "link",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "name",
 							"type": "text"
 						}
 					]
@@ -4528,12 +4534,22 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{zola}}/friend",
+					"raw": "{{zola}}/friend?index=10&count=20",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
 						"friend"
+					],
+					"query": [
+						{
+							"key": "index",
+							"value": "10"
+						},
+						{
+							"key": "count",
+							"value": "20"
+						}
 					]
 				}
 			},

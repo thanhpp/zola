@@ -1,6 +1,8 @@
 package dto
 
 import (
+	"strconv"
+
 	"github.com/thanhpp/zola/internal/laclongquan/application"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 )
@@ -52,6 +54,7 @@ type GetUserFriendsResp struct {
 	DefaultRespWithoutData
 	Data struct {
 		Friends []GetUserFriendsRespData `json:"friends"`
+		Total   string                   `json:"total"`
 	} `json:"data"`
 }
 
@@ -62,19 +65,26 @@ type GetUserFriendsRespData struct {
 	Status   string `json:"status"`
 }
 
-func (resp *GetUserFriendsResp) SetData(users []*entity.User, formUserMediaURLFn FormUserMediaFn) {
-	if resp == nil || users == nil || formUserMediaURLFn == nil {
+func (resp *GetUserFriendsResp) SetData(users []*entity.User, total int, formUserMediaURLFn FormUserMediaFn) {
+	if resp == nil || formUserMediaURLFn == nil {
 		return
 	}
 
 	for i := range users {
 		avatarURL, _ := formUserMediaURLFn(users[i])
 
+		status := "offline"
+		if users[i].IsOnline() {
+			status = "online"
+		}
+
 		resp.Data.Friends = append(resp.Data.Friends, GetUserFriendsRespData{
 			UserID:   users[i].ID().String(),
 			UserName: users[i].GetUsername(),
 			Avatar:   avatarURL,
-			Status:   "", //TODO: missing
+			Status:   status,
 		})
 	}
+
+	resp.Data.Total = strconv.Itoa(total)
 }

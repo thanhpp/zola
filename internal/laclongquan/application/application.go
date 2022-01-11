@@ -3,6 +3,7 @@ package application
 import (
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/repository"
+	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/adapter/esclient"
 )
 
 type Application struct {
@@ -20,6 +21,7 @@ func NewApplication(
 	likeRepo repository.LikeRepository,
 	relationRepo repository.RelationRepository,
 	commentRepo repository.CommentRepository,
+	esClient *esclient.EsClient,
 ) Application {
 
 	return Application{
@@ -29,6 +31,7 @@ func NewApplication(
 			relationRepo,
 			postRepo,
 			accCipher,
+			esClient,
 		),
 		PostHandler: NewPostHandler(
 			postRepo,
