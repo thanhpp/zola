@@ -71,7 +71,7 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 
 	err = ctrl.handler.SetUserInfo(
 		c, userID,
-		req.Username, req.Description,
+		req.Username, req.Description, req.Name,
 		req.Address, req.City, req.Country,
 		req.Link,
 		avatarMedia, coverMedia,
