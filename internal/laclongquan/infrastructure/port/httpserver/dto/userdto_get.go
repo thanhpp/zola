@@ -13,6 +13,7 @@ type GetUserResp struct {
 		ID          string `json:"id"`
 		Username    string `json:"username"`
 		Description string `json:"description"`
+		Name        string `json:"name"`
 		Avatar      string `json:"avatar"`
 		CoverImage  string `json:"cover_image"`
 		Link        string `json:"link"`
@@ -36,6 +37,7 @@ func (resp *GetUserResp) SetData(user *entity.User, friendCount int, isFriend bo
 	resp.Data.ID = user.ID().String()
 	resp.Data.Username = user.GetUsername()
 	resp.Data.Description = user.GetDescription()
+	resp.Data.Name = user.GetName()
 	avatarURL, coverImgURL := formURL(user)
 	resp.Data.Avatar = avatarURL
 	resp.Data.CoverImage = coverImgURL

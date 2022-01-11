@@ -96,6 +96,24 @@ func validateUsername(username string) error {
 	return nil
 }
 
+func (u *User) UpdateName(name string) error {
+	if u == nil {
+		return nil
+	}
+
+	if err := validateUsername(name); err != nil {
+		return err
+	}
+
+	u.name = name
+
+	return nil
+}
+
+func (u User) GetName() string {
+	return u.name
+}
+
 func (u User) GetDescription() string {
 	return u.Description
 }

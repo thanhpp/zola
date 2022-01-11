@@ -4,6 +4,7 @@ import "github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 
 type SetUserInfoReq struct {
 	Username    string `form:"username"`
+	Name        string `form:"name"`
 	Description string `form:"description"`
 	Address     string `form:"address"`
 	City        string `form:"city"`
