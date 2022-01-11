@@ -209,7 +209,7 @@ func (ctrl UserController) GetFriends(c *gin.Context) {
 	var resp = new(dto.GetUserFriendsResp)
 	resp.SetCode(responsevalue.CodeOK)
 	resp.SetMsg(responsevalue.MsgOK)
-	resp.SetData(results, ctrl.formUserMediaUrlFn)
+	resp.SetData(results.Friends, results.Total, ctrl.formUserMediaUrlFn)
 
 	c.JSON(http.StatusOK, resp)
 }

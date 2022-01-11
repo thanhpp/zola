@@ -126,7 +126,12 @@ func (u UserHandler) GetRequestedFriends(ctx context.Context, requestorID, reque
 	return results, nil
 }
 
-func (u UserHandler) GetUserFriends(ctx context.Context, requestorID, requestedID string, offset, limit int) ([]*entity.User, error) {
+type GetFriendsRes struct {
+	Friends []*entity.User
+	Total   int
+}
+
+func (u UserHandler) GetUserFriends(ctx context.Context, requestorID, requestedID string, offset, limit int) (*GetFriendsRes, error) {
 	var res = make([]*entity.User, 0, limit)
 
 	requestor, err := u.repo.GetByID(ctx, requestorID)
@@ -143,7 +148,7 @@ func (u UserHandler) GetUserFriends(ctx context.Context, requestorID, requestedI
 		return nil, err
 	}
 
-	relations, err := u.relationRepo.GetActiveUserFriends(ctx, requestedID, offset, limit)
+	relations, total, err := u.relationRepo.GetActiveUserFriends(ctx, requestedID, offset, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -164,5 +169,8 @@ func (u UserHandler) GetUserFriends(ctx context.Context, requestorID, requestedI
 		res = append(res, user)
 	}
 
-	return res, nil
+	return &GetFriendsRes{
+		Friends: res,
+		Total:   total,
+	}, nil
 }

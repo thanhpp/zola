@@ -17,7 +17,7 @@ type RelationRepository interface {
 	GetRelationBetween(ctx context.Context, userIDA, userIDB string) (*entity.Relation, error)
 	CountFriends(ctx context.Context, userID string) (int, error)
 	GetActiveRequestedFriends(ctx context.Context, userID string, offset, limit int) ([]*entity.Relation, error)
-	GetActiveUserFriends(ctx context.Context, userID string, offset, limit int) ([]*entity.Relation, error)
+	GetActiveUserFriends(ctx context.Context, userID string, offset, limit int) ([]*entity.Relation, int, error)
 
 	// write
 	CreateRelation(ctx context.Context, relation *entity.Relation) error
