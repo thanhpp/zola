@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import "antd/dist/antd.css";
 import styles from "./Header.module.css";
 import Spinner from "../../spinner/Spinner";
-import { Menu, Layout } from "antd";
+import { Menu, Layout, message } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { logoutUser } from "../../../api/userAuthentication";
 import AuthContext from "../../../context/authContext";
@@ -24,9 +24,11 @@ export default function HeaderMenu() {
 		}
 	);
 
-	//if (status === "loading") return <Spinner />;
+	if (isLoading) return <Spinner />;
 	if (status === "error") {
-		console.log(error);
+		//console.log(error);
+		message.error(`Code: ${error.response.data.code};
+		Message:${error.response.data.message}`);
 	}
 	const handleLogoutClick = () => {
 		refetch();
@@ -47,7 +49,6 @@ export default function HeaderMenu() {
 					</Menu.Item>
 				</Menu>
 			</Header>
-			{isLoading ? <Spinner /> : null}
 		</>
 	);
 }

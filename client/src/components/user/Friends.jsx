@@ -1,7 +1,7 @@
 import React from "react";
 import "antd/dist/antd.css";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { List, Avatar, Skeleton, Divider, Typography } from "antd";
+import { List, Avatar, Divider, Typography } from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 const { Title } = Typography;
@@ -23,7 +23,7 @@ export default function Friends(props) {
 				dataLength={10}
 				next={fetchNextPage}
 				hasMore={hasNextPage}
-				loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+				//loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
 				endMessage={<Divider plain />}
 				scrollableTarget="scrollableDiv"
 			>
@@ -40,7 +40,7 @@ export default function Friends(props) {
 													item.avatar ? (
 														<Avatar alt="avatar" src={item.avatar} />
 													) : (
-														<Avatar size="medium" icon={<UserOutlined />} />
+														<Avatar size="large" icon={<UserOutlined />} />
 													)
 												}
 												title={

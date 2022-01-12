@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Posts from "../../components/list/Posts";
-//import { Button } from "antd";
+import { Button } from "antd";
+import AuthContext from "../../context/authContext";
+import ModalNewPost from "../../components/modal/ModalFormPost";
 
 const datas = {
 	code: "1000",
@@ -39,13 +41,30 @@ for (let i = 0; i < 23; i++) {
 	});
 }
 
-export default function PostsList() {
+export default function PostsList(props) {
+	const { user } = useContext(AuthContext);
+	const [displayModal, setDisplayModal] = useState(false);
+	let result;
+	const button = (
+		<Button type="primary" block onClick={() => setDisplayModal(true)}>
+			Add new post
+		</Button>
+	);
+
+	if (!props.id) {
+		result = button;
+	} else {
+		props.id === user.userId ? (result = button) : (result = null);
+	}
+
 	return (
 		<>
+			{result}
 			{/* <Button type="primary" block>
 				Add new post
 			</Button> */}
 			<Posts posts={datas.posts} />
+			<ModalNewPost visible={displayModal} setVisible={setDisplayModal} />
 		</>
 	);
 }

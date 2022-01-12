@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import EditTableRow from "../../components/table/EditableTableRow";
-import { Avatar, Space } from "antd";
+import { Avatar, Space, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -80,6 +80,12 @@ export default function UserList() {
 		onSuccess: (data) => {
 			console.log("added user", data);
 			queryClient.invalidateQueries("users");
+		},
+		onError: (error) => {
+			message.error({
+				content: `Code: ${error.response.data.code};
+				Message: ${error.response.data.message}`,
+			});
 		},
 	});
 	const { mutate: deleteUserMutation } = useMutation(deleteUser, {
