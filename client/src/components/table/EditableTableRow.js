@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "antd/dist/antd.css";
+import AuthContext from "../../context/authContext";
 
 import {
 	Table,
@@ -14,6 +15,7 @@ import ModalFormUser from "../modal/ModalFormUser";
 const { Option } = Select;
 
 const EditTableRow = (props) => {
+	const { user } = useContext(AuthContext);
 	const [form] = Form.useForm();
 	const {
 		data,
@@ -117,45 +119,47 @@ const EditTableRow = (props) => {
 			dataIndex: "operation",
 			render: (_, record) => {
 				const editable = isEditing(record);
-				return editable ? (
-					<span>
-						{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-						<a
-							/*eslint-disable-next-line no-script-url*/
-							href="#/"
-							onClick={() => save(record.key)}
-							style={{
-								marginRight: 8,
-							}}
-						>
-							Save
-						</a>
+				return user.userId !== record.key ? (
+					editable ? (
+						<span>
+							{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+							<a
+								/*eslint-disable-next-line no-script-url*/
+								href="#/"
+								onClick={() => save(record.key)}
+								style={{
+									marginRight: 8,
+								}}
+							>
+								Save
+							</a>
 
-						<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-							{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-							<a>Cancel</a>
-						</Popconfirm>
-					</span>
-				) : (
-					<>
-						<Typography.Link
-							disabled={editingKey !== ""}
-							onClick={() => edit(record)}
-							style={{
-								marginRight: 8,
-							}}
-						>
-							Edit
-						</Typography.Link>
-						<Popconfirm
-							title="Sure to delete?"
-							onConfirm={() => handleDelete(record.key)}
-						>
-							{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-							<a>Delete</a>
-						</Popconfirm>
-					</>
-				);
+							<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+								{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+								<a>Cancel</a>
+							</Popconfirm>
+						</span>
+					) : (
+						<>
+							<Typography.Link
+								disabled={editingKey !== ""}
+								onClick={() => edit(record)}
+								style={{
+									marginRight: 8,
+								}}
+							>
+								Edit
+							</Typography.Link>
+							<Popconfirm
+								title="Sure to delete?"
+								onConfirm={() => handleDelete(record.key)}
+							>
+								{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+								<a>Delete</a>
+							</Popconfirm>
+						</>
+					)
+				) : null;
 			},
 		},
 	];

@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "antd/dist/antd.css";
 import styles from "./Header.module.css";
-import Spinner from "../../spinner/Spinner";
+//import Spinner from "../../spinner/Spinner";
 import { Menu, Layout, message } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { logoutUser } from "../../../api/userAuthentication";
@@ -24,7 +24,13 @@ export default function HeaderMenu() {
 		}
 	);
 
-	if (isLoading) return <Spinner />;
+	useEffect(() => {
+		if (isLoading) {
+			message.loading("loading");
+		}
+	}, [isLoading]);
+
+	//if (isLoading) return <Spinner />;
 	if (status === "error") {
 		//console.log(error);
 		message.error(`Code: ${error.response.data.code};

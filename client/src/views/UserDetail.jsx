@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "antd/dist/antd.css";
 import { Row, Col, Tabs, message } from "antd";
 import ProfileCard from "../components/user/ProfileCard";
@@ -69,6 +69,12 @@ export default function UserDetail() {
 		},
 	});
 
+	useEffect(() => {
+		if (isEditLoading) {
+			message.loading("loading");
+		}
+	}, [isEditLoading]);
+
 	if (isLoading) return <Spinner />;
 
 	return (
@@ -81,7 +87,6 @@ export default function UserDetail() {
 								user={userInfos.data.data}
 								editUserHandler={editUser}
 							/>
-							{isEditLoading ? <Spinner /> : null}
 						</TabPane>
 						<TabPane tab="Posts" key="2">
 							<PostsList id={userInfos.data.data.id} />
