@@ -28,6 +28,7 @@ func (ctrl PostController) GetComments(c *gin.Context) {
 	}
 
 	offset, limit := pagination(c)
+	logger.Debugf("offset %d, limit %d", offset, limit)
 
 	res, err := ctrl.handler.GetPostComments(c, requestorID.String(), postID.String(), offset, limit)
 	if err != nil {
@@ -50,7 +51,11 @@ func (ctrl PostController) GetComments(c *gin.Context) {
 			return
 
 		case application.ErrAlreadyBlocked:
-			ginAbortNotAcceptable(c, responsevalue.CodePostNotExist, "invalid post id", nil)
+			resp := new(dto.GetCommentResp)
+			resp.SetCode(responsevalue.CodeOK)
+			resp.SetMsg(responsevalue.MsgOK)
+			resp.SetIsBlocked()
+			c.JSON(http.StatusOK, resp)
 			return
 		}
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)

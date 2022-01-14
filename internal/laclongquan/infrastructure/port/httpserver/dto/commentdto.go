@@ -1,6 +1,8 @@
 package dto
 
-import "github.com/thanhpp/zola/internal/laclongquan/application"
+import (
+	"github.com/thanhpp/zola/internal/laclongquan/application"
+)
 
 type CreateCommentReq struct {
 	Comment string `form:"comment"`
@@ -10,7 +12,8 @@ type CreateCommentReq struct {
 
 type CreateCommentResp struct {
 	DefaultResp
-	IsBlocked string `json:"is_blocked"`
+	Data      []*GetCommentRespData `json:"data"`
+	IsBlocked string                `json:"is_blocked"`
 }
 
 func (resp *CreateCommentResp) SetIsBlocked(isBlocked bool) {
@@ -21,21 +24,35 @@ func (resp *CreateCommentResp) SetIsBlocked(isBlocked bool) {
 	resp.IsBlocked = boolTranslate(isBlocked)
 }
 
+func (resp *CreateCommentResp) SetData(res []*application.GetPostCommentRes, formUserMediaURL FormUserMediaFn) {
+	if resp == nil || res == nil || formUserMediaURL == nil {
+		return
+	}
+
+	resp.IsBlocked = boolTranslate(false)
+	resp.Data = make([]*GetCommentRespData, 0, len(res))
+	for i := range res {
+		respData := new(GetCommentRespData)
+		respData.setData(res[i], formUserMediaURL)
+		resp.Data = append(resp.Data, respData)
+	}
+}
+
 type UpdateCommentReq struct {
 	NewContent string `form:"comment"`
 }
 
 type GetCommentResp struct {
 	DefaultRespWithoutData
-	Data []GetCommentRespData `json:"data"`
+	Data      []GetCommentRespData `json:"data"`
+	IsBlocked string               `json:"is_blocked"`
 }
 
 type GetCommentRespData struct {
-	ID        string                   `json:"id"`
-	Comment   string                   `json:"comment"`
-	Created   string                   `json:"created"`
-	Poster    GetCommentRespPosterData `json:"poster"`
-	IsBlocked string                   `json:"is_blocked"`
+	ID      string                   `json:"id"`
+	Comment string                   `json:"comment"`
+	Created string                   `json:"created"`
+	Poster  GetCommentRespPosterData `json:"poster"`
 }
 
 type GetCommentRespPosterData struct {
@@ -44,30 +61,38 @@ type GetCommentRespPosterData struct {
 	Avatar string `json:"avatar"`
 }
 
+func (resp *GetCommentResp) SetIsBlocked() {
+	if resp == nil {
+		return
+	}
+
+	resp.IsBlocked = boolTranslate(true)
+}
+
+func (data *GetCommentRespData) setData(res *application.GetPostCommentRes, formUserMediaURL FormUserMediaFn) {
+	if data == nil || res == nil || formUserMediaURL == nil {
+		return
+	}
+
+	avatarURL, _ := formUserMediaURL(res.Comment.GetCreator())
+	data.ID = res.Comment.IDString()
+	data.Comment = res.Comment.GetContent()
+	data.Created = res.Comment.CreatedAt.String()
+	data.Poster = GetCommentRespPosterData{
+		ID:     res.Comment.GetCreator().ID().String(),
+		Name:   res.Comment.GetCreator().GetName(),
+		Avatar: avatarURL,
+	}
+}
+
 func (resp *GetCommentResp) SetData(res []*application.GetPostCommentRes, formUserMediaURL FormUserMediaFn) {
 	if resp == nil || res == nil || formUserMediaURL == nil {
 		return
 	}
 
-	resp.Data = make([]GetCommentRespData, 0, len(res))
+	resp.IsBlocked = boolTranslate(false)
+	resp.Data = make([]GetCommentRespData, len(res))
 	for i := range res {
-		if res[i].IsBlocked {
-			resp.Data = append(resp.Data, GetCommentRespData{
-				IsBlocked: boolTranslate(res[i].IsBlocked),
-			})
-			continue
-		}
-		avatarURL, _ := formUserMediaURL(res[i].Comment.GetCreator())
-		resp.Data = append(resp.Data, GetCommentRespData{
-			ID:      res[i].Comment.IDString(),
-			Comment: res[i].Comment.GetContent(),
-			Created: res[i].Comment.CreatedAt.String(),
-			Poster: GetCommentRespPosterData{
-				ID:     res[i].Comment.GetCreator().ID().String(),
-				Name:   res[i].Comment.GetCreator().GetName(),
-				Avatar: avatarURL,
-			},
-			IsBlocked: boolTranslate(res[i].IsBlocked),
-		})
+		resp.Data[i].setData(res[i], formUserMediaURL)
 	}
 }
