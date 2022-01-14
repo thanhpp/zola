@@ -1322,6 +1322,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get_comments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/post/04637818-752d-11ec-8884-0242ac120003/comment",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post",
+								"04637818-752d-11ec-8884-0242ac120003",
+								"comment"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

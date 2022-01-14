@@ -66,7 +66,7 @@
 - [x] [set_comment](https://github.com/thanhpp/zola/issues/28)
   - [x] [Create comment](https://github.com/thanhpp/zola/issues/28)
   - [ ] Get comment
-- [ ] get_comment
+- [x] [get_comment](https://github.com/thanhpp/zola/issues/81)
 - [x] [like](https://github.com/thanhpp/zola/issues/15)
 - [x] [edit_comment](https://github.com/thanhpp/zola/issues/30)
 - [x] [del_comment](https://github.com/thanhpp/zola/issues/31)
