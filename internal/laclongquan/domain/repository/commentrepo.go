@@ -17,6 +17,7 @@ type CommentRepository interface {
 	// read
 	GetByIDAndPostID(ctx context.Context, commentID, postID string) (*entity.Comment, error)
 	CountByPostID(ctx context.Context, postID string) (int, error)
+	GetByPostIDWithActiveUser(ctx context.Context, postID string, offset, limit int) ([]*entity.Comment, error)
 
 	// write
 	Create(ctx context.Context, comment *entity.Comment) error

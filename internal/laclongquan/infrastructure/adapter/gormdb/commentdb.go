@@ -88,6 +88,39 @@ func (c commentGorm) CountByPostID(ctx context.Context, postID string) (int, err
 	return int(commentCount), nil
 }
 
+func (c commentGorm) GetByPostIDWithActiveUser(ctx context.Context, postID string, offset, limit int) ([]*entity.Comment, error) {
+	var list []*CommentDB
+
+	stmt := c.db.WithContext(ctx).Model(c.cmtModel).
+		Where("post_uuid = ?", postID).
+		Order("created_at desc").
+		Joins(`JOIN user_db ON user_db.user_uuid = comment_db.creator_uuid AND user_db.state = 'active'`)
+
+	if offset >= 0 && limit > 0 {
+		stmt = stmt.Offset(offset).Limit(limit)
+	}
+
+	if err := stmt.Find(&list).Error; err != nil {
+		return nil, err
+	}
+
+	post, err := c.postGorm.GetByID(ctx, postID)
+	if err != nil {
+		return nil, err
+	}
+
+	var comments = make([]*entity.Comment, 0, len(list))
+	for i := range list {
+		user, err := c.userGorm.GetByID(ctx, list[i].CreatorUUID)
+		if err != nil {
+			return nil, err
+		}
+		comments = append(comments, c.unmarshal(list[i], post, user))
+	}
+
+	return comments, nil
+}
+
 func (c commentGorm) Create(ctx context.Context, comment *entity.Comment) error {
 	return c.db.WithContext(ctx).Model(c.cmtModel).
 		Create(c.marshal(comment)).Error

@@ -167,7 +167,7 @@ func (p Post) CanUserGetPost(user *User, relation *Relation) error {
 	}
 
 	if p.IsLocked() {
-		return ErrLockedUser
+		return ErrLockedPost
 	}
 
 	if (user.ID().String() != p.Creator() && relation == nil) || (relation != nil && relation.IsFriend()) {

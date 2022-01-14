@@ -97,6 +97,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		postGr.PUT("/:postid/like", postCtrl.LikePost)
 
 		// comment
+		postGr.GET("/:postid/comment", postCtrl.GetComments)
 		postGr.POST("/:postid/comment", postCtrl.CreateComment)
 		postGr.PUT("/:postid/comment/:commentid", postCtrl.UpdateComment)
 		postGr.DELETE("/:postid/comment/:commentid", postCtrl.DeleteComment)
