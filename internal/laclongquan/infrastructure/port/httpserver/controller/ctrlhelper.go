@@ -153,7 +153,7 @@ func pagination(c *gin.Context) (offset, limit int) {
 		return paginationMinOffset, paginationDefaultLimit
 	}
 
-	limitStr := c.Query("limit")
+	limitStr := c.Query("count")
 	if limitStr == "" {
 		return (index - 1) * paginationDefaultLimit, paginationDefaultLimit
 	}

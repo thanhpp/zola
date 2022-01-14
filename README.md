@@ -17,7 +17,6 @@
 
 ### Requirements
 - [GOOGLE DRIVE](https://drive.google.com/drive/folders/1ii_FZnXnlrzpcdi5AwqHDAD82lV-0S8T?usp=sharing)
-- [API TESTING](https://docs.google.com/spreadsheets/d/12-7goP0F4rkHljCae2DN6iesQMPO_0gtiVl8lKsxjPA/edit?usp=sharing)
 - Timestamp: Seconds from 01/01/1970 (Unix)
 ### Database
 ![Diagram](docs/Zola.png)
@@ -65,7 +64,7 @@
 - [x] [report](https://github.com/thanhpp/zola/issues/10)
 - [x] [set_comment](https://github.com/thanhpp/zola/issues/28)
   - [x] [Create comment](https://github.com/thanhpp/zola/issues/28)
-  - [ ] Get comment
+  - [x] [Get comment](https://github.com/thanhpp/zola/issues/83)
 - [x] [get_comment](https://github.com/thanhpp/zola/issues/81)
 - [x] [like](https://github.com/thanhpp/zola/issues/15)
 - [x] [edit_comment](https://github.com/thanhpp/zola/issues/30)

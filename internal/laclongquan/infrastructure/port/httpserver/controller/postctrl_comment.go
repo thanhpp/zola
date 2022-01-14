@@ -88,10 +88,18 @@ func (ctrl PostController) CreateComment(c *gin.Context) {
 		return
 	}
 
-	// FIXME: get comments by index and count
+	res, err := ctrl.handler.GetPostComments(c, userID.String(), postID.String(), 0, 20)
+	if err != nil {
+		logger.Errorf("get post comments error: %v", err)
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		return
+	}
 
-	// FIXME: temporary respone
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	resp := new(dto.CreateCommentResp)
+	resp.SetCode(responsevalue.CodeOK)
+	resp.SetMsg(responsevalue.MsgOK)
+	resp.SetData(res, ctrl.formUserMediaURLFunc)
+	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, resp)
 }
 
 func (ctrl PostController) UpdateComment(c *gin.Context) {
@@ -231,6 +239,7 @@ func (ctrl PostController) DeleteComment(c *gin.Context) {
 		}
 
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		return
 	}
 
 	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
