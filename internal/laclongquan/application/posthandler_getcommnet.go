@@ -29,7 +29,12 @@ func (p PostHandler) GetPostComments(ctx context.Context, requestorID, postID st
 		return nil, err
 	}
 
-	comments, err := p.commentRepo.GetByPostIDWithActiveUser(ctx, postID, offset, limit)
+	comments, err := p.commentRepo.GetByPostIDFromNonBlockedActiveUser(
+		ctx,
+		requestorID,
+		postID,
+		offset,
+		limit)
 	if err != nil {
 		return nil, err
 	}

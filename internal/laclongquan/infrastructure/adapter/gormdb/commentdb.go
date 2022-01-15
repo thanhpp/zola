@@ -88,13 +88,21 @@ func (c commentGorm) CountByPostID(ctx context.Context, postID string) (int, err
 	return int(commentCount), nil
 }
 
-func (c commentGorm) GetByPostIDWithActiveUser(ctx context.Context, postID string, offset, limit int) ([]*entity.Comment, error) {
+func (c commentGorm) GetByPostIDFromNonBlockedActiveUser(ctx context.Context, requestorID, postID string, offset, limit int) ([]*entity.Comment, error) {
 	var list []*CommentDB
 
 	stmt := c.db.WithContext(ctx).Model(c.cmtModel).
+		Select("comment_db.*").
 		Where("post_uuid = ?", postID).
 		Order("created_at desc").
-		Joins(`JOIN user_db ON user_db.user_uuid = comment_db.creator_uuid AND user_db.state = 'active'`)
+		Joins(`JOIN user_db ON user_db.user_uuid = comment_db.creator_uuid AND user_db.state = 'active'
+		LEFT JOIN relation_db ON (
+			(relation_db.user_a = ? AND relation_db.user_b = comment_db.creator_uuid) 
+			OR
+			(relation_db.user_a = comment_db.creator_uuid AND relation_db.user_b = ?)
+			AND
+			(relation_db.status <> 'blocked' OR relation_db.status <> 'diary_blocked')
+		)`, requestorID, requestorID)
 
 	if offset >= 0 && limit > 0 {
 		stmt = stmt.Offset(offset).Limit(limit)
@@ -109,13 +117,22 @@ func (c commentGorm) GetByPostIDWithActiveUser(ctx context.Context, postID strin
 		return nil, err
 	}
 
-	var comments = make([]*entity.Comment, 0, len(list))
+	var (
+		comments  = make([]*entity.Comment, 0, len(list))
+		userCache = make(map[string]*entity.User)
+	)
 	for i := range list {
-		user, err := c.userGorm.GetByID(ctx, list[i].CreatorUUID)
+		user, ok := userCache[list[i].CreatorUUID]
+		if ok {
+			comments = append(comments, c.unmarshal(list[i], post, user))
+			continue
+		}
+		user, err = c.userGorm.GetByID(ctx, list[i].CreatorUUID)
 		if err != nil {
 			return nil, err
 		}
 		comments = append(comments, c.unmarshal(list[i], post, user))
+		userCache[list[i].CreatorUUID] = user
 	}
 
 	return comments, nil
