@@ -129,6 +129,10 @@ func (p Post) CreatedAt() int64 {
 	return p.createdAt.Unix()
 }
 
+func (p Post) CreatedAtTime() time.Time {
+	return p.createdAt
+}
+
 func (p Post) UpdatedAt() int64 {
 	return p.updatedAt.Unix()
 }
@@ -180,6 +184,10 @@ func (p Post) CanUserGetPost(user *User, relation *Relation) error {
 func (p Post) CanUserEditPost(user *User) error {
 	if user == nil {
 		return ErrNilUser
+	}
+
+	if user.IsAdmin() {
+		return nil
 	}
 
 	if user.IsLocked() {

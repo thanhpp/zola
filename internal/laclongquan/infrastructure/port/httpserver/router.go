@@ -87,6 +87,7 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	postGr := r.Group("/post")
 	{
 		postGr.Use(s.AuthMiddleware())
+		postGr.GET("", postCtrl.GetListPost)
 		postGr.GET("/:postid", postCtrl.GetPost)
 		postGr.POST("", postCtrl.CreatePost)
 		postGr.PUT("/:postid", postCtrl.EditPost)

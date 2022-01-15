@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 )
@@ -18,6 +19,7 @@ type PostRepository interface {
 	// read
 	GetByID(ctx context.Context, id string) (*entity.Post, error)
 	GetMediaByID(ctx context.Context, id string) (*entity.Media, error)
+	GetListPost(ctx context.Context, requestorID string, timeMilestone time.Time, offset, limit int) ([]*entity.Post, int, error)
 
 	// write
 	Create(ctx context.Context, post *entity.Post) error

@@ -56,7 +56,8 @@
 - [x] get_post
   - [x] [Get post data](https://github.com/thanhpp/zola/issues/41)
   - [x] [video thumbnails](https://github.com/thanhpp/zola/issues/42)
-- [ ] get_list_posts
+- [x] [get_list_posts](https://github.com/thanhpp/zola/issues/85)
+  - ![](docs/get_list_post.png)
 - [ ] check_new_item
 - [x] [edit_post](https://github.com/thanhpp/zola/issues/7)
   - [ ] missing images order
