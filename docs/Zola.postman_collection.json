@@ -1351,6 +1351,46 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get_list_post",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "last_id",
+									"value": "04637818-752d-11ec-8884-0242ac120003",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{zola}}/post",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"post"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
