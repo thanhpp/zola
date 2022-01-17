@@ -3,6 +3,9 @@ import Posts from "../../components/list/Posts";
 import { Button } from "antd";
 import AuthContext from "../../context/authContext";
 import ModalNewPost from "../../components/modal/ModalFormPost";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getPostList } from "../../api/postApi";
+import Spinner from "../../components/spinner/Spinner";
 
 const datas = {
 	code: "1000",
@@ -42,28 +45,21 @@ for (let i = 0; i < 23; i++) {
 }
 
 export default function PostsList(props) {
+	const queryClient = useQueryClient();
 	const { user } = useContext(AuthContext);
 	const [displayModal, setDisplayModal] = useState(false);
-	let result;
-	const button = (
-		<Button type="primary" block onClick={() => setDisplayModal(true)}>
-			Add new post
-		</Button>
-	);
+	const { data, isLoading } = useQuery("posts", getPostList);
 
-	if (!props.id) {
-		result = button;
-	} else {
-		props.id === user.userId ? (result = button) : (result = null);
-	}
+	//console.log(data.data.posts);
+
+	if (isLoading) return <Spinner />;
 
 	return (
 		<>
-			{result}
-			{/* <Button type="primary" block>
+			<Button type="primary" block onClick={() => setDisplayModal(true)}>
 				Add new post
-			</Button> */}
-			<Posts posts={datas.posts} />
+			</Button>
+			<Posts posts={data.data.posts} />
 			<ModalNewPost visible={displayModal} setVisible={setDisplayModal} />
 		</>
 	);

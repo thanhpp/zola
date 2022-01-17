@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import "antd/dist/antd.css";
 import { Modal, Form, Input, Button, Space, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 export default function ModalFormPost(props) {
 	const { visible, onCreate, setVisible } = props;
+	const [isImageAttched, setIsImageAttched] = useState(false);
+	const [isVideoAttched, setIsVideoAttched] = useState(false);
 	const [form] = Form.useForm();
 	return (
 		<Modal
@@ -42,8 +45,24 @@ export default function ModalFormPost(props) {
 				</Form.Item>
 				<Form.Item name="media" label="Attachment">
 					<Space>
-						<Button>Images</Button>
-						<Button>Video</Button>
+						<Upload disabled={isImageAttched}>
+							<Button
+								disabled={isImageAttched}
+								icon={<UploadOutlined />}
+								onClick={() => setIsVideoAttched(!isVideoAttched)}
+							>
+								Images
+							</Button>
+						</Upload>
+						<Upload disabled={isVideoAttched}>
+							<Button
+								disabled={isVideoAttched}
+								icon={<UploadOutlined />}
+								onClick={() => setIsImageAttched(!isImageAttched)}
+							>
+								Video
+							</Button>
+						</Upload>
 					</Space>
 				</Form.Item>
 			</Form>
