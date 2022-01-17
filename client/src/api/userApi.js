@@ -5,11 +5,20 @@ export async function getUserList() {
 	return data;
 }
 
-export async function setUserState() {}
+export async function setUserState(values) {
+	const { user_id, state } = values;
+	const formData = new FormData();
+	formData.append("state", state);
+	const { data } = await axiosClient.put(
+		`/admin/users/${user_id}/state`,
+		formData
+	);
+	return data;
+}
 
 export async function deleteUser(id) {
-	console.log(id);
-	//const {data} = await axiosClient.delete()
+	const { data } = await axiosClient.delete(`/admin/users/${id}`);
+	return data;
 }
 
 export async function getUserInfo(id) {

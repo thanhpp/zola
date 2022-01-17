@@ -5,7 +5,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { signUpUser } from "../../api/userAuthentication";
-import { getUserList, deleteUser } from "../../api/userApi";
+import { getUserList, deleteUser, setUserState } from "../../api/userApi";
 
 const columns = [
 	{
@@ -49,8 +49,8 @@ const columns = [
 ];
 
 const options = [
-	{ value: 0, text: "Inactive" },
-	{ value: 1, text: "Active" },
+	{ value: "locked", text: "Inactive" },
+	{ value: "active", text: "Active" },
 ];
 
 const isActive = (state) => {
@@ -73,45 +73,53 @@ const convertedData = (query) => {
 
 export default function UserList() {
 	const queryClient = useQueryClient();
-	//const [data, setData] = useState(users);
 	const { data: query, isLoading } = useQuery("users", getUserList);
-	//console.log(query);
 	const { mutate: addUserMutation } = useMutation(signUpUser, {
-		onSuccess: (data) => {
-			console.log("added user", data);
+		onSuccess: () => {
 			queryClient.invalidateQueries("users");
 		},
 		onError: (error) => {
 			message.error({
-				content: `Code: ${error.response.data.code};
-				Message: ${error.response.data.message}`,
+				content: `Code: ${error.response?.data?.code};
+				Message: ${error.response?.data?.message}`,
 			});
 		},
 	});
 	const { mutate: deleteUserMutation } = useMutation(deleteUser, {
-		onSuccess: (data) => {
-			console.log("deleted", data);
+		onSuccess: () => {
 			queryClient.invalidateQueries("users");
 		},
+		onError: (error) => {
+			message.error({
+				content: `Code: ${error.response?.data?.code};
+				Message: ${error.response?.data?.message}`,
+			});
+		},
 	});
+
+	const { mutate: setUserStateMutation } = useMutation(setUserState, {
+		onSuccess: () => {
+			queryClient.invalidateQueries("users");
+		},
+		onError: (error) => {
+			message.error({
+				content: `Code: ${error.response?.data?.code};
+				Message: ${error.response?.data?.message}`,
+			});
+		},
+		onMutate: () => {
+			message.loading("loading");
+		},
+	});
+
 	const handleAdd = (values) => {
 		addUserMutation(values);
 	};
 	const handleDelete = (id) => {
-		console.log(id);
 		deleteUserMutation(id);
 	};
 	const handleEdit = (values) => {
-		//edit user state - send async request
-		const { user_id, state } = values;
-		console.log(user_id, state);
-		//handle array client
-		values = { ...values, state: isActive(state) };
-		// const newData = data.map((data) => {
-		// 	if (data.user_id === values.user_id) return values;
-		// 	return data;
-		// });
-		// setData(newData);
+		setUserStateMutation(values);
 	};
 	return (
 		<EditTableRow
