@@ -26,4 +26,5 @@ type UserRepository interface {
 
 	// delete
 	DeleteByID(ctx context.Context, id string) error
+	DeleteByIDCascade(ctx context.Context, id string) error
 }

@@ -25,8 +25,8 @@ type GetUserResp struct {
 		State       string `json:"state"`
 		IsActive    string `json:"is_active"`
 		IsOnline    string `json:"is_online"`
-		Listing     int64  `json:"listing"`
-		Created     int64  `json:"created"`
+		Listing     string `json:"listing"`
+		Created     string `json:"created"`
 	} `json:"data"`
 }
 
@@ -53,8 +53,8 @@ func (resp *GetUserResp) SetData(user *entity.User, friendCount int, isFriend bo
 	resp.Data.State = user.State().String()
 	resp.Data.IsActive = boolTranslate(user.IsActive())
 	resp.Data.IsOnline = boolTranslate(user.IsOnline())
-	resp.Data.Listing = int64(friendCount)
-	resp.Data.Created = user.CreatedAtUnix()
+	resp.Data.Listing = strconv.Itoa(friendCount)
+	resp.Data.Created = strconv.Itoa(int(user.CreatedAtUnix()))
 }
 
 type UserData struct {

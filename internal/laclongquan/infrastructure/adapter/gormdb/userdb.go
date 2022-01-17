@@ -212,3 +212,81 @@ func (u userGorm) Update(ctx context.Context, id string, fn repository.UserUpdat
 func (u userGorm) DeleteByID(ctx context.Context, id string) error {
 	return u.db.WithContext(ctx).Model(u.model).Where("user_uuid = ?", id).Delete(u.model).Error
 }
+
+func (u userGorm) DeleteByIDCascade(ctx context.Context, id string) error {
+	return u.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// delete from auth_db
+		if err := tx.Model(&AuthDB{}).Where("user_id = ?", id).Delete(&AuthDB{}).Error; err != nil {
+			return err
+		}
+
+		// comment_db
+		if err := tx.WithContext(ctx).Exec(`
+			DELETE FROM comment_db
+			WHERE comment_db.post_uuid IN (
+				SELECT post_db.post_uuid
+				FROM post_db
+				WHERE post_db.creator = ?
+			) OR
+			comment_db.creator_uuid = ?
+		`, id, id).Error; err != nil {
+			return err
+		}
+
+		// like_db
+		if err := tx.WithContext(ctx).Exec(`
+			DELETE FROM like_db
+			WHERE like_db.post_uuid IN (
+				SELECT post_db.post_uuid
+				FROM post_db
+				WHERE post_db.creator = ?
+			) OR
+			like_db.creator_uuid = ?
+		`, id, id).Error; err != nil {
+			return err
+		}
+
+		// media_db
+		if err := tx.WithContext(ctx).Exec(`
+			DELETE FROM media_db
+			WHERE media_db.post_uuid IN (
+				SELECT post_db.post_uuid
+				FROM post_db
+				WHERE post_db.creator = ?
+			) OR
+			media_db.owner = ?
+		`, id, id).Error; err != nil {
+			return err
+		}
+
+		// report_db
+		if err := tx.WithContext(ctx).Exec(`
+			DELETE FROM report_db
+			WHERE report_db.post_uuid IN (
+				SELECT post_db.post_uuid
+				FROM post_db
+				WHERE post_db.creator = ?
+			) OR
+			report_db.creator_uuid = ?
+		`, id, id).Error; err != nil {
+			return err
+		}
+
+		// post_db
+		if err := tx.WithContext(ctx).Model(&PostDB{}).Where("creator = ?", id).Delete(&PostDB{}).Error; err != nil {
+			return err
+		}
+
+		// relation_db
+		if err := tx.WithContext(ctx).Model(&RelationDB{}).Where("user_a = ? OR user_b = ?", id, id).Delete(&RelationDB{}).Error; err != nil {
+			return err
+		}
+
+		// user_db
+		if err := tx.WithContext(ctx).Model(u.model).Where("user_uuid = ?", id).Delete(&UserDB{}).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+}

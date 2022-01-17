@@ -164,6 +164,14 @@ func (u *User) UpdatePass(oldPass, newPass string, accCipher AccountCipher) erro
 	return nil
 }
 
+func (u *User) AdminUpdatePass(newPass string, accCipher AccountCipher) error {
+	if u == nil {
+		return nil
+	}
+
+	return u.account.AdminUpdatePass(newPass, accCipher)
+}
+
 func (u User) State() UserState {
 	return u.state
 }
@@ -174,6 +182,24 @@ func (u User) IsLocked() bool {
 
 func (u User) IsActive() bool {
 	return u.state == UserStateActive
+}
+
+func (u *User) SetState(state string) error {
+	if u == nil {
+		return nil
+	}
+
+	switch state {
+	case UserStateActive.String():
+		u.state = UserStateActive
+		return nil
+
+	case UserStateLocked.String():
+		u.state = UserStateLocked
+		return nil
+	}
+
+	return ErrInvalidState
 }
 
 func (u User) GetAvatar() string {

@@ -18,6 +18,10 @@ const (
 	UserStateLocked UserState = "locked"
 )
 
+var (
+	ErrInvalidState = errors.New("invalid state")
+)
+
 type UserRole string
 
 func (r UserRole) String() string {

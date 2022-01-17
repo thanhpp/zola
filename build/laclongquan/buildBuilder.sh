@@ -1,0 +1,1 @@
+docker build -t ghcr.io/thanhpp/zola/laclongquan:builder -f Dockerfile.builder /home/thanhpp/go/src/github.com/thanhpp/zola
