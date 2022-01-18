@@ -61,13 +61,17 @@ export default function PostDetail() {
 
 	return (
 		<>
-			<Post post={post.data}>
-				<Comments
-					comments={comments?.data}
-					isLoading={isCommentsLoading}
-					onLoadMore={onLoadMore}
-				/>
-			</Post>
+			{post && (
+				<Post post={post.data}>
+					{comments && (
+						<Comments
+							comments={comments.data}
+							isLoading={isCommentsLoading}
+							onLoadMore={onLoadMore}
+						/>
+					)}
+				</Post>
+			)}
 			{parseInt(post.data.can_comment) ? (
 				<Comment
 					content={

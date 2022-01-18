@@ -37,7 +37,7 @@ export default function UserDetail() {
 	);
 
 	useEffect(() => {
-		console.log("running effect");
+		//console.log("running effect");
 		if (id === user.userId) {
 			setIsEditable(true);
 		}

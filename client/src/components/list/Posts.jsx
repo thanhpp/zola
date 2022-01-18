@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import { List, Avatar, Space, Typography, Popconfirm, Skeleton } from "antd";
 import {
@@ -6,11 +6,13 @@ import {
 	LikeOutlined,
 	DeleteOutlined,
 	LikeFilled,
+	UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+//import { getPostMedia } from "../../api/postApi";
 dayjs.extend(relativeTime);
 
 const IconText = ({ icon, text }) => (
@@ -24,7 +26,7 @@ const { Paragraph } = Typography;
 
 const mediaPreview = (post) => {
 	if (post.image) {
-		return <img width={272} alt="images" src={post.image[0].url} />;
+		return <img width={272} alt="images" src={post.image[0]} />;
 	} else if (post.video.url) {
 		return (
 			<video width={272} poster={post.video.thumb} controls>
@@ -33,7 +35,18 @@ const mediaPreview = (post) => {
 		);
 	} else return;
 };
-export default function Posts({ posts }) {
+export default function Posts(props) {
+	const { pages, hasNextPage, fetchNextPage } = props;
+	const [posts, setPosts] = useState([]);
+
+	console.log(pages);
+
+	useEffect(() => {
+		console.log("running effect in posts");
+		setPosts((p) => [...p, ...pages[pages.length - 1].data.data.posts]);
+		//console.log(posts);
+	}, [pages]);
+
 	return (
 		<div
 			id="scrollableDiv"
@@ -43,8 +56,8 @@ export default function Posts({ posts }) {
 			}}
 		>
 			<InfiniteScroll
-				next={() => console.log("next")}
-				hasMore={posts.length < 50}
+				next={fetchNextPage}
+				hasMore={hasNextPage}
 				loader={<Skeleton avatar paragraph={{ rows: 3 }} active />}
 				scrollableTarget="scrollableDiv"
 				dataLength={posts.length}
@@ -55,7 +68,7 @@ export default function Posts({ posts }) {
 					dataSource={posts}
 					renderItem={(post) => (
 						<List.Item
-							key={post.title}
+							key={post.id}
 							actions={[
 								<IconText
 									icon={!!+post.is_liked ? LikeFilled : LikeOutlined}
@@ -79,7 +92,13 @@ export default function Posts({ posts }) {
 						>
 							<Link to={`${post.id}`}>
 								<List.Item.Meta
-									avatar={<Avatar src={post.author.avatar} />}
+									avatar={
+										post.author.avatar ? (
+											<Avatar src={post.author.avatar} />
+										) : (
+											<Avatar icon={<UserOutlined />} />
+										)
+									}
 									title={post.author.username}
 									description={dayjs.unix(post.created).fromNow()}
 								/>

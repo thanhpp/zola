@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import "antd/dist/antd.css";
-import { Modal, Form, Input, Button, Space, Upload } from "antd";
+import { Modal, Form, Input, Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 export default function ModalFormPost(props) {
 	const { visible, onCreate, setVisible } = props;
-	const [isImageAttched, setIsImageAttched] = useState(false);
-	const [isVideoAttched, setIsVideoAttched] = useState(false);
+
 	const [form] = Form.useForm();
 	return (
 		<Modal
@@ -22,8 +21,20 @@ export default function ModalFormPost(props) {
 				form
 					.validateFields()
 					.then((values) => {
+						console.log(values);
+						const { described, image, video } = values;
+						const formData = new FormData();
+						formData.append("described", described);
+						if (video) {
+							formData.append("video", video.fileList[0].originFileObj);
+						}
+						if (image) {
+							for (let i = 0; i < image.fileList.length; i++) {
+								formData.append("image", image.fileList[i].originFileObj);
+							}
+						}
+						onCreate(formData);
 						form.resetFields();
-						onCreate(values);
 					})
 					.catch((info) => {
 						console.log("Validate Failed:", info);
@@ -40,22 +51,29 @@ export default function ModalFormPost(props) {
 					}
 				}
 			>
-				<Form.Item name="content" label="Write your thought here">
+				<Form.Item name="described" label="Write your thought here">
 					<Input.TextArea />
 				</Form.Item>
-				<Form.Item name="media" label="Attachment">
-					<Space>
-						<Upload disabled={isImageAttched}>
-							<Button disabled={isImageAttched} icon={<UploadOutlined />}>
-								Images
-							</Button>
-						</Upload>
-						<Upload disabled={isVideoAttched}>
-							<Button disabled={isVideoAttched} icon={<UploadOutlined />}>
-								Video
-							</Button>
-						</Upload>
-					</Space>
+				<Form.Item name="image" label="Attachment" valuePropName="fileList">
+					<Upload
+						maxCount={4}
+						listType="picture"
+						beforeUpload={() => {
+							return false;
+						}}
+					>
+						<Button icon={<UploadOutlined />}>Images</Button>
+					</Upload>
+				</Form.Item>
+				<Form.Item name="video" label="Attachment" valuePropName="fileList">
+					<Upload
+						maxCount={1}
+						beforeUpload={() => {
+							return false;
+						}}
+					>
+						<Button icon={<UploadOutlined />}>Video</Button>
+					</Upload>
 				</Form.Item>
 			</Form>
 		</Modal>
