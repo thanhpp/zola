@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"log"
 	"time"
 
@@ -21,14 +22,17 @@ var (
 )
 
 type Client struct {
+	ID        string
 	conn      *websocket.Conn
 	wsManager *WebSocketManager
 	send      chan []byte
+	rooms     map[*WsRoom]struct{}
 }
 
 func (c *Client) readPump() {
 	defer func() {
 		// TODO: disconnect
+		c.disconnect()
 	}()
 
 	c.conn.SetReadLimit(maxMessageSize)
@@ -99,4 +103,48 @@ func (c *Client) writePump() {
 			}
 		}
 	}
+}
+
+func (client *Client) disconnect() {
+	client.wsManager.unregisterC <- client
+	for room := range client.rooms {
+		room.UnregisterC <- client
+	}
+}
+
+func (c *Client) handleMessage(msgB []byte) {
+	var newMsg = new(WsMessage)
+	if err := json.Unmarshal(msgB, newMsg); err != nil {
+		logger.Errorf("handleMessage: decode error: %v", err)
+		return
+	}
+
+	// attach the sender to the message
+	newMsg.Sender = c
+
+	switch newMsg.Action {
+	case MessageActionSend:
+		// get the room name
+		roomName := newMsg.Target
+
+		if room := c.wsManager.findRoomByName(roomName); room != nil {
+			room.Broadcast <- []byte(newMsg.Message)
+		}
+
+	case MessageActionJoin:
+
+	case MessageActionLeave:
+	}
+}
+
+func (c *Client) handleJoinRoom(msg *WsMessage) {
+	roomName := msg.Message
+
+	room := c.wsManager.findRoomByName(roomName)
+	if room == nil {
+		room = c.wsManager.createRoom(msg.Message)
+	}
+
+	room.RegisterC <- c
+	c.rooms[room] = struct{}{}
 }

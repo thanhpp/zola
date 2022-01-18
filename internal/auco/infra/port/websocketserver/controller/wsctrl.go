@@ -20,7 +20,13 @@ func (ctrl WsCtrl) ServeWebsocket(c *gin.Context) {
 		return
 	}
 
-	client := ctrl.newClient(conn)
+	name, ok := c.GetQuery("name")
+	if !ok || len(name) == 0 {
+		logger.Errorf("WsCtrl: invalid name")
+		return
+	}
+
+	client := ctrl.newClient(conn, name)
 
 	go client.writePump()
 	go client.readPump()
@@ -30,10 +36,12 @@ func (ctrl WsCtrl) ServeWebsocket(c *gin.Context) {
 	logger.Infof("new client %v", client)
 }
 
-func (ctrl WsCtrl) newClient(conn *websocket.Conn) *Client {
+func (ctrl WsCtrl) newClient(conn *websocket.Conn, name string) *Client {
 	return &Client{
+		ID:        name,
 		conn:      conn,
 		wsManager: ctrl.wsManager,
 		send:      make(chan []byte),
+		rooms:     make(map[*WsRoom]struct{}),
 	}
 }
