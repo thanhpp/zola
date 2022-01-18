@@ -46,20 +46,12 @@ export default function ModalFormPost(props) {
 				<Form.Item name="media" label="Attachment">
 					<Space>
 						<Upload disabled={isImageAttched}>
-							<Button
-								disabled={isImageAttched}
-								icon={<UploadOutlined />}
-								onClick={() => setIsVideoAttched(!isVideoAttched)}
-							>
+							<Button disabled={isImageAttched} icon={<UploadOutlined />}>
 								Images
 							</Button>
 						</Upload>
 						<Upload disabled={isVideoAttched}>
-							<Button
-								disabled={isVideoAttched}
-								icon={<UploadOutlined />}
-								onClick={() => setIsImageAttched(!isImageAttched)}
-							>
+							<Button disabled={isVideoAttched} icon={<UploadOutlined />}>
 								Video
 							</Button>
 						</Upload>

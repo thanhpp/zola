@@ -9,6 +9,9 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 const IconText = ({ icon, text }) => (
 	<Space>
@@ -19,27 +22,18 @@ const IconText = ({ icon, text }) => (
 
 const { Paragraph } = Typography;
 
+const mediaPreview = (post) => {
+	if (post.image) {
+		return <img width={272} alt="images" src={post.image[0].url} />;
+	} else if (post.video.url) {
+		return (
+			<video width={272} poster={post.video.thumb} controls>
+				<source src={post.video.url} />
+			</video>
+		);
+	} else return;
+};
 export default function Posts({ posts }) {
-	const mediaAttach = (post) => {
-		if (post.image) {
-			return `With ${post.image?.length} images attached`;
-		} else if (post.video) {
-			return `With a video attached`;
-		} else return;
-	};
-
-	const mediaPreview = (post) => {
-		if (post.image) {
-			return <img width={272} alt="images" src={post.image[0].url} />;
-		} else if (post.video) {
-			return (
-				<video width={272} poster={post.video.thumb} controls>
-					<source src={post.video.url} />
-				</video>
-			);
-		} else return;
-	};
-
 	return (
 		<div
 			id="scrollableDiv"
@@ -87,7 +81,7 @@ export default function Posts({ posts }) {
 								<List.Item.Meta
 									avatar={<Avatar src={post.author.avatar} />}
 									title={post.author.username}
-									description={mediaAttach(post)}
+									description={dayjs.unix(post.created).fromNow()}
 								/>
 								<Paragraph
 									ellipsis={{

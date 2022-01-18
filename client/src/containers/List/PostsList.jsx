@@ -50,8 +50,6 @@ export default function PostsList(props) {
 	const [displayModal, setDisplayModal] = useState(false);
 	const { data, isLoading } = useQuery("posts", getPostList);
 
-	//console.log(data.data.posts);
-
 	if (isLoading) return <Spinner />;
 
 	return (
