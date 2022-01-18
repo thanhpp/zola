@@ -1,5 +1,13 @@
 package entity
 
+import (
+	"time"
+)
+
 type Message struct {
-	ID int64
+	RoomID    string
+	Sender    string
+	Receiver  string
+	Content   string
+	CreatedAt time.Time
 }

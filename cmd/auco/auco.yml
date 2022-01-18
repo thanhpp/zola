@@ -1,0 +1,10 @@
+Name: auco_srv
+
+Log:
+  Color:      true
+  LoggerName: ACSrv
+  Level:      Debug
+
+HTTPServer:
+  Host:       0.0.0.0
+  Port:       12000

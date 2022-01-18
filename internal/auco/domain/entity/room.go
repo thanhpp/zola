@@ -1,12 +1,11 @@
 package entity
 
 import (
-	"math/big"
 	"time"
 )
 
 type Room struct {
-	ID        big.Int
+	ID        string
 	UserA     string
 	UserB     string
 	CreatedAt time.Time
