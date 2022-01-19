@@ -102,6 +102,7 @@ func (p PostHandler) GetListPost(ctx context.Context, requestorID, lastPostID st
 		if err != nil {
 			return nil, err
 		}
+		resPostElem.Creator = user
 		resPosts = append(resPosts, resPostElem)
 		creatorCache[posts[i].Creator()] = user
 	}
