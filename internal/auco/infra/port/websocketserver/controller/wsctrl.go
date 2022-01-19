@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/thanhpp/zola/pkg/logger"
 )
@@ -39,6 +40,7 @@ func (ctrl WsCtrl) ServeWebsocket(c *gin.Context) {
 func (ctrl WsCtrl) newClient(conn *websocket.Conn, name string) *Client {
 	return &Client{
 		ID:        name,
+		UUID:      uuid.New(),
 		conn:      conn,
 		wsManager: ctrl.wsManager,
 		send:      make(chan []byte),

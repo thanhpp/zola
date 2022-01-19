@@ -7,15 +7,19 @@ import (
 )
 
 const (
-	MessageActionSend  = "send-message"
-	MessageActionJoin  = "join-room"
-	MessageActionLeave = "leave-room"
+	MessageActionSend            = "send-message"
+	MessageActionJoin            = "join-room"
+	MessageActionLeave           = "leave-room"
+	MessageActionUserJoined      = "user-join"
+	MessageActionUserLeft        = "user-left"
+	MessageActionJoinRoomPrivate = "join-room-private"
+	MessageActionRoomJoined      = "room-joined"
 )
 
 type WsMessage struct {
 	Action  string  `json:"action"`
 	Message string  `json:"message"`
-	Target  string  `json:"target"`
+	Target  *WsRoom `json:"target"`
 	Sender  *Client `json:"sender"`
 }
 

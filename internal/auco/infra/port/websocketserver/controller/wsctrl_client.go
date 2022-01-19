@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/thanhpp/zola/pkg/logger"
 )
@@ -23,6 +24,7 @@ var (
 
 type Client struct {
 	ID        string
+	UUID      uuid.UUID
 	conn      *websocket.Conn
 	wsManager *WebSocketManager
 	send      chan []byte
@@ -53,7 +55,7 @@ func (c *Client) readPump() {
 		}
 
 		logger.Debugf("received message: %s", jsonMessage)
-		c.wsManager.broadcastToClients(jsonMessage)
+		c.handleMessage(jsonMessage)
 	}
 }
 
@@ -127,24 +129,79 @@ func (c *Client) handleMessage(msgB []byte) {
 		// get the room name
 		roomName := newMsg.Target
 
-		if room := c.wsManager.findRoomByName(roomName); room != nil {
+		if room := c.wsManager.findRoomByName(roomName.ID); room != nil {
 			room.Broadcast <- []byte(newMsg.Message)
 		}
 
 	case MessageActionJoin:
+		logger.Debug("Client: handleJoinRoom")
+		c.handleJoinRoom(newMsg)
 
 	case MessageActionLeave:
+		c.handleLeaveRoom(newMsg)
 	}
 }
 
 func (c *Client) handleJoinRoom(msg *WsMessage) {
 	roomName := msg.Message
 
-	room := c.wsManager.findRoomByName(roomName)
-	if room == nil {
-		room = c.wsManager.createRoom(msg.Message)
+	c.joinRoom(roomName, nil)
+}
+
+func (c *Client) handleLeaveRoom(msg *WsMessage) {
+	room := c.wsManager.findRoomByName(msg.Message)
+
+	if room != nil {
+		return
 	}
 
-	room.RegisterC <- c
-	c.rooms[room] = struct{}{}
+	if _, ok := c.rooms[room]; ok {
+		delete(c.rooms, room)
+		room.UnregisterC <- c
+	}
+}
+
+func (c *Client) handleJoinRoomPrivateMessage(msg WsMessage) {
+	target := c.wsManager.findClientByUUID(msg.Message)
+	if target == nil {
+		return
+	}
+
+	roomName := msg.Message + c.UUID.String()
+
+	c.joinRoom(roomName, target)
+	target.joinRoom(roomName, c)
+}
+
+func (c *Client) joinRoom(roomName string, sender *Client) {
+	room := c.wsManager.findRoomByName(roomName)
+	if room == nil {
+		room = c.wsManager.createRoom(roomName, sender != nil)
+	}
+
+	if sender == nil && room.Private {
+		return
+	}
+
+	if !c.isInRoom(room) {
+		c.rooms[room] = struct{}{}
+		room.RegisterC <- c
+		c.notifyRoomJoined(room, sender)
+	}
+}
+
+func (c *Client) isInRoom(room *WsRoom) bool {
+	if _, ok := c.rooms[room]; ok {
+		return true
+	}
+	return false
+}
+
+func (c *Client) notifyRoomJoined(room *WsRoom, sender *Client) {
+	message := &WsMessage{
+		Action: MessageActionJoin,
+		Target: room,
+		Sender: sender,
+	}
+	c.send <- message.Encode()
 }

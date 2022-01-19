@@ -34,10 +34,13 @@ func (man *WebSocketManager) Run() {
 
 func (man *WebSocketManager) registerClient(client *Client) {
 	man.clients[client] = struct{}{}
+	man.notifyClientJoined(client)
+	man.listOnlineCLients(client)
 }
 
 func (man *WebSocketManager) unregisterClient(client *Client) {
 	if _, ok := man.clients[client]; ok {
+		man.notifyClientLeft(client)
 		delete(man.clients, client)
 	}
 }
@@ -58,10 +61,58 @@ func (man *WebSocketManager) findRoomByName(name string) *WsRoom {
 	return nil
 }
 
-func (man *WebSocketManager) createRoom(name string) *WsRoom {
-	room := NewRoom(name)
+func (man *WebSocketManager) createRoom(name string, private bool) *WsRoom {
+	room := NewRoom(name, private)
 	go room.Run()
 	man.rooms[room] = struct{}{}
 
 	return room
+}
+
+func (man *WebSocketManager) notifyClientJoined(client *Client) {
+	message := &WsMessage{
+		Action: MessageActionUserJoined,
+		Sender: client,
+	}
+
+	man.broadcastToClients(message.Encode())
+}
+
+func (man *WebSocketManager) notifyClientLeft(client *Client) {
+	message := &WsMessage{
+		Action: MessageActionUserLeft,
+		Sender: client,
+	}
+
+	man.broadcastToClients(message.Encode())
+}
+
+func (man *WebSocketManager) listOnlineCLients(client *Client) {
+	for existingClient := range man.clients {
+		message := &WsMessage{
+			Action: MessageActionUserJoined,
+			Sender: existingClient,
+		}
+		client.send <- message.Encode()
+	}
+}
+
+func (man *WebSocketManager) findClientByUUID(in string) *Client {
+	for client := range man.clients {
+		if client.UUID.String() == in {
+			return client
+		}
+	}
+
+	return nil
+}
+
+func (man *WebSocketManager) findRoomByUUID(in string) *WsRoom {
+	for room := range man.rooms {
+		if room.UUID.String() == in {
+			return room
+		}
+	}
+
+	return nil
 }

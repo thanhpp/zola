@@ -1,18 +1,26 @@
 package controller
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type WsRoom struct {
 	ID          string
+	UUID        uuid.UUID
+	Private     bool
 	Clients     map[*Client]struct{}
 	RegisterC   chan *Client
 	UnregisterC chan *Client
 	Broadcast   chan []byte
 }
 
-func NewRoom(id string) *WsRoom {
+func NewRoom(id string, private bool) *WsRoom {
 	return &WsRoom{
 		ID:          id,
+		UUID:        uuid.New(),
+		Private:     private,
 		Clients:     make(map[*Client]struct{}),
 		RegisterC:   make(chan *Client),
 		UnregisterC: make(chan *Client),
@@ -58,9 +66,17 @@ const (
 func (wr *WsRoom) NotifyClients(newClient *Client) {
 	newMsg := &WsMessage{
 		Action:  MessageActionSend,
-		Target:  wr.ID,
+		Target:  wr,
 		Message: fmt.Sprintf(welcomeMsg, newClient.ID),
 	}
 
 	wr.BroadcastMessage(newMsg.Encode())
+}
+
+func (wr *WsRoom) registerClientInRoom(client *Client) {
+	if !wr.Private {
+		wr.NotifyClients(client)
+	}
+
+	wr.Clients[client] = struct{}{}
 }
