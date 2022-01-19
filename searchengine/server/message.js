@@ -14,12 +14,11 @@ async function getMessages() {
 async function addManyMessages(messages) {
   const docs = messages.flatMap((message) => {
     let messageObj = {
-      id: message.user_id,
-      name: message.name,
-      username: message.username,
-      phonenumber: message.phone,
+      from: message.from,
+      to: message.to,
+      message: message.message,
     };
-    return [{ index: { _index: index, _id: message.user_id } }, messageObj];
+    return [{ index: { _index: index, _id: message.id } }, messageObj];
   });
   const { body: bulkResponse } = await client.bulk({
     refresh: true,

@@ -18,7 +18,7 @@ exports.delete = wrapAsync(async (req, res, next) => {
 
 exports.getOne = wrapAsync(async (req, res, next) => {
   const result = await post.getPost(req.params.id);
-  return res.status(200).send(result.body);
+  return res.status(200).send(result.body._source);
 });
 
 exports.update = wrapAsync(async (req, res, next) => {
