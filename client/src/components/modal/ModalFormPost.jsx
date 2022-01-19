@@ -35,6 +35,7 @@ export default function ModalFormPost(props) {
 						}
 						onCreate(formData);
 						form.resetFields();
+						setVisible(!visible);
 					})
 					.catch((info) => {
 						console.log("Validate Failed:", info);

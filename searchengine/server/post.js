@@ -11,8 +11,9 @@ async function addManyPosts(posts) {
       id: post.id,
       described: post.described,
       author: post.author.name,
+      created: post.created,
     };
-    return [{ index: { _index: index, _id: post.user_id } }, postObj];
+    return [{ index: { _index: index, _id: post.id } }, postObj];
   });
   const { body: bulkResponse } = await client.bulk({
     refresh: true,
@@ -40,6 +41,7 @@ async function editPost(editedPost) {
     id: editedPost.id,
     described: editedPost.described,
     author: editedPost.author.name,
+    created: post.created,
   };
   return await client.update({
     index,
@@ -61,9 +63,10 @@ async function getPost(id) {
 async function searchPosts(searchItem) {
   const query = {
     query: {
-      query_string: {
-        query: `*${searchItem.keyword}*`,
-        fields: ['described'],
+      match: {
+        described: {
+          query: `${searchItem.keyword}`,
+        },
       },
     },
     from: searchItem.index,

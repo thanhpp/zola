@@ -3,25 +3,74 @@ import Post from "../components/user/Post";
 import Comments from "../components/user/Comments";
 import Editor from "../components/chat/Editor";
 import { Comment, message } from "antd";
-import { useQuery } from "react-query";
-import { getPost, getPostComment } from "../api/postApi";
+import {
+	useQuery,
+	useMutation,
+	useQueryClient,
+	useInfiniteQuery,
+} from "react-query";
+import {
+	getPost,
+	getPostComment,
+	addPostComment,
+	deletePostComment,
+	likePost,
+} from "../api/postApi";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/spinner/Spinner";
 
 export default function PostDetail() {
-	const [index, setIndex] = useState(1);
-	const [enabled, setEnabled] = useState(true);
+	const queryClient = useQueryClient();
 	const { id } = useParams();
+	const [comment, setComment] = useState({
+		value: "",
+	});
 	const { data: post, isLoading } = useQuery(["posts", id], () => getPost(id));
 	const {
 		data: comments,
 		isLoading: isCommentsLoading,
-		refetch,
-	} = useQuery("comments", () => getPostComment({ id, index }), {
-		enabled: enabled,
-		retry: false,
+		hasNextPage,
+		fetchNextPage,
+	} = useInfiniteQuery(
+		["posts", id, "comments"],
+		({ pageParam = 1 }) => getPostComment({ id, pageParam }),
+		{
+			//enabled: enabled,
+			retry: false,
+			getNextPageParam: (lastPage) => {
+				//console.log(lastPage);
+				if (lastPage.data.data.length !== 0) return lastPage.nextPage;
+				return undefined;
+			},
+			onError: (error) => {
+				message.error({
+					content: `Code: ${error.response?.data?.code};
+				Message: ${error.response?.data?.message}`,
+				});
+			},
+		}
+	);
+
+	const { mutate: addNewComment, isLoading: isCommentSubmitting } = useMutation(
+		addPostComment,
+		{
+			onSuccess: () => {
+				//queryClient.invalidateQueries(["posts", id, "comments"]);
+				setComment({ value: "" });
+				queryClient.refetchQueries(["posts", id, "comments"]);
+			},
+			onError: (error) => {
+				message.error({
+					content: `Code: ${error.response?.data?.code};
+				Message: ${error.response?.data?.message}`,
+				});
+			},
+		}
+	);
+
+	const { mutate: deleteOldComment } = useMutation(deletePostComment, {
 		onSuccess: () => {
-			setEnabled(false);
+			queryClient.invalidateQueries(["posts", id, "comments"]);
 		},
 		onError: (error) => {
 			message.error({
@@ -29,16 +78,24 @@ export default function PostDetail() {
 				Message: ${error.response?.data?.message}`,
 			});
 		},
+		onMutate: () => {
+			message.loading("loading");
+		},
 	});
 
-	const onLoadMore = () => {
-		setIndex(index + 1);
-		refetch();
-	};
-
-	const [comment, setComment] = useState({
-		submitting: false,
-		value: "",
+	const { mutate: postInteraction } = useMutation(likePost, {
+		onSuccess: () => {
+			queryClient.invalidateQueries(["posts", id]);
+		},
+		onError: (error) => {
+			message.error({
+				content: `Code: ${error.response?.data?.code};
+				Message: ${error.response?.data?.message}`,
+			});
+		},
+		onMutate: () => {
+			message.loading("loading");
+		},
 	});
 
 	const handleChange = (e) => {
@@ -47,14 +104,9 @@ export default function PostDetail() {
 
 	const handleSubmit = () => {
 		if (!comment.value) return;
-		setComment({ ...comment, submitting: true });
-		console.log(comment.value);
-		setTimeout(() => {
-			setComment({
-				submitting: false,
-				value: "",
-			});
-		}, 1000);
+		const formData = new FormData();
+		formData.append("comment", comment.value);
+		addNewComment({ id: id, comment: formData });
 	};
 
 	if (isLoading) return <Spinner />;
@@ -62,12 +114,15 @@ export default function PostDetail() {
 	return (
 		<>
 			{post && (
-				<Post post={post.data}>
+				<Post post={post.data} handleInteraction={postInteraction}>
 					{comments && (
 						<Comments
-							comments={comments.data}
+							comments={comments}
 							isLoading={isCommentsLoading}
-							onLoadMore={onLoadMore}
+							onLoadMore={fetchNextPage}
+							handleDeleteComment={deleteOldComment}
+							postId={id}
+							hasMoreComment={hasNextPage}
 						/>
 					)}
 				</Post>
@@ -78,7 +133,7 @@ export default function PostDetail() {
 						<Editor
 							onChange={handleChange}
 							onSubmit={handleSubmit}
-							submitting={comment.submitting}
+							submitting={isCommentSubmitting}
 							value={comment.value}
 						/>
 					}

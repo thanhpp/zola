@@ -9,85 +9,98 @@ import {
 	Button,
 	Skeleton,
 } from "antd";
-import { DeleteOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import AuthContext from "../../context/authContext";
 dayjs.extend(relativeTime);
 
 export default function Comments(props) {
-	const { comments, isLoading, onLoadMore } = props;
+	const {
+		comments,
+		isLoading,
+		onLoadMore,
+		handleDeleteComment,
+		postId,
+		hasMoreComment,
+	} = props;
 
 	//userID
 	const { user } = useContext(AuthContext);
 
-	const loadMore =
-		comments.length !== 0 ? (
-			<div
-				style={{
-					textAlign: "center",
-					marginTop: 12,
-					height: 32,
-					lineHeight: "32px",
-				}}
-			>
-				<Button onClick={onLoadMore}>Load more comments</Button>
-			</div>
-		) : null;
+	//console.log(comments);
 
-	const handleDelete = (id, id_com) => {
-		console.log({ id_post: id, id_com: id_com });
+	const loadMore = hasMoreComment ? (
+		<div
+			style={{
+				textAlign: "center",
+				marginTop: 12,
+				height: 32,
+				lineHeight: "32px",
+			}}
+		>
+			<Button onClick={onLoadMore}>Load more comments</Button>
+		</div>
+	) : null;
+
+	const handleDelete = (id_com, com) => {
+		//console.log({ postId: postId, commentId: id_com });
+		handleDeleteComment({ postId: postId, commentId: id_com, comment: com });
 	};
 	return (
 		<>
 			<List
 				className="comment-list"
 				itemLayout="horizontal"
-				dataSource={comments}
+				dataSource={comments.pages}
 				loading={isLoading}
 				loadMore={loadMore}
-				renderItem={(comment) => (
-					<li>
-						<Skeleton avatar title={false} loading={isLoading} active>
-							<Comment
-								key={comment.id}
-								actions={[
-									<Tooltip key="comment-basic-delete" title="Delete comment">
-										<DeleteOutlined
-											onClick={() =>
-												handleDelete(comment.poster.id, comment.id)
-											}
-										/>
-										Delete
-									</Tooltip>,
-									//edit comment
-									// user.userId === comment.poster.id ? (
-									// 	<Tooltip key="comment-basic-edit" title="Edit comment">
-									// 		<EditOutlined />
-									// 		Edit
-									// 	</Tooltip>
-									// ) : null,
-								]}
-								author={comment.poster.name}
-								avatar={
-									comment.poster.avatar ? (
-										<Avatar src={comment.poster.avatar} alt="avatar" />
-									) : (
-										<Avatar size="small" icon={<UserOutlined />} />
-									)
-								}
-								content={
-									<Typography.Paragraph>{comment.comment}</Typography.Paragraph>
-								}
-								datetime={
-									<Tooltip title={dayjs().format("DD-MM-YYYY HH:mm:ss")}>
-										<span>{dayjs.unix(comment.created).fromNow()}</span>
-									</Tooltip>
-								}
-							/>
-						</Skeleton>
-					</li>
-				)}
+				renderItem={(page) =>
+					page.data.data.map((comment) => {
+						return (
+							<li>
+								<Skeleton avatar title={false} loading={isLoading} active>
+									<Comment
+										key={comment.id}
+										actions={[
+											<Tooltip
+												key="comment-basic-delete"
+												title="Delete comment"
+											>
+												<span
+													onClick={() =>
+														handleDelete(comment.id, comment.comment)
+													}
+												>
+													<DeleteOutlined />
+													Delete
+												</span>
+											</Tooltip>,
+										]}
+										author={comment.poster.name}
+										avatar={
+											comment.poster.avatar ? (
+												<Avatar src={comment.poster.avatar} alt="avatar" />
+											) : (
+												<Avatar size="small" icon={<UserOutlined />} />
+											)
+										}
+										content={
+											<Typography.Paragraph>
+												{comment.comment}
+											</Typography.Paragraph>
+										}
+										datetime={
+											<Tooltip title={dayjs().format("DD-MM-YYYY HH:mm:ss")}>
+												<span>{dayjs.unix(comment.created).fromNow()}</span>
+											</Tooltip>
+										}
+									/>
+								</Skeleton>
+							</li>
+						);
+					})
+				}
 			/>
 		</>
 	);

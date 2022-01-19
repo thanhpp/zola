@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "antd/dist/antd.css";
 import { List, Avatar, Space, Typography, Popconfirm, Skeleton } from "antd";
 import {
@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-//import { getPostMedia } from "../../api/postApi";
 dayjs.extend(relativeTime);
 
 const IconText = ({ icon, text }) => (
@@ -36,16 +35,9 @@ const mediaPreview = (post) => {
 	} else return;
 };
 export default function Posts(props) {
-	const { pages, hasNextPage, fetchNextPage } = props;
-	const [posts, setPosts] = useState([]);
+	const { pages, hasNextPage, fetchNextPage, handleDelete } = props;
 
-	console.log(pages);
-
-	useEffect(() => {
-		console.log("running effect in posts");
-		setPosts((p) => [...p, ...pages[pages.length - 1].data.data.posts]);
-		//console.log(posts);
-	}, [pages]);
+	//console.log(pages);
 
 	return (
 		<div
@@ -60,60 +52,64 @@ export default function Posts(props) {
 				hasMore={hasNextPage}
 				loader={<Skeleton avatar paragraph={{ rows: 3 }} active />}
 				scrollableTarget="scrollableDiv"
-				dataLength={posts.length}
+				dataLength={pages.length}
 			>
 				<List
 					itemLayout="vertical"
 					size="large"
-					dataSource={posts}
-					renderItem={(post) => (
-						<List.Item
-							key={post.id}
-							actions={[
-								<IconText
-									icon={!!+post.is_liked ? LikeFilled : LikeOutlined}
-									text={post.like}
-									key="list-vertical-like-o"
-								/>,
-								<IconText
-									icon={MessageOutlined}
-									text={post.comment}
-									key="list-vertical-message"
-								/>,
-								<Popconfirm
-									title="Sure to delete?"
-									onConfirm={() => console.log(post.id)}
+					dataSource={pages}
+					renderItem={(page) =>
+						page.data.data.posts.map((post) => {
+							return (
+								<List.Item
+									key={post.id}
+									actions={[
+										<IconText
+											icon={!!+post.is_liked ? LikeFilled : LikeOutlined}
+											text={post.like}
+											key="list-vertical-like-o"
+										/>,
+										<IconText
+											icon={MessageOutlined}
+											text={post.comment}
+											key="list-vertical-message"
+										/>,
+										<Popconfirm
+											title="Sure to delete?"
+											onConfirm={() => handleDelete(post.id)}
+										>
+											<DeleteOutlined />
+											<span className="comment-action-delete"> Delete</span>
+										</Popconfirm>,
+									]}
+									extra={mediaPreview(post)}
 								>
-									<DeleteOutlined />
-									<span className="comment-action-delete"> Delete</span>
-								</Popconfirm>,
-							]}
-							extra={mediaPreview(post)}
-						>
-							<Link to={`${post.id}`}>
-								<List.Item.Meta
-									avatar={
-										post.author.avatar ? (
-											<Avatar src={post.author.avatar} />
-										) : (
-											<Avatar icon={<UserOutlined />} />
-										)
-									}
-									title={post.author.username}
-									description={dayjs.unix(post.created).fromNow()}
-								/>
-								<Paragraph
-									ellipsis={{
-										rows: 2,
-										expandable: true,
-										symbol: "more",
-									}}
-								>
-									{post.described}
-								</Paragraph>
-							</Link>
-						</List.Item>
-					)}
+									<Link to={`${post.id}`}>
+										<List.Item.Meta
+											avatar={
+												post.author.avatar ? (
+													<Avatar src={post.author.avatar} />
+												) : (
+													<Avatar icon={<UserOutlined />} />
+												)
+											}
+											title={post.author.username}
+											description={dayjs.unix(post.created).fromNow()}
+										/>
+										<Paragraph
+											ellipsis={{
+												rows: 2,
+												expandable: true,
+												symbol: "more",
+											}}
+										>
+											{post.described}
+										</Paragraph>
+									</Link>
+								</List.Item>
+							);
+						})
+					}
 				/>
 			</InfiniteScroll>
 		</div>

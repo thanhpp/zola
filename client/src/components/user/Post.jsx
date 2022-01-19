@@ -12,11 +12,11 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 export default function Post(props) {
-	const { post } = props;
-	const { is_liked, like, comment, author, described, created } = post;
+	const { post, handleInteraction } = props;
+	const { is_liked, like, comment, author, described, created, id } = post;
 	const actions = [
 		<Tooltip key="comment-basic-like" title="Like">
-			<span>
+			<span onClick={() => handleInteraction(id)}>
 				{React.createElement(parseInt(is_liked) ? LikeFilled : LikeOutlined)}
 				<span className="comment-action">{like}</span>
 			</span>

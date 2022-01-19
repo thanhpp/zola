@@ -3,7 +3,7 @@ import Posts from "../../components/list/Posts";
 import { Button, message } from "antd";
 import ModalNewPost from "../../components/modal/ModalFormPost";
 import { useMutation, useInfiniteQuery, useQueryClient } from "react-query";
-import { getPostList, addPost } from "../../api/postApi";
+import { getPostList, addPost, deletePost } from "../../api/postApi";
 import Spinner from "../../components/spinner/Spinner";
 
 export default function PostsList() {
@@ -27,8 +27,7 @@ export default function PostsList() {
 	);
 
 	const { mutate: addNewPost } = useMutation(addPost, {
-		onSuccess: (data) => {
-			console.log(data);
+		onSuccess: () => {
 			queryClient.invalidateQueries("posts");
 			//queryClient.refetchQueries("posts");
 		},
@@ -37,6 +36,25 @@ export default function PostsList() {
 				content: `Code: ${error.response?.data?.code};
 				Message: ${error.response?.data?.message}`,
 			});
+		},
+		onMutate: () => {
+			message.loading("loading");
+		},
+	});
+
+	const { mutate: deleteOldPost } = useMutation(deletePost, {
+		onSuccess: () => {
+			queryClient.invalidateQueries("posts");
+			message.success("Post deleted!");
+		},
+		onError: (error) => {
+			message.error({
+				content: `Code: ${error.response?.data?.code};
+				Message: ${error.response?.data?.message}`,
+			});
+		},
+		onMutate: () => {
+			message.loading("loading");
 		},
 	});
 
@@ -56,6 +74,7 @@ export default function PostsList() {
 					pages={data.pages}
 					fetchNextPage={fetchNextPage}
 					hasNextPage={hasNextPage}
+					handleDelete={deleteOldPost}
 				/>
 			)}
 			<ModalNewPost
