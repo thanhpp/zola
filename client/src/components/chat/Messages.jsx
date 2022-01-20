@@ -10,9 +10,10 @@ const { Meta } = Card;
 
 export default function Messages({ messages }) {
 	const userId = "41324124";
+	console.log(messages);
 	return (
 		<>
-			{messages.map((message) => {
+			{/* {messages.map((message) => {
 				return (
 					<Card
 						key={message.messageId}
@@ -64,7 +65,7 @@ export default function Messages({ messages }) {
 						</Typography>
 					</Card>
 				);
-			})}
+			})} */}
 			{/* {messages.map((message) => {
 				return (
 					<Comment
