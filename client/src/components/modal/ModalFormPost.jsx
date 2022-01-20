@@ -1,7 +1,27 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Modal, Form, Input, Button, Upload } from "antd";
+import { Modal, Form, Input, Button, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+
+const beforeImageUpload = (file) => {
+	const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+	if (!isJpgOrPng) {
+		message.error("You can only upload JPG/PNG file!");
+	}
+	const isLt2M = file.size / 1024 / 1024 < 2;
+	if (!isLt2M) {
+		message.error("Image must smaller than 2MB!");
+	}
+	return false;
+};
+
+const beforeVideoUpload = (file) => {
+	const isLt10M = file.size / 1024 / 1024 < 10;
+	if (!isLt10M) {
+		message.error("Video must smaller than 10MB!");
+	}
+	return false;
+};
 
 export default function ModalFormPost(props) {
 	const { visible, onCreate, setVisible } = props;
@@ -21,7 +41,7 @@ export default function ModalFormPost(props) {
 				form
 					.validateFields()
 					.then((values) => {
-						console.log(values);
+						//console.log(values);
 						const { described, image, video } = values;
 						const formData = new FormData();
 						formData.append("described", described);
@@ -53,25 +73,23 @@ export default function ModalFormPost(props) {
 				}
 			>
 				<Form.Item name="described" label="Write your thought here">
-					<Input.TextArea />
+					<Input.TextArea maxLength={500} />
 				</Form.Item>
-				<Form.Item name="image" label="Attachment" valuePropName="fileList">
+				<Form.Item name="image" label="Attachment" valuePropName="file">
 					<Upload
 						maxCount={4}
 						listType="picture"
-						beforeUpload={() => {
-							return false;
-						}}
+						beforeUpload={beforeImageUpload}
+						accept="image/*"
 					>
 						<Button icon={<UploadOutlined />}>Images</Button>
 					</Upload>
 				</Form.Item>
-				<Form.Item name="video" label="Attachment" valuePropName="fileList">
+				<Form.Item name="video" label="Attachment" valuePropName="file">
 					<Upload
+						accept="video/*"
 						maxCount={1}
-						beforeUpload={() => {
-							return false;
-						}}
+						beforeUpload={beforeVideoUpload}
 					>
 						<Button icon={<UploadOutlined />}>Video</Button>
 					</Upload>
