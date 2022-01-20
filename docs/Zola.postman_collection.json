@@ -2740,6 +2740,44 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get list post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/admin/posts?index=1&count=1",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"admin",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "index",
+									"value": "1"
+								},
+								{
+									"key": "count",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

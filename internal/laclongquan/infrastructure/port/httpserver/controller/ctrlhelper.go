@@ -134,13 +134,13 @@ func genRandomString(length int) string {
 const (
 	paginationMinOffset    = 0
 	paginationMinLimit     = 1
-	paginationDefaultLimit = 10
+	paginationDefaultLimit = 20
 	paginationMaxLimit     = 100
 )
 
 func pagination(c *gin.Context) (offset, limit int) {
 	indexStr := c.Query("index")
-	if indexStr == "" {
+	if len(indexStr) == 0 {
 		return paginationMinOffset, paginationDefaultLimit
 	}
 
@@ -154,7 +154,7 @@ func pagination(c *gin.Context) (offset, limit int) {
 	}
 
 	limitStr := c.Query("count")
-	if limitStr == "" {
+	if len(limitStr) == 0 {
 		return (index - 1) * paginationDefaultLimit, paginationDefaultLimit
 	}
 

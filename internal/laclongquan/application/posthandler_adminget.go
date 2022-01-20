@@ -7,7 +7,7 @@ import (
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
 )
 
-func (p PostHandler) AdminGetList(ctx context.Context, requestorID, lastPostID string, limit, offset int) (*GetListPostRes, error) {
+func (p PostHandler) AdminGetList(ctx context.Context, requestorID, lastPostID string, offset, limit int) (*GetListPostRes, error) {
 	requestor, err := p.userRepo.GetByID(ctx, requestorID)
 	if err != nil {
 		return nil, err
