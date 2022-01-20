@@ -19,3 +19,4 @@ cmd/laclongquan/localstorage/*
 searchengine/node_modules
 searchengine/*.env
 client/node_modules
+cmd/auco/auco

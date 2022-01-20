@@ -161,6 +161,16 @@ func (p Post) CanUserGetMedia(user *User, relation *Relation, mediaID string) (*
 	return nil, ErrPostNotContainsMedia
 }
 
+func (p Post) FindMediaByID(mediaID string) (*Media, error) {
+	for i := range p.media {
+		if mediaID == p.media[i].ID() {
+			return &p.media[i], nil
+		}
+	}
+
+	return nil, ErrPostNotContainsMedia
+}
+
 func (p Post) CanUserGetPost(user *User, relation *Relation) error {
 	if user.IsAdmin() {
 		return nil
