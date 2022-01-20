@@ -129,6 +129,11 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 			usersGr.PUT("/:userid/state", userCtrl.AdminSetState)
 			usersGr.PUT("/:userid/password", userCtrl.AdminUpdatePassword)
 		}
+
+		postsGr := adminGr.Group("/posts")
+		{
+			postsGr.GET("", postCtrl.AdminGetListPosts)
+		}
 	}
 	// ---------------
 

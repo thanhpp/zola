@@ -20,6 +20,7 @@ type PostRepository interface {
 	GetByID(ctx context.Context, id string) (*entity.Post, error)
 	GetMediaByID(ctx context.Context, id string) (*entity.Media, error)
 	GetListPost(ctx context.Context, requestorID string, timeMilestone time.Time, offset, limit int) ([]*entity.Post, int, error)
+	GetListPostForAdmin(ctx context.Context, requestorID string, timeMileStone time.Time, offset, limit int) ([]*entity.Post, int, error)
 
 	// write
 	Create(ctx context.Context, post *entity.Post) error

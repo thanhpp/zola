@@ -181,6 +181,42 @@ func (p postGorm) GetListPost(ctx context.Context, requestorID string, timeMileS
 	return listPost, int(newItems), nil
 }
 
+func (p postGorm) GetListPostForAdmin(ctx context.Context, requestorID string, timeMileStone time.Time, offset, limit int) ([]*entity.Post, int, error) {
+	var (
+		list     []*PostDB
+		newItems int64
+	)
+
+	stmt := p.db.WithContext(ctx).Model(p.postModel).
+		Preload(clause.Associations)
+
+	if !timeMileStone.IsZero() {
+		stmt.Where("post_db.created_at < ?", timeMileStone)
+	}
+
+	if err := stmt.Limit(limit).Offset(offset).Find(&list).Error; err != nil {
+		return nil, -1, err
+	}
+
+	var listPost = make([]*entity.Post, 0, len(list))
+	for i := range list {
+		post, err := p.unmarshalPost(list[i])
+		if err != nil {
+			return nil, -1, err
+		}
+		listPost = append(listPost, post)
+	}
+
+	if !timeMileStone.IsZero() {
+		stmt2 := p.db.WithContext(ctx).Model(p.postModel)
+		if err := stmt2.Where("post_db.created_at > ?", timeMileStone).Count(&newItems).Error; err != nil {
+			return nil, 0, err
+		}
+	}
+
+	return listPost, int(newItems), nil
+}
+
 func (p postGorm) joinGetListPostFromActiveFriends(db *gorm.DB, requestorID string) {
 	db.Order("post_db.created_at desc").
 		Joins(`
