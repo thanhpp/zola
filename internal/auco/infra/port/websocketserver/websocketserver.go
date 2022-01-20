@@ -8,24 +8,27 @@ import (
 	"time"
 
 	"github.com/thanhpp/zola/config/shared"
+	"github.com/thanhpp/zola/internal/auco/app"
 	"github.com/thanhpp/zola/pkg/booting"
 	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type WebsocketServer struct {
 	cfg *shared.HTTPServerConfig
+	wm  *app.WsManager
 }
 
-func NewWebsocketServer(cfg *shared.HTTPServerConfig) *WebsocketServer {
+func NewWebsocketServer(cfg *shared.HTTPServerConfig, wm *app.WsManager) *WebsocketServer {
 	return &WebsocketServer{
 		cfg: cfg,
+		wm:  wm,
 	}
 }
 
 func (s *WebsocketServer) Start() (booting.Daemon, error) {
 	server := &http.Server{
 		Addr:    fmt.Sprintf("%s:%s", s.cfg.Host, s.cfg.Port),
-		Handler: newRouter(),
+		Handler: s.newRouter(),
 	}
 
 	return func(ctx context.Context) (start func() error, cleanup func()) {

@@ -7,9 +7,9 @@ services:
       context: ./postgres
       dockerfile: Dockerfile
     environment:
-      POSTGRES_USER:      laclongquan_user
-      POSTGRES_PASSWORD:  laclongquan_pass
-      POSTGRES_MULTIPLE_DATABASES: laclongquan_db,laclongquan_user
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_MULTIPLE_DATABASES: laclongquan_db,laclongquan_user,laclongquan_pass;auco_db,auco_user,auco_pass
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     networks:
@@ -17,7 +17,7 @@ services:
 
   laclongquan:
     container_name: laclongquanservice
-    build: 
+    build:
       context: ..
       dockerfile: ./build/laclongquan/Dockerfile
     depends_on:
@@ -47,6 +47,13 @@ services:
       restart_policy:
           condition: on-failure
           max_attempts: 5
+    depends_on:
+      - database
+    environment:
+      WAIT_HOSTS:   database:5432
+      WAIT_AFTER:   5
+      AC_DB_HOST:   database
+      AC_DB_PORT:   5432
     ports:
       - 12000:12000
     networks:

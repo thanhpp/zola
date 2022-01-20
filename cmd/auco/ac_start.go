@@ -7,13 +7,15 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/thanhpp/zola/config/aucoconfig"
+	"github.com/thanhpp/zola/internal/auco/app"
+	"github.com/thanhpp/zola/internal/auco/infra/adapter/gormdb"
 	"github.com/thanhpp/zola/internal/auco/infra/port/websocketserver"
 	"github.com/thanhpp/zola/pkg/booting"
 	"github.com/thanhpp/zola/pkg/logger"
 )
 
 func start(configPath string) {
-	if err := aucoconfig.Set(configPath); err != nil {
+	if err := aucoconfig.SetFromENV(configPath); err != nil {
 		panic(errors.WithMessage(err, "set config"))
 	}
 
@@ -22,7 +24,15 @@ func start(configPath string) {
 	}
 	logger.Info("logger OK")
 
-	wsServer := websocketserver.NewWebsocketServer(&aucoconfig.Get().HTTPServer)
+	err := gormdb.InitConnection(aucoconfig.Get().Database.DSN(), aucoconfig.Get().Log.Level, aucoconfig.Get().Log.Color)
+	if err != nil {
+		panic(errors.WithMessage(err, "init connection"))
+	}
+	logger.Info("dbao OK")
+
+	wmManager := app.NewWsManager(gormdb.NewGormDB())
+
+	wsServer := websocketserver.NewWebsocketServer(&aucoconfig.Get().HTTPServer, wmManager)
 	wsServerDaemon, err := wsServer.Start()
 	if err != nil {
 		panic(errors.WithMessage(err, "start websocket server"))

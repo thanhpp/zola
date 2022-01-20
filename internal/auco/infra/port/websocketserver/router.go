@@ -9,7 +9,7 @@ import (
 	"github.com/thanhpp/zola/internal/auco/infra/port/websocketserver/controller"
 )
 
-func newRouter() *gin.Engine {
+func (s *WebsocketServer) newRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Recovery())
 	router.Use(gin.Logger())
@@ -25,7 +25,7 @@ func newRouter() *gin.Engine {
 	}))
 
 	// controller
-	wsCtrl := controller.NewWsController()
+	wsCtrl := controller.NewWsController(s.wm)
 
 	// routes
 	router.StaticFS("/pub", http.Dir("./public"))

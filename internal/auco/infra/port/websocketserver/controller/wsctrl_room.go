@@ -7,13 +7,13 @@ import (
 )
 
 type WsRoom struct {
-	ID          string
-	UUID        uuid.UUID
+	ID          string    `json:"name"`
+	UUID        uuid.UUID `json:"id"`
 	Private     bool
-	Clients     map[*Client]struct{}
-	RegisterC   chan *Client
-	UnregisterC chan *Client
-	Broadcast   chan []byte
+	clients     map[*Client]struct{} `json:"-"`
+	registerC   chan *Client         `json:"-"`
+	unregisterC chan *Client         `json:"-"`
+	broadcast   chan []byte          `json:"-"`
 }
 
 func NewRoom(id string, private bool) *WsRoom {
@@ -21,40 +21,40 @@ func NewRoom(id string, private bool) *WsRoom {
 		ID:          id,
 		UUID:        uuid.New(),
 		Private:     private,
-		Clients:     make(map[*Client]struct{}),
-		RegisterC:   make(chan *Client),
-		UnregisterC: make(chan *Client),
-		Broadcast:   make(chan []byte),
+		clients:     make(map[*Client]struct{}),
+		registerC:   make(chan *Client),
+		unregisterC: make(chan *Client),
+		broadcast:   make(chan []byte),
 	}
 }
 
 func (wr *WsRoom) Run() {
 	for {
 		select {
-		case client := <-wr.RegisterC:
+		case client := <-wr.registerC:
 			wr.Register(client)
 
-		case client := <-wr.UnregisterC:
+		case client := <-wr.unregisterC:
 			wr.Unregister(client)
 
-		case msg := <-wr.Broadcast:
+		case msg := <-wr.broadcast:
 			wr.BroadcastMessage(msg)
 		}
 	}
 }
 
 func (wr *WsRoom) Register(client *Client) {
-	wr.Clients[client] = struct{}{}
+	wr.clients[client] = struct{}{}
 }
 
 func (wr *WsRoom) Unregister(client *Client) {
-	if _, ok := wr.Clients[client]; ok {
-		delete(wr.Clients, client)
+	if _, ok := wr.clients[client]; ok {
+		delete(wr.clients, client)
 	}
 }
 
 func (wr *WsRoom) BroadcastMessage(message []byte) {
-	for client := range wr.Clients {
+	for client := range wr.clients {
 		client.send <- message
 	}
 }
@@ -78,5 +78,5 @@ func (wr *WsRoom) registerClientInRoom(client *Client) {
 		wr.NotifyClients(client)
 	}
 
-	wr.Clients[client] = struct{}{}
+	wr.clients[client] = struct{}{}
 }

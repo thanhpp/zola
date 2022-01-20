@@ -23,8 +23,8 @@ var (
 )
 
 type Client struct {
-	ID        string
-	UUID      uuid.UUID
+	ID        string    `json:"name"`
+	UUID      uuid.UUID `json:"id"`
 	conn      *websocket.Conn
 	wsManager *WebSocketManager
 	send      chan []byte
@@ -110,7 +110,7 @@ func (c *Client) writePump() {
 func (client *Client) disconnect() {
 	client.wsManager.unregisterC <- client
 	for room := range client.rooms {
-		room.UnregisterC <- client
+		room.unregisterC <- client
 	}
 }
 
@@ -130,7 +130,7 @@ func (c *Client) handleMessage(msgB []byte) {
 		roomName := newMsg.Target
 
 		if room := c.wsManager.findRoomByName(roomName.ID); room != nil {
-			room.Broadcast <- []byte(newMsg.Message)
+			room.broadcast <- []byte(newMsg.Message)
 		}
 
 	case MessageActionJoin:
@@ -157,7 +157,7 @@ func (c *Client) handleLeaveRoom(msg *WsMessage) {
 
 	if _, ok := c.rooms[room]; ok {
 		delete(c.rooms, room)
-		room.UnregisterC <- c
+		room.unregisterC <- c
 	}
 }
 
@@ -185,7 +185,7 @@ func (c *Client) joinRoom(roomName string, sender *Client) {
 
 	if !c.isInRoom(room) {
 		c.rooms[room] = struct{}{}
-		room.RegisterC <- c
+		room.registerC <- c
 		c.notifyRoomJoined(room, sender)
 	}
 }

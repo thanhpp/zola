@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/thanhpp/zola/internal/auco/app"
 )
 
 const (
@@ -11,9 +12,7 @@ const (
 	writeBufferSize = 4096
 )
 
-func NewWsController() *WsCtrl {
-	wsMan := NewWsManager()
-	go wsMan.Run()
+func NewWsController(wm *app.WsManager) *WsCtrl {
 	return &WsCtrl{
 		upgrader: &websocket.Upgrader{
 			ReadBufferSize:  readBufferSize,
@@ -22,6 +21,6 @@ func NewWsController() *WsCtrl {
 				return true
 			},
 		},
-		wsManager: wsMan,
+		wsManager: wm,
 	}
 }
