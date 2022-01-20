@@ -8,5 +8,9 @@ var (
 
 type RoomRepository interface {
 	FindRoomBetween(userA, userB string) (*WsRoom, error)
-	Create(room *WsRoom) error
+	CreateRoom(room *WsRoom) error
+}
+
+type MessageRepository interface {
+	CreateMessage(msg *WsMessage) error
 }

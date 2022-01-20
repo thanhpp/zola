@@ -30,7 +30,7 @@ func start(configPath string) {
 	}
 	logger.Info("dbao OK")
 
-	wmManager := app.NewWsManager(gormdb.NewGormDB())
+	wmManager := app.NewWsManager(gormdb.NewGormDB(), gormdb.NewGormDB())
 
 	wsServer := websocketserver.NewWebsocketServer(&aucoconfig.Get().HTTPServer, wmManager)
 	wsServerDaemon, err := wsServer.Start()

@@ -17,6 +17,7 @@ type gormDB struct {
 	db        *gorm.DB
 	fac       *app.WsFactory
 	roomModel *RoomDB
+	msgModel  *MessageDB
 }
 
 func NewGormDB() *gormDB {
@@ -68,5 +69,6 @@ func InitConnection(dsn string, logLevel string, color bool) error {
 func autoMigrate() error {
 	return gDB.AutoMigrate(
 		&RoomDB{},
+		&MessageDB{},
 	)
 }

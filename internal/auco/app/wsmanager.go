@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/gorilla/websocket"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type WsManager struct {
@@ -9,14 +10,16 @@ type WsManager struct {
 	clientMap *wsClientMap
 	roomMap   *wsRoomMap
 	roomRepo  RoomRepository
+	msgRepo   MessageRepository
 }
 
-func NewWsManager(roomRepo RoomRepository) *WsManager {
+func NewWsManager(roomRepo RoomRepository, msgRepo MessageRepository) *WsManager {
 	return &WsManager{
 		fac:       &WsFactory{},
 		clientMap: newWsClientMap(),
 		roomMap:   newWsRoomMap(),
 		roomRepo:  roomRepo,
+		msgRepo:   msgRepo,
 	}
 }
 
@@ -36,6 +39,7 @@ func (wm *WsManager) findRoom(userA, userB string) (*WsRoom, bool) {
 		return room, ok
 	}
 
+	logger.Errorf("WsManager: findRoom error %v", err)
 	return nil, false
 }
 
@@ -46,7 +50,7 @@ func (wm *WsManager) createRoom(userA, userB string) (*WsRoom, error) {
 	}
 
 	// add to repository
-	err = wm.roomRepo.Create(room)
+	err = wm.roomRepo.CreateRoom(room)
 	if err != nil {
 		return nil, err
 	}

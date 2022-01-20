@@ -1,6 +1,10 @@
 package app
 
-import "github.com/thanhpp/zola/pkg/logger"
+import (
+	"time"
+
+	"github.com/thanhpp/zola/pkg/logger"
+)
 
 func (c *WsClient) handleNewMessage(msgB []byte) {
 	var newMsg = new(WsMessage)
@@ -15,8 +19,10 @@ func (c *WsClient) handleNewMessage(msgB []byte) {
 	case MsgEventReconnect:
 
 	case MsgEventAvaliable:
+		c.conn.SetReadDeadline(time.Now().Add(pongWait))
 
 	case MsgEventDisconnect:
+		c.disconnect()
 
 	case MsgEventDeleteMessage:
 
@@ -56,6 +62,21 @@ func (c *WsClient) handleSend(msg *WsMessage) {
 		return
 	}
 
-	// send message to the room
-	room.sendMessageToAll([]byte(msg.Content))
+	// create a new message
+	newMsg, err := c.wsManager.fac.NewMessage(room.ID, msg.SenderID, msg.ReceiverID, msg.Created, msg.Content)
+	if err != nil {
+		logger.Errorf("WsClient %s: create message error: %v", c.ID, err)
+		return
+	}
+
+	// save the message
+	if err := c.wsManager.msgRepo.CreateMessage(newMsg); err != nil {
+		logger.Errorf("WsClient %s: create message error: %v", c.ID, err)
+		return
+	}
+
+	// send the message to the room
+	newMsg.Event = MsgEventOnMessage
+
+	room.sendMessageToAll(newMsg.Encode())
 }

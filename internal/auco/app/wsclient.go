@@ -35,6 +35,7 @@ func (c *WsClient) readPump() {
 	// cleanup
 	defer func() {
 		readTicker.Stop()
+		c.disconnect()
 	}()
 
 	// setup
@@ -117,4 +118,12 @@ func (c *WsClient) send(msg []byte) {
 	default:
 		logger.Errorf("WsClient %s: send message failed", c.ID)
 	}
+}
+
+func (c *WsClient) disconnect() {
+	c.wsManager.clientMap.delete(c)
+	c.wsManager.roomMap.walkLock(func(wr *WsRoom) {
+		wr.clientMap.delete(c)
+	})
+	close(c.sendC)
 }

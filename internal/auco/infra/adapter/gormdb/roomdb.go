@@ -38,6 +38,6 @@ func (g gormDB) FindRoomBetween(userA, userB string) (*app.WsRoom, error) {
 	return g.unmarshalRoom(roomDB), nil
 }
 
-func (g gormDB) Create(room *app.WsRoom) error {
+func (g gormDB) CreateRoom(room *app.WsRoom) error {
 	return g.db.Model(g.roomModel).Create(g.marshalRoom(room)).Error
 }
