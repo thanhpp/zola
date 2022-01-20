@@ -6,7 +6,7 @@ import styles from "./Chat.module.css";
 import ScrollToBottom from "react-scroll-to-bottom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Comment, Avatar } from "antd";
+import { Comment } from "antd";
 dayjs.extend(relativeTime);
 
 const conversation = {
@@ -85,9 +85,6 @@ export default function Chat() {
 			</ScrollToBottom>
 
 			<Comment
-				avatar={
-					<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
-				}
 				content={
 					<Editor
 						onChange={handleChange}

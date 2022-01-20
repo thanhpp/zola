@@ -1,0 +1,30 @@
+.message-sender-bubble {
+	width: 600px;
+	border-radius: 20px;
+	margin-bottom: 30px;
+	display: inline-block;
+}
+
+.message-reciever-bubble {
+	width: 600px;
+	background-color: #1890ff;
+	color: white;
+	border-radius: 20px;
+	margin: 10px 0 30px auto;
+	display: block;
+}
+
+.message-sender-name {
+	display: flex;
+	justify-content: space-between;
+}
+
+.message-icon {
+	float: left;
+}
+
+.message-reciever-name {
+	display: flex;
+	justify-content: space-between;
+	color: white;
+}

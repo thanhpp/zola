@@ -39,7 +39,9 @@ export default function Comments(props) {
 				lineHeight: "32px",
 			}}
 		>
-			<Button onClick={onLoadMore}>Load more comments</Button>
+			<Button onClick={onLoadMore} loading={isLoading}>
+				Load more comments
+			</Button>
 		</div>
 	) : null;
 
@@ -62,21 +64,25 @@ export default function Comments(props) {
 								<Skeleton avatar title={false} loading={isLoading} active>
 									<Comment
 										key={comment.id}
-										actions={[
-											<Tooltip
-												key="comment-basic-delete"
-												title="Delete comment"
-											>
-												<span
-													onClick={() =>
-														handleDelete(comment.id, comment.comment)
-													}
-												>
-													<DeleteOutlined />
-													Delete
-												</span>
-											</Tooltip>,
-										]}
+										actions={
+											user.role === "admin"
+												? [
+														<Tooltip
+															key="comment-basic-delete"
+															title="Delete comment"
+														>
+															<span
+																onClick={() =>
+																	handleDelete(comment.id, comment.comment)
+																}
+															>
+																<DeleteOutlined />
+																Delete
+															</span>
+														</Tooltip>,
+												  ]
+												: null
+										}
 										author={comment.poster.name}
 										avatar={
 											comment.poster.avatar ? (
