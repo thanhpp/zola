@@ -91,6 +91,8 @@ async function searchPosts(searchItem) {
               },
             },
           },
+        ],
+        should: [
           {
             match_phrase: {
               described: {
@@ -98,8 +100,6 @@ async function searchPosts(searchItem) {
               },
             },
           },
-        ],
-        should: [
           {
             query_string: {
               query: `${searchItem.keyword}`,
