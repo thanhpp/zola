@@ -1,99 +1,105 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Messages from "../../components/chat/Messages";
 import Editor from "../../components/chat/Editor";
-import Spinner from "../../components/spinner/Spinner";
+//import Spinner from "../../components/spinner/Spinner";
 import styles from "./Chat.module.css";
 import ScrollToBottom from "react-scroll-to-bottom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Comment, Avatar } from "antd";
+import { Comment, message } from "antd";
+import io from "socket.io-client";
+import { useParams } from "react-router-dom";
+import AuthContext from "../../context/authContext";
 dayjs.extend(relativeTime);
 
-const conversation = {
-	id: "2",
-	messages: [
-		{
-			messageId: "1234345",
-			message: "This is a messages",
-			unread: 1, // đã đọc
-			created: "1638785915",
-			sender: {
-				id: "41324124", // là user đang đăng nhập
-				username: "John Doe",
-				avatar: "https://joeschmoe.io/api/v1/random",
-			},
-		},
-		{
-			messageId: "1234335",
-			message: "This is a messages",
-			unread: 0, // chưa đọc
-			created: "1638785965",
-			sender: {
-				id: "41324123",
-				username: "John Doe",
-				avatar: "https://joeschmoe.io/api/v1/random",
-			},
-		},
-	],
-	isBlocked: 0, // không bị block
-};
+const socket = io.connect(process.env.REACT_APP_CHAT_URL, {
+	reconnection: false,
+});
 
-export default function Chat() {
-	const [messages, setMessages] = useState(conversation.messages);
-	const [message, setMessage] = useState({
-		submitting: false,
-		value: "",
+export default function Chat(props) {
+	//const { receiverId } = props;
+	const { user } = useContext(AuthContext);
+	const { id } = useParams();
+	const [isLoading, setIsLoading] = useState(false);
+	const [messages, setMessages] = useState([]);
+	const [chatMessage, setChatMessage] = useState({
+		message_id: "",
+		event: "joinchat",
+		sender: user.userId,
+		receiver: 41324124,
+		created: Date.now(),
+		content: "",
 	});
 
-	const [isLoading, setIsLoading] = useState(false);
-
 	const handleChange = (e) => {
-		setMessage({ ...message, value: e.target.value });
+		setChatMessage({
+			...message,
+			...{
+				message_id: "",
+				event: "send",
+				sender: user.userId,
+				receiver: 41324124,
+				created: Date.now(),
+				content: e.target.value,
+			},
+		});
 	};
 
+	useEffect(() => {
+		socket.emit("joinchat", chatMessage, (error) => {
+			message.error(error);
+		});
+
+		socket.on("connection_timeout", (err) => {
+			console.log(err);
+		});
+
+		socket.on("connect_error", (err) => {
+			console.log(err);
+		});
+
+		socket.on("reconnecting", () => {
+			console.log("trying to recconect");
+		});
+
+		socket.on("reconnect_attempt", () => {
+			console.log("trying to recconect with many attempts ...");
+		});
+
+		socket.on("disconnect", (reason) => {
+			console.log("socket connection disconnected", reason);
+		});
+
+		socket.on("onmessage", (incommingMessage) => {
+			setMessages((messages) => [...messages, incommingMessage]);
+		});
+		return () => {
+			socket.disconnect();
+		};
+	}, [chatMessage]);
+
 	const handleSubmit = () => {
-		if (!!message.submitting) {
+		if (!chatMessage.content) {
 			return;
 		}
-
-		setMessage({ ...message, submitting: true });
-
-		setTimeout(() => {
-			setMessage({
-				...message,
-				submitting: false,
-				value: "",
-			});
-
-			setMessages([
-				...messages,
-				{
-					author: "You",
-					content: <p>{message.value}</p>,
-					datetime: dayjs().fromNow(),
-				},
-			]);
-		}, 1000);
+		setIsLoading(true);
+		socket.emit("send", chatMessage);
+		setIsLoading(false);
 	};
 
 	return (
 		<div className={styles.background}>
-			{isLoading && <Spinner />}
-
 			<ScrollToBottom className={styles.container}>
 				{messages.length > 1 && <Messages messages={messages} />}
 			</ScrollToBottom>
 
 			<Comment
-				avatar={
-					<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
-				}
 				content={
 					<Editor
 						onChange={handleChange}
 						onSubmit={handleSubmit}
-						submitting={message.submitting}
-						value={message.value}
+						submitting={isLoading}
+						value={chatMessage}
 					/>
 				}
 			/>

@@ -21,6 +21,7 @@ export default function ProfileForm(props) {
 		country,
 		name,
 	} = props.user;
+	const { isEditable } = props;
 	// const [files, setFiles] = useState({
 	// 	avatar: avatar,
 	// 	cover_img: cover_img,
@@ -74,28 +75,28 @@ export default function ProfileForm(props) {
 				}}
 			>
 				<Form.Item label="Name" name="name">
-					<Input />
+					<Input disabled={!isEditable} />
 				</Form.Item>
 				<Form.Item label="Username" name="username">
-					<Input />
+					<Input disabled={!isEditable} />
 				</Form.Item>
 				<Form.Item label="Phone number" name="phone">
 					<Input disabled />
 				</Form.Item>
 				<Form.Item label="Address" name="address">
-					<Input />
+					<Input disabled={!isEditable} />
 				</Form.Item>
 				<Form.Item label="City" name="city">
-					<Input />
+					<Input disabled={!isEditable} />
 				</Form.Item>
 				<Form.Item label="Country" name="country">
-					<Input />
+					<Input disabled={!isEditable} />
 				</Form.Item>
 				<Form.Item name="link" label="Website">
-					<Input />
+					<Input disabled={!isEditable} />
 				</Form.Item>
 				<Form.Item name="description" label="Description">
-					<Input.TextArea maxLength={150} />
+					<Input.TextArea maxLength={150} disabled={!isEditable} />
 				</Form.Item>
 				{/* <Form.Item
 					name="avatar"
@@ -132,20 +133,22 @@ export default function ProfileForm(props) {
 						<Button icon={<UploadOutlined />}>Click to upload</Button>
 					</Upload>
 				</Form.Item> */}
-				<Form.Item>
-					<Space>
-						<Button type="primary" htmlType="submit">
-							Submit
-						</Button>
-						<Button
-							type="primary"
-							htmlType="button"
-							onClick={() => form.resetFields()}
-						>
-							Cancel
-						</Button>
-					</Space>
-				</Form.Item>
+				{isEditable ? (
+					<Form.Item>
+						<Space>
+							<Button type="primary" htmlType="submit">
+								Submit
+							</Button>
+							<Button
+								type="primary"
+								htmlType="button"
+								onClick={() => form.resetFields()}
+							>
+								Cancel
+							</Button>
+						</Space>
+					</Form.Item>
+				) : null}
 			</Form>
 		</Card>
 	);

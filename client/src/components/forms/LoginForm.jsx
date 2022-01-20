@@ -18,7 +18,10 @@ export default function LoginForm(props) {
 			wrapperCol={{
 				span: 16,
 			}}
-			initialValues={{}}
+			initialValues={{
+				phonenumber: "0965508091",
+				password: "Ppt190898",
+			}}
 			onFinish={handleLoginSubmit}
 			onFinishFailed={onFinishFailed}
 			autoComplete="off"

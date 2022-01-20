@@ -1,7 +1,7 @@
 import React from "react";
 import "antd/dist/antd.css";
 import { List, Avatar, Typography, Popconfirm, Badge } from "antd";
-import { DeleteOutlined, LockOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Link } from "react-router-dom";
@@ -25,18 +25,11 @@ export default function Conversations({ conversations }) {
 					key={conversation.id}
 					actions={[
 						<Popconfirm
-							title="Sure to delete?"
+							title="Sure to delete conversation?"
 							onConfirm={() => console.log(conversation.id)}
 						>
 							<DeleteOutlined />
 							<span className="converstion-action-delete"> Delete</span>
-						</Popconfirm>,
-						<Popconfirm
-							title="Sure to block?"
-							onConfirm={() => console.log(conversation.partner.id)}
-						>
-							<LockOutlined />
-							<span className="converstion-action-delete"> Block User</span>
 						</Popconfirm>,
 					]}
 				>
