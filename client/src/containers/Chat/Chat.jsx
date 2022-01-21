@@ -68,7 +68,7 @@ export default function Chat(props) {
 		}
 		setIsLoading(true);
 		//send message
-		socket.send(chatMessage);
+		socket.send(JSON.stringify(chatMessage));
 		setIsLoading(false);
 	};
 
