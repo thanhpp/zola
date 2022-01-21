@@ -1,0 +1,19 @@
+Name: auco_srv
+
+Log:
+  Color:      true
+  LoggerName: ACSrv
+  Level:      Debug
+
+HTTPServer:
+  Host:       0.0.0.0
+  Port:       12000
+
+Database:
+  Host:       127.0.0.1
+  Port:       5432
+  DBName:     auco_db
+  User:       auco_user
+  Pass:       auco_pass
+  LogLevel:   Info
+  LogColor:   true

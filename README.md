@@ -78,6 +78,31 @@
 - [ ] get_list_conversation
 - [ ] delete_conversation
 
+- TODO (data whatever)
+  - [ ] Tạo connection || ws://localhost:12000/ws ||
+  - [ ] Join room
+    - ```go
+      type WsMessage struct {
+        MsgID      string `json:"message_id"` // null
+        Event      string `json:"event"`      // joinroom
+        SenderID   string `json:"sender"`     // user-id
+        ReceiverID string `json:"receiver"`   // receiver-id
+        Created    string `json:"created"`    // time.Now.UnixMili()
+        Content    string `json:"content"`    // null
+      }
+      ```
+  - [ ] send message
+    - ```go
+      type WsMessage struct {
+        MsgID      string `json:"message_id"` // null
+        Event      string `json:"event"`      // send
+        SenderID   string `json:"sender"`     // user-id
+        ReceiverID string `json:"receiver"`   // receiver-id
+        Created    string `json:"created"`    // time.Now.UnixMili()
+        Content    string `json:"content"`    // content
+      }
+      ```
+
 #### More APIs
 - [ ] set_official_account
 - [ ] check_verify_code
