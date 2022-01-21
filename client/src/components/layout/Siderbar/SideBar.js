@@ -11,8 +11,8 @@ export const sider = [
 		navName: "Messages",
 		link: "messages",
 	},
-	{
-		navName: "Search",
-		link: "search",
-	},
+	// {
+	// 	navName: "Search",
+	// 	link: "search",
+	// },
 ];

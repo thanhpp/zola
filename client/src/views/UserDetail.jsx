@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import { Row, Col, Tabs, message } from "antd";
 import ProfileCard from "../components/user/ProfileCard";
 import ProfileForm from "../components/user/ProfileForm";
 import Friends from "../components/user/Friends";
-import PostsList from "../containers/List/PostsList";
-
+//import PostsList from "../containers/List/PostsList";
+import AuthContext from "../context/authContext";
 import {
 	useMutation,
 	useQuery,
@@ -19,7 +19,9 @@ import Spinner from "../components/spinner/Spinner";
 const { TabPane } = Tabs;
 
 export default function UserDetail() {
+	const { user } = useContext(AuthContext);
 	const queryClient = useQueryClient();
+	const [isEditable, setIsEditable] = useState(false);
 	const { id } = useParams();
 	const { data: userInfos, isLoading } = useQuery(
 		["users", id],
@@ -34,6 +36,13 @@ export default function UserDetail() {
 		}
 	);
 
+	useEffect(() => {
+		//console.log("running effect");
+		if (id === user.userId) {
+			setIsEditable(true);
+		}
+	}, [id, user]);
+
 	const { isLoading: isEditLoading, mutate: editUser } = useMutation(
 		editUserInfo,
 		{
@@ -47,6 +56,7 @@ export default function UserDetail() {
 					content: `Code: ${error.response.data.code};
 				Message: ${error.response.data.message}`,
 				});
+				queryClient.invalidateQueries("users", `${id}`);
 			},
 		}
 	);
@@ -84,13 +94,14 @@ export default function UserDetail() {
 					<Tabs defaultActiveKey="1" type="card" size={"middle"}>
 						<TabPane tab="Presonal Info" key="1">
 							<ProfileForm
+								isEditable={isEditable}
 								user={userInfos.data.data}
 								editUserHandler={editUser}
 							/>
 						</TabPane>
-						<TabPane tab="Posts" key="2">
+						{/* <TabPane tab="Posts" key="2">
 							<PostsList id={userInfos.data.data.id} />
-						</TabPane>
+						</TabPane> */}
 					</Tabs>
 				</Col>
 

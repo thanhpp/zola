@@ -33,8 +33,8 @@ export default function HeaderMenu() {
 	//if (isLoading) return <Spinner />;
 	if (status === "error") {
 		//console.log(error);
-		message.error(`Code: ${error.response.data.code};
-		Message:${error.response.data.message}`);
+		message.error(`Code: ${error.response?.data?.code};
+		Message:${error.response?.data?.message}`);
 	}
 	const handleLogoutClick = () => {
 		refetch();

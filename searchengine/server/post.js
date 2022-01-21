@@ -1,8 +1,18 @@
 const client = require('../config/connection');
 const index = 'posts';
 
-async function addPost({ id, ...post }) {
-  return await client.index({ index, id: id, body: post });
+async function addPost(post) {
+  let postObj = {
+    id: post.id,
+    described: post.described,
+    author: {
+      id: post.author.id,
+      name: post.author.name || post.author.username,
+    },
+    created: post.created,
+    modified: post.modified,
+  };
+  return await client.index({ index, id: post.id, body: postObj });
 }
 
 async function addManyPosts(posts) {
@@ -10,9 +20,14 @@ async function addManyPosts(posts) {
     let postObj = {
       id: post.id,
       described: post.described,
-      author: post.author.name,
+      author: {
+        id: post.author.id,
+        name: post.author.name || post.author.username,
+      },
+      created: post.created,
+      modified: post.modified,
     };
-    return [{ index: { _index: index, _id: post.user_id } }, postObj];
+    return [{ index: { _index: index, _id: post.id } }, postObj];
   });
   const { body: bulkResponse } = await client.bulk({
     refresh: true,
@@ -39,7 +54,12 @@ async function editPost(editedPost) {
   let postObj = {
     id: editedPost.id,
     described: editedPost.described,
-    author: editedPost.author.name,
+    author: {
+      id: editedPost.author.id,
+      name: editedPost.author.name || editedPost.author.username,
+    },
+    created: editedPost.created,
+    modified: editedPost.modified,
   };
   return await client.update({
     index,
@@ -61,9 +81,34 @@ async function getPost(id) {
 async function searchPosts(searchItem) {
   const query = {
     query: {
-      query_string: {
-        query: `*${searchItem.keyword}*`,
-        fields: ['described'],
+      bool: {
+        must: [
+          {
+            match: {
+              described: {
+                query: `${searchItem.keyword}`,
+                operator: 'AND',
+              },
+            },
+          },
+        ],
+        should: [
+          {
+            match_phrase: {
+              described: {
+                query: `${searchItem.keyword}`,
+              },
+            },
+          },
+          {
+            query_string: {
+              query: `${searchItem.keyword}`,
+              fields: ['described'],
+            },
+          },
+        ],
+        minimum_should_match: 1,
+        boost: 1.0,
       },
     },
     from: searchItem.index,
