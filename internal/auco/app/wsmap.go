@@ -22,6 +22,7 @@ func newWsRoomMap() *wsRoomMap {
 
 func (rm *wsRoomMap) add(room *WsRoom) {
 	rm.rw.Lock()
+	logger.Debugf("WsRoomMap: added room %s", room.key())
 	rm.m[room.key()] = room
 	rm.rw.Unlock()
 }
@@ -36,6 +37,9 @@ func (rm *wsRoomMap) delete(room *WsRoom) {
 
 func (rm *wsRoomMap) findByUserIDs(userA, userB string) (*WsRoom, bool) {
 	rm.rw.RLock()
+	if userA > userB {
+		userA, userB = userB, userA
+	}
 	room, ok := rm.m[userA+"-"+userB]
 	rm.rw.RUnlock()
 	return room, ok
