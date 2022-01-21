@@ -1,6 +1,8 @@
 package dto
 
 import (
+	"strconv"
+
 	"github.com/thanhpp/zola/internal/laclongquan/application"
 )
 
@@ -77,7 +79,7 @@ func (data *GetCommentRespData) setData(res *application.GetPostCommentRes, form
 	avatarURL, _ := formUserMediaURL(res.Comment.GetCreator())
 	data.ID = res.Comment.IDString()
 	data.Comment = res.Comment.GetContent()
-	data.Created = res.Comment.CreatedAt.String()
+	data.Created = strconv.FormatInt(res.Comment.CreatedAt.Unix(), 10)
 	data.Poster = GetCommentRespPosterData{
 		ID:     res.Comment.GetCreator().ID().String(),
 		Name:   res.Comment.GetCreator().GetName(),
