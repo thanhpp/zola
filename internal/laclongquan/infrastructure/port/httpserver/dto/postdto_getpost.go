@@ -16,9 +16,10 @@ type VideoResponse struct {
 }
 
 type AuthorResponse struct {
-	ID     string `json:"id"`
-	Name   string `json:"name"`
-	Avatar string `json:"avatar"`
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
 }
 
 type GetPostResponseData struct {
@@ -92,9 +93,10 @@ func (resp *GetPostResponse) SetData(
 	if getPostResult.Author != nil {
 		avatarURL, _ := formUserMediaFN(getPostResult.Author)
 		resp.Data.Author = AuthorResponse{
-			ID:     getPostResult.Author.ID().String(),
-			Name:   getPostResult.Author.Name(),
-			Avatar: avatarURL,
+			ID:       getPostResult.Author.ID().String(),
+			Name:     getPostResult.Author.Name(),
+			Username: getPostResult.Author.GetUsername(),
+			Avatar:   avatarURL,
 		}
 		resp.Data.State = getPostResult.Author.State().String()
 	}
