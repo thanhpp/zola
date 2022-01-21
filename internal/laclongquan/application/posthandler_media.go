@@ -27,3 +27,7 @@ func (p PostHandler) GetMedia(ctx context.Context, userID, postID, mediaID strin
 
 	return post.FindMediaByID(mediaID)
 }
+
+func (p PostHandler) GetMediaByID(ctx context.Context, mediaID string) (*entity.Media, error) {
+	return p.repo.GetMediaByID(ctx, mediaID)
+}
