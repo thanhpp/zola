@@ -3,9 +3,7 @@ version: "3.9"
 services:
   database:
     container_name: pgdatabase
-    build:
-      context: ./postgres
-      dockerfile: Dockerfile
+    image: ghcr.io/thanhpp/zola/pgdb:latest
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
@@ -22,15 +20,15 @@ services:
       dockerfile: ./build/auco/Dockerfile
     deploy:
       restart_policy:
-          condition: on-failure
-          max_attempts: 5
+        condition: on-failure
+        max_attempts: 5
     depends_on:
       - database
     environment:
-      WAIT_HOSTS:   database:5432
-      WAIT_AFTER:   5
-      AC_DB_HOST:   database
-      AC_DB_PORT:   5432
+      WAIT_HOSTS: database:5432
+      WAIT_AFTER: 5
+      AC_DB_HOST: database
+      AC_DB_PORT: 5432
     ports:
       - 12000:12000
     networks:

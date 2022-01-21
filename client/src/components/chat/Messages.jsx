@@ -9,7 +9,7 @@ dayjs.extend(relativeTime);
 const { Meta } = Card;
 
 export default function Messages({ messages }) {
-	const userId = "41324124";
+	//const userId = "41324124";
 	console.log(messages);
 	return (
 		<>
