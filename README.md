@@ -79,8 +79,8 @@
 - [ ] delete_conversation
 
 - TODO (data whatever)
-  - [ ] Tạo connection || ws://localhost:12000/ws ||
-  - [ ] Join room
+  - [x] Tạo connection || ws://localhost:12000/ws ||
+  - [x] Join room
     - ```go
       type WsMessage struct {
         MsgID      string `json:"message_id"` // null
@@ -91,7 +91,7 @@
         Content    string `json:"content"`    // null
       }
       ```
-  - [ ] send message
+  - [x] send message
     - ```go
       type WsMessage struct {
         MsgID      string `json:"message_id"` // null
