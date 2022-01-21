@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Messages from "../../components/chat/Messages";
 import Editor from "../../components/chat/Editor";
-//import Spinner from "../../components/spinner/Spinner";
 import styles from "./Chat.module.css";
 import ScrollToBottom from "react-scroll-to-bottom";
 import dayjs from "dayjs";
@@ -12,10 +11,8 @@ import { useParams } from "react-router-dom";
 import AuthContext from "../../context/authContext";
 dayjs.extend(relativeTime);
 
-let socket = new WebSocket(process.env.REACT_APP_CHAT_URL);
-export default function Chat(props) {
-	//const { receiverId } = props;
-	const { user } = useContext(AuthContext);
+function Chat(props) {
+	const { socket, user } = props;
 	const { id } = useParams();
 	const [isLoading, setIsLoading] = useState(false);
 	const [messages, setMessages] = useState([]);
@@ -24,7 +21,7 @@ export default function Chat(props) {
 		event: "joinchat",
 		sender: user.userId,
 		receiver: id,
-		created: Date.now(),
+		created: Date.now().toString(),
 		content: "",
 	});
 
@@ -36,7 +33,7 @@ export default function Chat(props) {
 				event: "send",
 				sender: user.userId,
 				receiver: id,
-				created: Date.now(),
+				created: Date.now().toString(),
 				content: e.target.value,
 			},
 		});
@@ -51,9 +48,10 @@ export default function Chat(props) {
 
 		//receive message
 		socket.onmessage = (e) => {
-			console.log(e);
-			console.log(e.data);
+			//console.log(e);
+			//console.log(e.data);
 			console.log(JSON.parse(e.data));
+			return false;
 			//setMessages((messages) => [...messages, e.data]);
 		};
 
@@ -70,8 +68,11 @@ export default function Chat(props) {
 			// console.log("connection openned");
 		};
 
-		console.log(socket.readyState);
+		//console.log(socket.readyState);
 
+		if (socket.readyState === 0) {
+			message.loading("connecting to websocket");
+		}
 		//close when unmount
 		return () => {
 			socket.close();
@@ -79,27 +80,30 @@ export default function Chat(props) {
 	}, []);
 
 	const handleSubmit = () => {
-		if (!chatMessage.content) {
-			return;
-		}
-		setIsLoading(true);
-		//send message
-		if (socket.readyState !== 1) {
+		try {
+			if (!chatMessage.content) {
+				return;
+			}
+			setIsLoading(true);
+			//send message
+			socket.send(JSON.stringify(chatMessage));
+			setIsLoading(false);
+			setChatMessage({
+				...message,
+				...{
+					message_id: "",
+					event: "send",
+					sender: user.userId,
+					receiver: id,
+					created: Date.now().toString(),
+					content: "",
+				},
+			});
+		} catch (error) {
+			console.log(error);
+			setIsLoading(false);
 			message.error("error when connect with websocket");
 		}
-		socket.send(JSON.stringify(chatMessage));
-		setIsLoading(false);
-		setChatMessage({
-			...message,
-			...{
-				message_id: "",
-				event: "send",
-				sender: user.userId,
-				receiver: "0fc9ef71-708e-11ec-bd01-0242c0a83003",
-				created: Date.now(),
-				content: "",
-			},
-		});
 	};
 
 	return (
@@ -120,4 +124,13 @@ export default function Chat(props) {
 			/>
 		</div>
 	);
+}
+
+export default function WrapperChat() {
+	const { user } = useContext(AuthContext);
+	const { userId } = user;
+	const socket = new WebSocket(
+		`${process.env.REACT_APP_CHAT_URL}?id=${userId}`
+	);
+	return <Chat socket={socket} user={user} />;
 }

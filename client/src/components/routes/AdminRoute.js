@@ -6,7 +6,7 @@ import UserDetail from "../../views/UserDetail";
 import PostsList from "../../containers/List/PostsList";
 import PostDetail from "../../views/PostDetail";
 import ConversationsList from "../../containers/List/ConversationsList";
-import Chat from "../../containers/Chat/Chat";
+import WrapperChat from "../../containers/Chat/Chat";
 import Search from "../../views/Search";
 
 export const adminRoutes = [
@@ -21,7 +21,7 @@ export const adminRoutes = [
 			{ path: "posts", element: <PostsList /> },
 			{ path: "posts/:id", element: <PostDetail /> },
 			{ path: "messages", element: <ConversationsList /> },
-			{ path: "messages/:id", element: <Chat /> },
+			{ path: "messages/:id", element: <WrapperChat /> },
 			{ path: "search", element: <Search /> },
 			//{ path: "*", element: <Navigate to="." /> },
 		],

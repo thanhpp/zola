@@ -54,18 +54,18 @@ func (c commentGorm) GetByIDAndPostID(ctx context.Context, commentID, postID str
 func (c commentGorm) getByPostIDCommentID(ctx context.Context, tx *gorm.DB, postID, commentID string) (*entity.Comment, error) {
 	var cmtDB = new(CommentDB)
 
-	post, err := c.postGorm.GetByID(ctx, cmtDB.PostUUID)
-	if err != nil {
-		return nil, err
-	}
-
-	err = tx.WithContext(ctx).Model(c.cmtModel).
+	err := tx.WithContext(ctx).Model(c.cmtModel).
 		Where("post_uuid = ? AND comment_uuid = ?", postID, commentID).
 		Take(cmtDB).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, repository.ErrCommentNotFound
 		}
+		return nil, err
+	}
+
+	post, err := c.postGorm.GetByID(ctx, postID)
+	if err != nil {
 		return nil, err
 	}
 

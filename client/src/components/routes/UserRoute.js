@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import UserLayout from "../../containers/Layout/UserLayout";
 import ConversationsList from "../../containers/List/ConversationsList";
-import Chat from "../../containers/Chat/Chat";
+import WrapperChat from "../../containers/Chat/Chat";
 
 export const userRoutes = [
 	{
@@ -12,7 +12,7 @@ export const userRoutes = [
 			//{ index: true, element: <ConversationsList /> },
 			{ path: "messages", element: <ConversationsList /> },
 			{ path: "/", element: <Navigate to="/messages" /> },
-			{ path: "messages/:id", element: <Chat /> },
+			{ path: "messages/:id", element: <WrapperChat /> },
 			{ path: "*", element: <Navigate to="." /> },
 		],
 	},
