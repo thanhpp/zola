@@ -7,14 +7,10 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Comment, message } from "antd";
-import io from "socket.io-client";
 import { useParams } from "react-router-dom";
+import { socket } from "../../api/socket";
 import AuthContext from "../../context/authContext";
 dayjs.extend(relativeTime);
-
-const socket = io.connect(process.env.REACT_APP_CHAT_URL, {
-	reconnection: false,
-});
 
 export default function Chat(props) {
 	//const { receiverId } = props;
@@ -46,35 +42,23 @@ export default function Chat(props) {
 	};
 
 	useEffect(() => {
-		socket.emit("joinchat", chatMessage, (error) => {
-			message.error(error);
-		});
+		//connect to socket
+		socket.onopen = () => {
+			console.log("connected, bitches");
+		};
 
-		socket.on("connection_timeout", (err) => {
-			console.log(err);
-		});
+		//receive message
+		socket.onmessage = (e) => {
+			console.log(e);
+			console.log(e.data);
+		};
 
-		socket.on("connect_error", (err) => {
-			console.log(err);
-		});
-
-		socket.on("reconnecting", () => {
-			console.log("trying to recconect");
-		});
-
-		socket.on("reconnect_attempt", () => {
-			console.log("trying to recconect with many attempts ...");
-		});
-
-		socket.on("disconnect", (reason) => {
-			console.log("socket connection disconnected", reason);
-		});
-
-		socket.on("onmessage", (incommingMessage) => {
-			setMessages((messages) => [...messages, incommingMessage]);
-		});
+		//error
+		socket.onerror = (error) => {
+			console.log(error);
+		};
 		return () => {
-			socket.disconnect();
+			socket.close();
 		};
 	}, [chatMessage]);
 
@@ -83,7 +67,8 @@ export default function Chat(props) {
 			return;
 		}
 		setIsLoading(true);
-		socket.emit("send", chatMessage);
+		//send message
+		socket.send(JSON.stringify(chatMessage));
 		setIsLoading(false);
 	};
 
@@ -99,7 +84,7 @@ export default function Chat(props) {
 						onChange={handleChange}
 						onSubmit={handleSubmit}
 						submitting={isLoading}
-						value={chatMessage}
+						value={chatMessage.content}
 					/>
 				}
 			/>
