@@ -31,7 +31,7 @@ func (ctrl UserController) AdminGetUsers(c *gin.Context) {
 			ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalidate user", nil)
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
 		return
 	}
 

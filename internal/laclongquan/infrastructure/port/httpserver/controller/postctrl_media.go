@@ -15,12 +15,12 @@ const (
 )
 
 func (ctrl PostController) GetMedia(c *gin.Context) {
-	userID, err := getUserUUIDFromClaims(c)
-	if err != nil {
-		logger.Errorf("get user id from claims error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
-		return
-	}
+	// userID, err := getUserUUIDFromClaims(c)
+	// if err != nil {
+	// 	logger.Errorf("get user id from claims error: %v", err)
+	// 	ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+	// 	return
+	// }
 
 	postID, err := getPostID(c)
 	if err != nil {
@@ -43,7 +43,7 @@ func (ctrl PostController) GetMedia(c *gin.Context) {
 		videoThumbFlags = true
 		mediaID = mediaID[:len(mediaID)-len(ThumbPostfix)]
 	}
-	media, err := ctrl.handler.GetMedia(c, userID.String(), postID.String(), mediaID)
+	media, err := ctrl.handler.GetMedia(c, "userID.String()", postID.String(), mediaID)
 	if err != nil {
 		logger.Errorf("get media %s error: %v", mediaID, err)
 		switch err {

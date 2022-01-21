@@ -104,8 +104,10 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		postGr.DELETE("/:postid/comment/:commentid", postCtrl.DeleteComment)
 
 		// media
-		postGr.GET("/:postid/media/:mediaid", postCtrl.GetMedia)
+		// postGr.GET("/:postid/media/:mediaid", postCtrl.GetMedia)
 	}
+
+	r.GET("/post/:postid/media/:mediaid", postCtrl.GetMedia)
 
 	reportGr := r.Group("/report")
 	{
@@ -116,7 +118,22 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	adminGr := r.Group("/admin")
 	{
 		adminGr.Use(s.AuthMiddleware())
-		adminGr.GET("/users", userCtrl.AdminGetUsers)
+		usersGr := adminGr.Group("/users")
+		{
+			usersGr.GET("", userCtrl.AdminGetUsers)
+			usersGr.GET("/:userid", userCtrl.AdminGetByID)
+
+			usersGr.POST("", userCtrl.AdminCreateUser)
+			usersGr.DELETE("/:userid", userCtrl.AdminDeleteUser)
+
+			usersGr.PUT("/:userid/state", userCtrl.AdminSetState)
+			usersGr.PUT("/:userid/password", userCtrl.AdminUpdatePassword)
+		}
+
+		postsGr := adminGr.Group("/posts")
+		{
+			postsGr.GET("", postCtrl.AdminGetListPosts)
+		}
 	}
 	// ---------------
 

@@ -76,6 +76,24 @@ func (acc *Account) UpdatePass(oldRawPass, newRawPass string, accCipher AccountC
 	return nil
 }
 
+func (acc *Account) AdminUpdatePass(newRawPass string, accCipher AccountCipher) error {
+	if acc == nil {
+		return nil
+	}
+
+	err := validatePass(newRawPass, acc.Phone)
+	if err != nil {
+		return ErrInvalidPassword
+	}
+
+	acc.HashPass, err = accCipher.Encrypt(newRawPass)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func validatePass(pass string, phone string) error {
 	if len(pass) > 10 || len(pass) < 6 {
 		return ErrInvalidPassword
