@@ -3,9 +3,7 @@ version: "3.9"
 services:
   database:
     container_name: pgdatabase
-    build:
-      context: ./postgres
-      dockerfile: Dockerfile
+    image: ghcr.io/thanhpp/zola/pgdb
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
