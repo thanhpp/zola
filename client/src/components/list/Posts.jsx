@@ -93,7 +93,7 @@ export default function Posts(props) {
 													<Avatar icon={<UserOutlined />} />
 												)
 											}
-											title={post.author.username}
+											title={post.author.name}
 											description={dayjs.unix(post.created).fromNow()}
 										/>
 										<Paragraph
