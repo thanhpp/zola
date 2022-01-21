@@ -47,7 +47,10 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 	}
 
 	avatarURL, coverURL := ctrl.formUserMediaUrlFn(user.User)
-	if avatarURL == req.Avatar {
+	// logger.Debugf("avatarURL: 		%s, coverURL: 		%s", avatarURL, coverURL)
+	// logger.Debugf("req.avatarURL: 	%s, req.coverURL: 	%s", req.Avatar, req.CoverImage)
+	if avatarURL != req.Avatar {
+		// logger.Debugf("avatar url: %s", req.Avatar)
 		avaPostID, avaMediaID, err := ctrl.resolveMediaUrlFn(req.Avatar)
 		if err != nil && !errors.Is(err, ErrEmptyMediaURL) {
 			logger.Errorf("resolve media url (avatar) error: %v", err)
@@ -57,21 +60,23 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 		if len(avaPostID)+len(avaMediaID) != 0 {
 			avatarMedia, err = ctrl.postHdl.GetMedia(c, userID.String(), avaPostID, avaMediaID)
 			if err != nil {
-				logger.Errorf("get media (avatar) error: %v", err)
+				logger.Errorf("get media (avatar) error from postID + mediaID: %v", err)
 				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 				return
 			}
 		}
 	} else {
-		avatarMedia, err = ctrl.postHdl.GetMediaByID(c, user.User.Avatar)
-		if err != nil {
-			logger.Errorf("get media (avatar) error: %v", err)
-			ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
-			return
+		if len(req.Avatar) != 0 {
+			avatarMedia, err = ctrl.postHdl.GetMediaByID(c, user.User.Avatar)
+			if err != nil {
+				logger.Errorf("get media (avatar) error: %v", err)
+				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				return
+			}
 		}
 	}
 
-	if coverURL == req.CoverImage {
+	if req.CoverImage != coverURL {
 		coverPostID, coverMediaID, err := ctrl.resolveMediaUrlFn(req.CoverImage)
 		if err != nil && !errors.Is(err, ErrEmptyMediaURL) {
 			logger.Errorf("resolve media url (cover image) error: %v", err)
@@ -81,17 +86,19 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 		if len(coverPostID)+len(coverMediaID) != 0 {
 			coverMedia, err = ctrl.postHdl.GetMedia(c, userID.String(), coverPostID, coverMediaID)
 			if err != nil {
-				logger.Errorf("get media (cover image) error: %v", err)
+				logger.Errorf("get media (cover image) postID + mediaID: %v", err)
 				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 				return
 			}
 		}
 	} else {
-		coverMedia, err = ctrl.postHdl.GetMediaByID(c, user.User.CoverImg)
-		if err != nil {
-			logger.Errorf("get media (cover image) error: %v", err)
-			ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
-			return
+		if len(req.CoverImage) != 0 {
+			coverMedia, err = ctrl.postHdl.GetMediaByID(c, user.User.CoverImg)
+			if err != nil {
+				logger.Errorf("get media (cover image) error: %v", err)
+				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				return
+			}
 		}
 	}
 
