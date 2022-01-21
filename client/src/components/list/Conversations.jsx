@@ -40,7 +40,7 @@ export default function Conversations({ conversations }) {
 							</Badge>
 						}
 						title={
-							<Link to={`${conversation.id}`}>
+							<Link to={`${conversation.partner.id}`}>
 								{conversation.partner.username}
 							</Link>
 						}

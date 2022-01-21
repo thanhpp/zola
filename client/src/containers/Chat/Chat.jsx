@@ -8,10 +8,11 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Comment, message } from "antd";
 import { useParams } from "react-router-dom";
-import { socket } from "../../api/socket";
+//import { socket } from "../../api/socket";
 import AuthContext from "../../context/authContext";
 dayjs.extend(relativeTime);
 
+let socket = new WebSocket(process.env.REACT_APP_CHAT_URL);
 export default function Chat(props) {
 	//const { receiverId } = props;
 	const { user } = useContext(AuthContext);
@@ -22,7 +23,7 @@ export default function Chat(props) {
 		message_id: "",
 		event: "joinchat",
 		sender: user.userId,
-		receiver: 41324124,
+		receiver: id,
 		created: Date.now(),
 		content: "",
 	});
@@ -34,7 +35,7 @@ export default function Chat(props) {
 				message_id: "",
 				event: "send",
 				sender: user.userId,
-				receiver: 41324124,
+				receiver: id,
 				created: Date.now(),
 				content: e.target.value,
 			},
@@ -44,23 +45,38 @@ export default function Chat(props) {
 	useEffect(() => {
 		//connect to socket
 		socket.onopen = () => {
-			console.log("connected, bitches");
+			console.log("connected to websocket");
+			socket.send(JSON.stringify(chatMessage));
 		};
 
 		//receive message
 		socket.onmessage = (e) => {
 			console.log(e);
 			console.log(e.data);
+			console.log(JSON.parse(e.data));
+			//setMessages((messages) => [...messages, e.data]);
 		};
 
 		//error
 		socket.onerror = (error) => {
 			console.log(error);
 		};
+
+		//close
+
+		socket.onclose = () => {
+			console.log("connection closed");
+			// socket = new WebSocket(process.env.REACT_APP_CHAT_URL);
+			// console.log("connection openned");
+		};
+
+		console.log(socket.readyState);
+
+		//close when unmount
 		return () => {
 			socket.close();
 		};
-	}, [chatMessage]);
+	}, []);
 
 	const handleSubmit = () => {
 		if (!chatMessage.content) {
@@ -68,8 +84,22 @@ export default function Chat(props) {
 		}
 		setIsLoading(true);
 		//send message
+		if (socket.readyState !== 1) {
+			message.error("error when connect with websocket");
+		}
 		socket.send(JSON.stringify(chatMessage));
 		setIsLoading(false);
+		setChatMessage({
+			...message,
+			...{
+				message_id: "",
+				event: "send",
+				sender: user.userId,
+				receiver: "0fc9ef71-708e-11ec-bd01-0242c0a83003",
+				created: Date.now(),
+				content: "",
+			},
+		});
 	};
 
 	return (

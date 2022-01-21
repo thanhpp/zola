@@ -7,8 +7,8 @@ const conversations = [
 	{
 		id: "2",
 		partner: {
-			id: "123123",
-			username: "John Doe",
+			id: "0fc9ef71-708e-11ec-bd01-0242c0a83003",
+			username: "Admin",
 			avatar: "https://joeschmoe.io/api/v1/random",
 		},
 		lastMessage: {
@@ -21,8 +21,8 @@ const conversations = [
 	{
 		id: "4",
 		partner: {
-			id: "123123",
-			username: "John Doe",
+			id: "c58b3958-716e-11ec-bd01-0242c0a83003",
+			username: "Hengf",
 			avatar: "https://joeschmoe.io/api/v1/random",
 		},
 		lastMessage: {
