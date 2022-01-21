@@ -17,7 +17,9 @@ services:
 
   auco:
     container_name: aucoservice
-    image: ghcr.io/thanhpp/zola/auco:latest
+    build:
+      context: ..
+      dockerfile: ./build/auco/Dockerfile
     deploy:
       restart_policy:
           condition: on-failure
