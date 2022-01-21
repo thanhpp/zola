@@ -27,16 +27,16 @@ func (wm *WsManager) findRoom(userA, userB string) (*WsRoom, bool) {
 	// check in the cache
 	room, ok := wm.roomMap.findByUserIDs(userA, userB)
 	if ok {
-		return room, ok
+		return room, true
 	}
 
 	// check in the repository
 	var err error
 	room, err = wm.roomRepo.FindRoomBetween(userA, userB)
 	if err == nil {
-		// add to cache
+		// add to caches
 		wm.roomMap.add(room)
-		return room, ok
+		return room, true
 	}
 
 	logger.Errorf("WsManager: findRoom error %v", err)

@@ -1,6 +1,10 @@
 package app
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/thanhpp/zola/pkg/logger"
+)
 
 // ----------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------- ROOM MAP ----------------------------------------------------------
@@ -69,6 +73,9 @@ func newWsClientMap() *wsClientMap {
 
 func (cm *wsClientMap) add(client *WsClient) {
 	cm.rw.Lock()
+	if cachedClient, ok := cm.m[client.ID]; ok {
+		cachedClient.disconnect()
+	}
 	cm.m[client.ID] = client
 	cm.rw.Unlock()
 }
@@ -90,8 +97,10 @@ func (cm *wsClientMap) findByID(id string) (*WsClient, bool) {
 
 func (cm *wsClientMap) walkLock(fn func(*WsClient)) {
 	cm.rw.Lock()
+	logger.Debugf("WsClientMap: walkLock - lock")
 	for _, client := range cm.m {
 		fn(client)
 	}
 	cm.rw.Unlock()
+	logger.Debugf("WsClientMap: walkLock - unlock")
 }

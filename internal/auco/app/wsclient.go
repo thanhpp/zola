@@ -53,12 +53,12 @@ func (c *WsClient) readPump() {
 		_, jsonMessage, err := c.conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				logger.Errorf("WsClient %s: unexpected close error: %v", err)
+				logger.Errorf("WsClient %s: unexpected close error: %v", c.ID, err)
 			}
 			break
 		}
 
-		logger.Debugf("WsClient %s: received message: %s", string(jsonMessage))
+		logger.Debugf("WsClient %s: received message: %s", c.ID, string(jsonMessage))
 		c.handleNewMessage(jsonMessage)
 	}
 }

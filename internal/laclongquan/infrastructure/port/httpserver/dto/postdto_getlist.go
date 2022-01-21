@@ -59,6 +59,7 @@ func (resp *GetListPostResp) SetData(res *application.GetListPostRes, lastID str
 			Video:      videoData,
 			Author: GetListPostRespAuthorData{
 				ID:       res.Posts[i].Creator.ID().String(),
+				Name:     res.Posts[i].Creator.Name(),
 				Username: res.Posts[i].Creator.GetUsername(),
 				Avatar:   avatarURL,
 				Online:   boolTranslate(res.Posts[i].Creator.IsOnline()),
@@ -90,6 +91,7 @@ type GetListPostRespVideoData struct {
 
 type GetListPostRespAuthorData struct {
 	ID       string `json:"id"`
+	Name     string `json:"name"`
 	Username string `json:"username"`
 	Avatar   string `json:"avatar"`
 	Online   string `json:"online"`

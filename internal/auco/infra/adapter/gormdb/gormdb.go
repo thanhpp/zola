@@ -22,7 +22,10 @@ type gormDB struct {
 
 func NewGormDB() *gormDB {
 	return &gormDB{
-		db: gDB,
+		db:        gDB,
+		fac:       &app.WsFactory{},
+		roomModel: &RoomDB{},
+		msgModel:  &MessageDB{},
 	}
 }
 
