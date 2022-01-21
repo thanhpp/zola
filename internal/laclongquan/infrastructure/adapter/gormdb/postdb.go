@@ -221,7 +221,7 @@ func (p postGorm) joinGetListPostFromActiveFriends(db *gorm.DB, requestorID stri
 	db.Order("post_db.created_at desc").
 		Joins(`
 	JOIN user_db ON (post_db.creator = user_db.user_uuid AND user_db.state = 'active')
-	INNER JOIN relation_db 
+	LEFT OUTER JOIN relation_db 
 	ON (
 		(
 			(relation_db.user_a = post_db.creator AND relation_db.user_b = ?)

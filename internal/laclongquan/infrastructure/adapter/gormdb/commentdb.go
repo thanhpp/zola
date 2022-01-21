@@ -96,13 +96,19 @@ func (c commentGorm) GetByPostIDFromNonBlockedActiveUser(ctx context.Context, re
 		Where("post_uuid = ?", postID).
 		Order("created_at desc").
 		Joins(`JOIN user_db ON user_db.user_uuid = comment_db.creator_uuid AND user_db.state = 'active'
-		LEFT JOIN relation_db ON (
-			(relation_db.user_a = ? AND relation_db.user_b = comment_db.creator_uuid) 
-			OR
-			(relation_db.user_a = comment_db.creator_uuid AND relation_db.user_b = ?)
-			AND
-			(relation_db.status <> 'blocked' OR relation_db.status <> 'diary_blocked')
-		)`, requestorID, requestorID)
+		LEFT OUTER JOIN relation_db ON (
+			(
+				(relation_db.user_a = ? AND relation_db.user_b = comment_db.creator_uuid) 
+				OR
+				(relation_db.user_a = comment_db.creator_uuid AND relation_db.user_b = ?)
+				AND
+				(relation_db.status = ?)
+			)
+			OR 
+			(
+				comment_db.creator_uuid = ?
+			)
+		)`, requestorID, requestorID, entity.RelationFriend, requestorID)
 
 	if offset >= 0 && limit > 0 {
 		stmt = stmt.Offset(offset).Limit(limit)
