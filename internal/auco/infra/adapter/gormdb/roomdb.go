@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/thanhpp/zola/internal/auco/app"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type RoomDB struct {
@@ -23,7 +24,10 @@ func (g gormDB) marshalRoom(room *app.WsRoom) *RoomDB {
 }
 
 func (g gormDB) unmarshalRoom(roomDB *RoomDB) *app.WsRoom {
-	room, _ := g.fac.NewRoomFromDB(roomDB.ID, roomDB.UserA, roomDB.UserB)
+	room, err := g.fac.NewRoomFromDB(roomDB.ID, roomDB.UserA, roomDB.UserB)
+	if err != nil {
+		logger.Errorf("gormDB - unmarshalRoom: %v", err)
+	}
 	return room
 }
 

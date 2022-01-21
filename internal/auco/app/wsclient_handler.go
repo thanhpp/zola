@@ -77,6 +77,6 @@ func (c *WsClient) handleSend(msg *WsMessage) {
 
 	// send the message to the room
 	newMsg.Event = MsgEventOnMessage
-
+	
 	room.sendMessageToAll(newMsg.Encode())
 }

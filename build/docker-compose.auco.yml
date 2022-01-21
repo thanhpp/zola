@@ -3,11 +3,7 @@ version: "3.9"
 services:
   database:
     container_name: pgdatabase
-<<<<<<< HEAD
     image: ghcr.io/thanhpp/zola/pgdb:latest
-=======
-    image: ghcr.io/thanhpp/zola/pgdb
->>>>>>> f5fba4fb02086166338d975709e8544701953587
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root

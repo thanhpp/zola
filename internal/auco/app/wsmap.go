@@ -69,6 +69,9 @@ func newWsClientMap() *wsClientMap {
 
 func (cm *wsClientMap) add(client *WsClient) {
 	cm.rw.Lock()
+	if cachedClient, ok := cm.m[client.ID]; ok {
+		cachedClient.disconnect()
+	}
 	cm.m[client.ID] = client
 	cm.rw.Unlock()
 }
