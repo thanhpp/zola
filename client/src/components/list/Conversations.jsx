@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 const { Paragraph } = Typography;
 dayjs.extend(relativeTime);
 
-export default function Conversations({ conversations }) {
+export default function Conversations(props) {
+	const { conversations, handleDelete } = props;
 	return (
 		<List
 			itemLayout="vertical"
@@ -26,7 +27,7 @@ export default function Conversations({ conversations }) {
 					actions={[
 						<Popconfirm
 							title="Sure to delete conversation?"
-							onConfirm={() => console.log(conversation.id)}
+							onConfirm={() => handleDelete(conversation.id)}
 						>
 							<DeleteOutlined />
 							<span className="converstion-action-delete"> Delete</span>

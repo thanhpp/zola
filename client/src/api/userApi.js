@@ -32,7 +32,9 @@ export async function editUserInfo(formData) {
 }
 
 export async function getMyFriend({ pageParam = 1 }) {
-	const { data } = await axiosClient.get(`/friend?index=${pageParam}`);
+	const { data } = await axiosClient.get(
+		`/friend?index=${pageParam}&count=100`
+	);
 	return {
 		data,
 		nextPage: pageParam + 1,

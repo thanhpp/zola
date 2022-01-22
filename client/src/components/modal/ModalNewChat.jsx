@@ -1,9 +1,11 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Modal, Form, Input } from "antd";
+import { Modal, Form, Select } from "antd";
+
+const { Option } = Select;
 
 export default function ModalNewChat(props) {
-	const { visible, setVisible, onCreate } = props;
+	const { visible, setVisible, onCreate, friends } = props;
 	const [form] = Form.useForm();
 
 	return (
@@ -40,7 +42,11 @@ export default function ModalNewChat(props) {
 						},
 					]}
 				>
-					<Input />
+					<Select>
+						{friends.map((friend) => {
+							return <Option key={friend.user_id}>{friend.user_name}</Option>;
+						})}
+					</Select>
 				</Form.Item>
 			</Form>
 		</Modal>
