@@ -11,13 +11,12 @@ import (
 )
 
 func (ctrl ConversationController) GetByPartnerID(c *gin.Context) {
-	claims, err := getClaimsFromCtx(c)
+	requestorID, err := getRequestorIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("CvsCtrl - get claims %v", err)
 		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
 		return
 	}
-	requestorID := claims.User.ID
 	partnerID := c.Param("id")
 
 	offset, limit := pagination(c)
@@ -45,13 +44,12 @@ func (ctrl ConversationController) GetByPartnerID(c *gin.Context) {
 }
 
 func (ctrl ConversationController) GetByRoomID(c *gin.Context) {
-	claims, err := getClaimsFromCtx(c)
+	requestorID, err := getRequestorIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("CvsCtrl - get claims %v", err)
 		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
 		return
 	}
-	requestorID := claims.User.ID
 	roomID := c.Param("id")
 
 	offset, limit := pagination(c)

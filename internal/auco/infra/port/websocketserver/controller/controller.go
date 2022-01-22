@@ -99,3 +99,11 @@ func getClaimsFromCtx(c *gin.Context) (*llqclient.ValidateTokenResp, error) {
 
 	return &claims, nil
 }
+
+func getRequestorIDFromClaims(c *gin.Context) (string, error) {
+	claims, err := getClaimsFromCtx(c)
+	if err != nil {
+		return "", err
+	}
+	return claims.User.ID, nil
+}

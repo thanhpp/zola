@@ -1,6 +1,7 @@
 package gormdb
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/thanhpp/zola/internal/auco/app"
@@ -49,4 +50,8 @@ func (g gormDB) CreateMessage(msg *app.WsMessage) error {
 	}
 
 	return g.db.Model(g.msgModel).Create(msgDB).Error
+}
+
+func (g gormDB) DeleteByRoomID(ctx context.Context, roomID string) error {
+	return g.db.Model(g.msgModel).WithContext(ctx).Where("room_id = ?", roomID).Delete(MessageDB{}).Error
 }

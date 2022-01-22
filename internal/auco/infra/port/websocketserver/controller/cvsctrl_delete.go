@@ -4,31 +4,31 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	acdto "github.com/thanhpp/zola/internal/auco/infra/port/websocketserver/dto"
+	"github.com/thanhpp/zola/internal/auco/infra/port/websocketserver/dto"
 	"github.com/thanhpp/zola/pkg/logger"
 	"github.com/thanhpp/zola/pkg/responsevalue"
 )
 
-func (ctrl ConversationController) GetList(c *gin.Context) {
+func (ctrl ConversationController) DeleteByConversationID(c *gin.Context) {
 	requestorID, err := getRequestorIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("CvsCtrl - get claims %v", err)
 		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
 		return
 	}
-	offset, limit := pagination(c)
 
-	data, err := ctrl.conversationHandler.GetListConversation(c, requestorID, offset, limit)
+	conversationID := c.Param("id")
+
+	err = ctrl.conversationHandler.DeleteByConversationID(c, requestorID, conversationID)
 	if err != nil {
-		logger.Errorf("ConversationCtrl: get list conversation error: %v", err)
+		logger.Errorf("CvsCtrl - delete conversation %v", err)
 		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
 		return
 	}
 
-	resp := new(acdto.GetListConversationResp)
+	resp := new(dto.DefaultResp)
 	resp.SetCode(responsevalue.CodeOK)
 	resp.SetMsg(responsevalue.MsgOK)
-	resp.SetData(data, requestorID)
 
 	c.JSON(http.StatusOK, resp)
 }

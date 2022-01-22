@@ -42,6 +42,7 @@ func (s *WebsocketServer) newRouter() *gin.Engine {
 		conversationGr.GET("", cCtrl.GetList)
 		conversationGr.GET("/partner/:id", cCtrl.GetByPartnerID)
 		conversationGr.GET("/:id", cCtrl.GetByRoomID)
+		conversationGr.DELETE("/:id", cCtrl.DeleteByConversationID)
 	}
 
 	return router

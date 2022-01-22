@@ -26,4 +26,5 @@ type MessageRepository interface {
 
 	// write
 	CreateMessage(msg *WsMessage) error
+	DeleteByRoomID(ctx context.Context, roomID string) error
 }
