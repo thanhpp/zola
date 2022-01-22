@@ -18,14 +18,14 @@ func (ctrl UserController) NewFriendRequest(c *gin.Context) {
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user id from ctx error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", err)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
 	requesteeID, err := getUserUUIDFromParam(c)
 	if err != nil {
 		logger.Errorf("get user id from param error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", err)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
@@ -34,51 +34,51 @@ func (ctrl UserController) NewFriendRequest(c *gin.Context) {
 		logger.Errorf("new friend request error: %v", err)
 		switch err {
 		case application.ErrRelationExisted:
-			ginAbortNotAcceptable(c, responsevalue.CodeActionHasBeenDone, "relation existed", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueActionHasBeenDone, "relation existed")
 			return
 
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user not exist")
 			return
 
 		case entity.ErrSelfRelation:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "same id request", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "same id request")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "locked user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "locked user")
 			return
 
 		case repository.ErrSameUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "same user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "same user")
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }
 
 func (ctrl UserController) UpdateFriendRequest(c *gin.Context) {
 	var req = new(dto.UpdateFriendRequestReq)
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind request error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", req)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid request")
 		return
 	}
 
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user id from ctx error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", err)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
 	requesteeID, err := getUserUUIDFromParam(c)
 	if err != nil {
 		logger.Errorf("get user id from param error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", err)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
@@ -91,41 +91,41 @@ func (ctrl UserController) UpdateFriendRequest(c *gin.Context) {
 
 	default:
 		logger.Errorf("invalid request code: %v", req.IsAccept)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid request code", req)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid request code")
 		return
 	}
 
 	if err != nil {
 		switch err {
 		case repository.ErrRelationNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "friend request not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "friend request not found")
 			return
 
 		case entity.ErrNotAFriendRequest:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "not a friend request", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "not a friend request")
 			return
 
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "locked user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "locked user")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }
 
 func (ctrl UserController) GetRequestedFriends(c *gin.Context) {
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user id from ctx error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", err)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
@@ -138,7 +138,7 @@ func (ctrl UserController) GetRequestedFriends(c *gin.Context) {
 		requestedID, err = uuid.Parse(requestedIDStr)
 		if err != nil {
 			logger.Errorf("parse user id from param error: %v", err)
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid user", err)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid user")
 			return
 		}
 	}
@@ -149,19 +149,19 @@ func (ctrl UserController) GetRequestedFriends(c *gin.Context) {
 		logger.Errorf("Get requested friends of %s by %s error: %v", requestedID.String(), requestorID.String(), err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user not exist")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "permission denied", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "permission denied")
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	var resp = new(dto.GetRequestedFriendsResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(results, ctrl.formUserMediaUrlFn)
 
@@ -172,7 +172,7 @@ func (ctrl UserController) GetFriends(c *gin.Context) {
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user id from ctx error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", err)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
@@ -184,7 +184,7 @@ func (ctrl UserController) GetFriends(c *gin.Context) {
 		requestedID, err = uuid.Parse(requestedIDStr)
 		if err != nil {
 			logger.Errorf("parse user id from param error: %v", err)
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid user", err)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid user")
 			return
 		}
 	}
@@ -195,19 +195,19 @@ func (ctrl UserController) GetFriends(c *gin.Context) {
 		logger.Errorf("Get friends of %s by %s error: %v", requestedID.String(), requestorID.String(), err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user not exist")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "permission denied", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "permission denied")
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, responsevalue.MsgUnknownError)
 		return
 	}
 
 	var resp = new(dto.GetUserFriendsResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(results.Friends, results.Total, ctrl.formUserMediaUrlFn)
 

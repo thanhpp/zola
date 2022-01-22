@@ -5,18 +5,19 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/dto"
+	"github.com/thanhpp/zola/pkg/responsevalue"
 )
 
 func (u UserController) InternalGetUser(c *gin.Context) {
 	userID, err := getUserUUIDFromParam(c)
 	if err != nil {
-		ginAbortNotAcceptable(c, http.StatusNotAcceptable, "invalid user id", err.Error())
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, err.Error())
 		return
 	}
 
 	user, err := u.handler.InternalGetUser(c, userID.String())
 	if err != nil {
-		ginAbortInternalError(c, http.StatusInternalServerError, "can not get user", err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
@@ -32,7 +33,7 @@ func (u UserController) InternalIsBlock(c *gin.Context) {
 
 	isBlock, err := u.handler.InternalIsBlock(c, userAID, userBID)
 	if err != nil {
-		ginAbortInternalError(c, http.StatusInternalServerError, "can not get user", err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 

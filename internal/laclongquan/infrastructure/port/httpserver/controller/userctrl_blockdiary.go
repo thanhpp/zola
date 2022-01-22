@@ -13,14 +13,14 @@ func (ctrl UserController) BlockDiary(c *gin.Context) {
 	var req = new(dto.BlockUserReq)
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind req %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, responsevalue.MsgInvalidRequest, req)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, responsevalue.MsgInvalidRequest)
 		return
 	}
 
 	blockerID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user uuid from claims error %v", err)
-		ginAbortInternalError(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortInternalError(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
@@ -30,33 +30,33 @@ func (ctrl UserController) BlockDiary(c *gin.Context) {
 			logger.Errorf("block diary issuer %s issued %s error %v", blockerID.String(), req.BlockedUserID, err)
 			switch err {
 			case repository.ErrUserNotFound:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user not exist")
 				return
 
 			case repository.ErrRelationNotFound:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "relation not exist", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "relation not exist")
 				return
 
 			case entity.ErrSelfRelation:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "can't block yourself", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "can't block yourself")
 				return
 
 			case entity.ErrLockedUser:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user has been locked", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user has been locked")
 				return
 
 			case entity.ErrAlreadyBlocked:
-				ginAbortNotAcceptable(c, responsevalue.CodeActionHasBeenDone, "user has already been blocked", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueActionHasBeenDone, "user has already been blocked")
 				return
 
 			case repository.ErrSameUser:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "same user", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "same user")
 				return
 			}
-			ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+			ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 			return
 		}
-		ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+		ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 		return
 
 	case UnblockCode:
@@ -64,33 +64,33 @@ func (ctrl UserController) BlockDiary(c *gin.Context) {
 			logger.Errorf("unblock diary issuer %s issued %s error %v", blockerID.String(), req.BlockedUserID, err)
 			switch err {
 			case repository.ErrUserNotFound:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not exist", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user not exist")
 				return
 
 			case repository.ErrRelationNotFound:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "relation not exist", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "relation not exist")
 				return
 
 			case entity.ErrLockedUser:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user has been locked", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user has been locked")
 				return
 
 			case entity.ErrInvalidRelation:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "can not unblock diary", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "can not unblock diary")
 				return
 
 			case repository.ErrSameUser:
-				ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "same user", nil)
+				ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "same user")
 				return
 			}
-			ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+			ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 			return
 		}
-		ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+		ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 		return
 
 	default:
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid block type", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid block type")
 		return
 	}
 }

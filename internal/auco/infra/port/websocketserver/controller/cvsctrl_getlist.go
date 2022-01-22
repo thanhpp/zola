@@ -13,7 +13,7 @@ func (ctrl ConversationController) GetList(c *gin.Context) {
 	requestorID, err := getRequestorIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("CvsCtrl - get claims %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser.Code, "invalid user", nil)
 		return
 	}
 	offset, limit := pagination(c)
@@ -21,12 +21,12 @@ func (ctrl ConversationController) GetList(c *gin.Context) {
 	data, err := ctrl.conversationHandler.GetListConversation(c, requestorID, offset, limit)
 	if err != nil {
 		logger.Errorf("ConversationCtrl: get list conversation error: %v", err)
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError.Code, responsevalue.MsgUnknownError, err.Error())
 		return
 	}
 
 	resp := new(acdto.GetListConversationResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(data, requestorID)
 

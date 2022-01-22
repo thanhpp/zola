@@ -13,7 +13,7 @@ func (ctrl ConversationController) DeleteByConversationID(c *gin.Context) {
 	requestorID, err := getRequestorIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("CvsCtrl - get claims %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser.Code, "invalid user", nil)
 		return
 	}
 
@@ -22,13 +22,13 @@ func (ctrl ConversationController) DeleteByConversationID(c *gin.Context) {
 	err = ctrl.conversationHandler.DeleteByConversationID(c, requestorID, conversationID)
 	if err != nil {
 		logger.Errorf("CvsCtrl - delete conversation %v", err)
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError.Code, responsevalue.ValueOK.Message, err.Error())
 		return
 	}
 
 	resp := new(dto.DefaultResp)
-	resp.SetCode(responsevalue.CodeOK)
-	resp.SetMsg(responsevalue.MsgOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
+	resp.SetMsg(responsevalue.ValueOK.Message)
 
 	c.JSON(http.StatusOK, resp)
 }
@@ -37,7 +37,7 @@ func (ctrl ConversationController) DeleteMessage(c *gin.Context) {
 	requestorID, err := getRequestorIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("CvsCtrl - get claims %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser.Code, "invalid user", nil)
 		return
 	}
 
@@ -45,12 +45,12 @@ func (ctrl ConversationController) DeleteMessage(c *gin.Context) {
 
 	if err := ctrl.conversationHandler.DeleteMessage(c, requestorID, messageID); err != nil {
 		logger.Errorf("CvsCtrl - delete message %v", err)
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError.Code, responsevalue.ValueOK.Message, err.Error())
 		return
 	}
 
 	resp := new(dto.DefaultResp)
-	resp.SetCode(responsevalue.CodeOK)
-	resp.SetMsg(responsevalue.MsgOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
+	resp.SetMsg(responsevalue.ValueOK.Message)
 	c.JSON(http.StatusOK, resp)
 }

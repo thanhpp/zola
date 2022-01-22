@@ -14,13 +14,13 @@ import (
 func (ctrl UserController) AdminCreateUser(c *gin.Context) {
 	var req = new(dto.AdminCreateUserReq)
 	if err := c.ShouldBind(req); err != nil {
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid request")
 		return
 	}
 
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalidate user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalidate user")
 		return
 	}
 
@@ -33,35 +33,35 @@ func (ctrl UserController) AdminCreateUser(c *gin.Context) {
 		logger.Errorf("admin %s create user error: %v", requestorID, err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalidate user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalidate user")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortUnauthorized(c, responsevalue.CodeInvalidAccess, "invalid access", nil)
+			ginAbortUnauthorized(c, responsevalue.ValueInvalidAccess, "invalid access")
 			return
 
 		case repository.ErrDuplicateUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "duplicate user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "duplicate user")
 			return
 
 		case entity.ErrInvalidCountry:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid country", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid country")
 			return
 
 		case entity.ErrInvalidPhone:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid phone number", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid phone number")
 			return
 
 		case entity.ErrInvalidPassword:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid password", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid password")
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	resp := new(dto.AdminCreateUserResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(newUser.ID().String())
 

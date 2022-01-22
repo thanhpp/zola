@@ -18,7 +18,7 @@ func (ctrl UserController) SignIn(c *gin.Context) {
 
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind req %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 		return
 	}
 
@@ -28,30 +28,30 @@ func (ctrl UserController) SignIn(c *gin.Context) {
 
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "user is not validated", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "user is not validated")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "user is locked", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "user is locked")
 			return
 
 		case entity.ErrPassNotEqual:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "password mismatch", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "password mismatch")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	token, err := ctrl.authsrv.NewTokenFromUser(c, user)
 	if err != nil {
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	resp := new(dto.SignInResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetData(token)
 
 	c.JSON(http.StatusOK, resp)

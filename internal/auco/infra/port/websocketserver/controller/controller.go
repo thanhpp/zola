@@ -49,28 +49,28 @@ func pagination(c *gin.Context) (offset, limit int) {
 	return (index - 1) * limit, limit
 }
 
-func ginRespOK(c *gin.Context, code int, msg string, data interface{}) {
+func ginRespOK(c *gin.Context, code, msg string, data interface{}) {
 	c.JSON(
 		http.StatusOK,
 		dto.NewDefaultResp(code, msg, data),
 	)
 }
 
-func ginAbortNotAcceptable(c *gin.Context, code int, msg string, data interface{}) {
+func ginAbortNotAcceptable(c *gin.Context, code, msg string, data interface{}) {
 	c.AbortWithStatusJSON(
 		http.StatusNotAcceptable,
 		dto.NewDefaultResp(code, msg, data),
 	)
 }
 
-func ginAbortInternalError(c *gin.Context, code int, msg string, data interface{}) {
+func ginAbortInternalError(c *gin.Context, code, msg string, data interface{}) {
 	c.AbortWithStatusJSON(
 		http.StatusInternalServerError,
 		dto.NewDefaultResp(code, msg, data),
 	)
 }
 
-func ginAbortUnauthorized(c *gin.Context, code int, msg string, data interface{}) {
+func ginAbortUnauthorized(c *gin.Context, code, msg string, data interface{}) {
 	c.AbortWithStatusJSON(
 		http.StatusUnauthorized,
 		dto.NewDefaultResp(code, msg, data),

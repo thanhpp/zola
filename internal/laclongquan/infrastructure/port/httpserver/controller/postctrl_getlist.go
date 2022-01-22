@@ -16,13 +16,13 @@ func (ctrl PostController) GetListPost(c *gin.Context) {
 		req = new(dto.GetListPostReq)
 	)
 	if err := c.ShouldBind(req); err != nil {
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", req)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid request")
 		return
 	}
 
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid token", err)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalid token")
 		return
 	}
 
@@ -33,39 +33,39 @@ func (ctrl PostController) GetListPost(c *gin.Context) {
 		logger.Errorf("GetListPost by user %s error: %v", requestorID, err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case repository.ErrPostNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid post id", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid post id")
 			return
 
 		case repository.ErrRelationNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidAccess, "invalid access", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidAccess, "invalid access")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidAccess, "invalid access", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidAccess, "invalid access")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "locked user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "locked user")
 			return
 
 		case entity.ErrLockedPost:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "locked post", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "locked post")
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	resp := new(dto.GetListPostResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(res, req.LastID, ctrl.formMediaURLFunc, ctrl.formVideoThumbURLFunc, ctrl.formUserMediaURLFunc)
 

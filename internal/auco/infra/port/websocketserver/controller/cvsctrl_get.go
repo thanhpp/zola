@@ -14,7 +14,7 @@ func (ctrl ConversationController) GetByPartnerID(c *gin.Context) {
 	requestorID, err := getRequestorIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("CvsCtrl - get claims %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser.Code, "invalid user", nil)
 		return
 	}
 	partnerID := c.Param("id")
@@ -25,18 +25,18 @@ func (ctrl ConversationController) GetByPartnerID(c *gin.Context) {
 		switch err {
 		case app.ErrBlocked:
 			resp := new(acdto.GetConversationResp)
-			resp.SetCode(responsevalue.CodeOK)
+			resp.SetCode(responsevalue.ValueOK.Code)
 			resp.SetMsg(responsevalue.MsgOK)
 			resp.SetIsBlocked()
 			c.JSON(http.StatusOK, resp)
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError.Code, responsevalue.MsgUnknownError, err.Error())
 		return
 	}
 
 	resp := new(acdto.GetConversationResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(res)
 
@@ -47,7 +47,7 @@ func (ctrl ConversationController) GetByRoomID(c *gin.Context) {
 	requestorID, err := getRequestorIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("CvsCtrl - get claims %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser.Code, "invalid user", nil)
 		return
 	}
 	roomID := c.Param("id")
@@ -58,18 +58,18 @@ func (ctrl ConversationController) GetByRoomID(c *gin.Context) {
 		switch err {
 		case app.ErrBlocked:
 			resp := new(acdto.GetConversationResp)
-			resp.SetCode(responsevalue.CodeOK)
+			resp.SetCode(responsevalue.ValueOK.Code)
 			resp.SetMsg(responsevalue.MsgOK)
 			resp.SetIsBlocked()
 			c.JSON(http.StatusOK, resp)
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError.Code, responsevalue.MsgUnknownError, err.Error())
 		return
 	}
 
 	resp := new(acdto.GetConversationResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(res)
 

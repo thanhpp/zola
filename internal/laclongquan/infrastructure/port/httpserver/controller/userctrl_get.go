@@ -15,13 +15,13 @@ import (
 func (ctrl UserController) GetUserInfo(c *gin.Context) {
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidToken, "invalid token", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidToken, "invalid token")
 		return
 	}
 
 	requestedID, err := getUserUUIDFromParam(c)
 	if err != nil {
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid user ID", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid user ID")
 	}
 
 	res, err := ctrl.handler.GetUserByID(c, requestorID.String(), requestedID.String())
@@ -29,24 +29,24 @@ func (ctrl UserController) GetUserInfo(c *gin.Context) {
 		logger.Errorf("can not get user %s info: %v", requestedID.String(), err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user not found")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user not found")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "user not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "user not found")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	var resp = new(dto.GetUserResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(res.User, res.FriendCount, res.IsFriend, ctrl.formUserMediaUrlFn)
 
@@ -56,19 +56,19 @@ func (ctrl UserController) GetUserInfo(c *gin.Context) {
 func (ctrl UserController) GetUserMedia(c *gin.Context) {
 	// requestorID, err := getUserUUIDFromClaims(c)
 	// if err != nil {
-	// 	ginAbortUnauthorized(c, responsevalue.CodeInvalidToken, "invalid token", nil)
+	// 	ginAbortUnauthorized(c, responsevalue.ValueInvalidToken, "invalid token")
 	// 	return
 	// }
 
 	requestedID, err := getUserUUIDFromParam(c)
 	if err != nil {
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid user ID", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid user ID")
 		return
 	}
 
 	mediaID, err := getMediaID(c)
 	if err != nil {
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid media ID", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid media ID")
 		return
 	}
 
@@ -77,27 +77,27 @@ func (ctrl UserController) GetUserMedia(c *gin.Context) {
 		logger.Errorf("can not get user %s media %s: %v", " requestorID.String()", mediaID, err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "media not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "media not found")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "media not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "media not found")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "media not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "media not found")
 			return
 
 		case repository.ErrMediaNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "media not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "media not found")
 			return
 
 		case application.ErrCanNotGetUserMedia:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "media not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "media not found")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 

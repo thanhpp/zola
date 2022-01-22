@@ -18,21 +18,21 @@ func (ctrl PostController) GetMedia(c *gin.Context) {
 	// userID, err := getUserUUIDFromClaims(c)
 	// if err != nil {
 	// 	logger.Errorf("get user id from claims error: %v", err)
-	// 	ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+	// 	ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 	// 	return
 	// }
 
 	postID, err := getPostID(c)
 	if err != nil {
 		logger.Errorf("get post id error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid post id", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid post id")
 		return
 	}
 
 	mediaID, err := getMediaID(c)
 	if err != nil {
 		logger.Errorf("get media id error: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid media id", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid media id")
 		return
 	}
 
@@ -48,35 +48,35 @@ func (ctrl PostController) GetMedia(c *gin.Context) {
 		logger.Errorf("get media %s error: %v", mediaID, err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "user not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "user not found")
 			return
 
 		case repository.ErrPostNotFound:
-			ginAbortInternalError(c, responsevalue.CodePostNotExist, "post not found", nil)
+			ginAbortInternalError(c, responsevalue.ValuePostNotExist, "post not found")
 			return
 
 		case repository.ErrRelationNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "relation not found", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "relation not found")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "locked user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "locked user")
 			return
 
 		case entity.ErrLockedPost:
-			ginAbortNotAcceptable(c, responsevalue.CodeActionHasBeenDone, "locked post", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueActionHasBeenDone, "locked post")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidAccess, "permission denied", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidAccess, "permission denied")
 			return
 
 		case entity.ErrPostNotContainsMedia:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "post not contains media", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "post not contains media")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 

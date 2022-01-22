@@ -23,14 +23,14 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind request error: %v", err)
-		ginAbortInternalError(c, responsevalue.CodeInvalidParameterType, responsevalue.MsgInvalidRequest, req)
+		ginAbortInternalError(c, responsevalue.ValueInvalidParameterType, responsevalue.MsgInvalidRequest)
 		return
 	}
 
 	userID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("Error while getting userID: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
@@ -42,7 +42,7 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 	user, err := ctrl.handler.GetUserByID(c, userID.String(), userID.String())
 	if err != nil {
 		logger.Errorf("Error while getting user by id: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
@@ -54,14 +54,14 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 		avaPostID, avaMediaID, err := ctrl.resolveMediaUrlFn(req.Avatar)
 		if err != nil && !errors.Is(err, ErrEmptyMediaURL) {
 			logger.Errorf("resolve media url (avatar) error: %v", err)
-			ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			ginAbortInternalError(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 			return
 		}
 		if len(avaPostID)+len(avaMediaID) != 0 {
 			avatarMedia, err = ctrl.postHdl.GetMedia(c, userID.String(), avaPostID, avaMediaID)
 			if err != nil {
 				logger.Errorf("get media (avatar) error from postID + mediaID: %v", err)
-				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				ginAbortInternalError(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 				return
 			}
 		}
@@ -70,7 +70,7 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 			avatarMedia, err = ctrl.postHdl.GetMediaByID(c, user.User.Avatar)
 			if err != nil {
 				logger.Errorf("get media (avatar) error: %v", err)
-				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				ginAbortInternalError(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 				return
 			}
 		}
@@ -80,14 +80,14 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 		coverPostID, coverMediaID, err := ctrl.resolveMediaUrlFn(req.CoverImage)
 		if err != nil && !errors.Is(err, ErrEmptyMediaURL) {
 			logger.Errorf("resolve media url (cover image) error: %v", err)
-			ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			ginAbortInternalError(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 			return
 		}
 		if len(coverPostID)+len(coverMediaID) != 0 {
 			coverMedia, err = ctrl.postHdl.GetMedia(c, userID.String(), coverPostID, coverMediaID)
 			if err != nil {
 				logger.Errorf("get media (cover image) postID + mediaID: %v", err)
-				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				ginAbortInternalError(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 				return
 			}
 		}
@@ -96,7 +96,7 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 			coverMedia, err = ctrl.postHdl.GetMediaByID(c, user.User.CoverImg)
 			if err != nil {
 				logger.Errorf("get media (cover image) error: %v", err)
-				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				ginAbortInternalError(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 				return
 			}
 		}
@@ -113,45 +113,45 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 		logger.Errorf("set user info %s: %v", userID.String(), err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case entity.ErrInvalidInputLength:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 			return
 
 		case entity.ErrInvalidUsername:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 			return
 
 		case entity.ErrInvalidName:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 			return
 
 		case entity.ErrInvalidCountry:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 			return
 
 		case application.ErrCanNotUseMedia:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, responsevalue.MsgInvalidRequest)
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	res, err := ctrl.handler.GetUserByID(c, userID.String(), userID.String())
 	if err != nil {
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, req)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, responsevalue.MsgUnknownError)
 		return
 	}
 
 	var resp = new(dto.SetUserInfoResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(res.User, ctrl.formUserMediaUrlFn)
 	c.JSON(http.StatusOK, resp)
@@ -161,7 +161,7 @@ func (ctrl UserController) SetOnline(c *gin.Context) {
 	userID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("Error while getting userID: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
@@ -169,21 +169,21 @@ func (ctrl UserController) SetOnline(c *gin.Context) {
 		logger.Errorf("set online %s: %v", userID.String(), err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, responsevalue.MsgUnknownError)
 		return
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 	return
 }

@@ -16,7 +16,7 @@ func (s HTTPServer) AuthMiddleware() gin.HandlerFunc {
 		if err != nil {
 			logger.Errorf("get token %v", err)
 			resp := new(dto.DefaultResp)
-			resp.SetCode(responsevalue.CodeInvalidToken)
+			resp.SetCode(responsevalue.ValueInvalidToken.Code)
 			resp.SetMsg(responsevalue.MsgUnauthorized)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, resp)
 			return
@@ -27,7 +27,7 @@ func (s HTTPServer) AuthMiddleware() gin.HandlerFunc {
 			logger.Debugf("error token %s", token)
 			logger.Errorf("get claims %v", err)
 			resp := new(dto.DefaultResp)
-			resp.SetCode(responsevalue.CodeInvalidToken)
+			resp.SetCode(responsevalue.ValueInvalidToken.Code)
 			resp.SetMsg(responsevalue.MsgUnauthorized)
 			c.AbortWithStatusJSON(http.StatusUnauthorized, resp)
 			return
@@ -62,7 +62,7 @@ func (s HTTPServer) validateInternal(c *gin.Context) {
 	if err != nil {
 		logger.Errorf("get token %v", err)
 		resp := new(dto.DefaultResp)
-		resp.SetCode(responsevalue.CodeInvalidToken)
+		resp.SetCode(responsevalue.ValueInvalidToken.Code)
 		resp.SetMsg(responsevalue.MsgUnauthorized)
 		c.AbortWithStatusJSON(http.StatusUnauthorized, resp)
 		return
@@ -73,7 +73,7 @@ func (s HTTPServer) validateInternal(c *gin.Context) {
 		logger.Debugf("error token %s", token)
 		logger.Errorf("get claims %v", err)
 		resp := new(dto.DefaultResp)
-		resp.SetCode(responsevalue.CodeInvalidToken)
+		resp.SetCode(responsevalue.ValueInvalidToken.Code)
 		resp.SetMsg(responsevalue.MsgUnauthorized)
 		c.AbortWithStatusJSON(http.StatusUnauthorized, resp)
 		return

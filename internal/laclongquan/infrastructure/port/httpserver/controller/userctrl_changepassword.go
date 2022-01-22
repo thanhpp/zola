@@ -14,46 +14,46 @@ func (ctrl UserController) ChangePassword(c *gin.Context) {
 	)
 
 	if err := c.ShouldBind(req); err != nil {
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, responsevalue.MsgInvalidRequest, req)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, responsevalue.MsgInvalidRequest)
 		return
 	}
 
 	userID, err := getUserUUIDFromClaims(c)
 	if err != nil {
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
 	if err := ctrl.handler.ChangePassword(c, userID.String(), req.Password, req.NewPassword); err != nil {
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortInternalError(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortInternalError(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case entity.ErrLockedUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "user is locked", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "user is locked")
 			return
 
 		case entity.ErrPassNotEqual:
-			ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, "invalid old password", nil)
+			ginAbortInternalError(c, responsevalue.ValueInvalidParameterValue, "invalid old password")
 			return
 
 		case entity.ErrSameOldPass:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "old password is same with new password", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "old password is same with new password")
 			return
 
 		case entity.ErrCommonPass:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "new password is too common with old password", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "new password is too common with old password")
 			return
 
 		case entity.ErrInvalidPassword:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid new password", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid new password")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }

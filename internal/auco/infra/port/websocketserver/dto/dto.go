@@ -1,11 +1,11 @@
 package dto
 
 type DefaultResp struct {
-	Code    int    `json:"code"`
+	Code    string `json:"code"`
 	Message string `json:"message"`
 }
 
-func (resp *DefaultResp) SetCode(code int) {
+func (resp *DefaultResp) SetCode(code string) {
 	if resp == nil {
 		return
 	}
