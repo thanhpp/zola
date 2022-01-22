@@ -103,7 +103,7 @@ func (u UserHandler) GetUser(ctx context.Context, phone, pass string) (*entity.U
 
 func (u UserHandler) SyncAllUser() error {
 	// get all user from es
-	usersIDs, err := u.esClient.SearchUser("")
+	usersIDs, err := u.esClient.SearchUser("", 0, 10000000)
 	if err != nil {
 		logger.Errorf("get all user from ES failed: %v", err)
 	}
@@ -129,6 +129,7 @@ func (u UserHandler) SyncAllUser() error {
 				logger.Errorf("delete user %s from ES failed: %v", usersIDs[i], err)
 				continue
 			}
+			// delete(userIDsMap, usersIDs[i])
 			logger.Infof("delete user %s from ES success", usersIDs[i])
 		}
 	}

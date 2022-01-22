@@ -40,6 +40,7 @@ func NewApplication(
 			commentRepo,
 			relationRepo,
 			userRepo,
+			esClient,
 		),
 		ReportHandler: NewReportHandler(
 			entity.NewReportFactory(),
