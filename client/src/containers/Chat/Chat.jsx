@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Messages from "../../components/chat/Messages";
 import Editor from "../../components/chat/Editor";
 import styles from "./Chat.module.css";
@@ -6,21 +6,15 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import dayjs from "dayjs";
 import { Comment, message } from "antd";
 import useResize from "../../hook/useResize";
+import SocketContext from "../../context/socketContext";
 
 export default function Chat(props) {
 	const componentRef = useRef();
 	const messagesEndRef = useRef(null);
 	const { height } = useResize(componentRef);
-	const {
-		socket,
-		user,
-		id,
-		chat,
-		onCreate,
-		hasNextPage,
-		fetchNextPage,
-		handleDelete,
-	} = props;
+	const { socket } = useContext(SocketContext);
+	const { user, id, chat, onCreate, hasNextPage, fetchNextPage, handleDelete } =
+		props;
 	const [isLoading, setIsLoading] = useState(false);
 	const [chatMessage, setChatMessage] = useState({
 		message_id: "",

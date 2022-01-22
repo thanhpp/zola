@@ -23,7 +23,6 @@ export default function Friends(props) {
 				dataLength={10}
 				next={fetchNextPage}
 				hasMore={hasNextPage}
-				//loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
 				endMessage={<Divider plain />}
 				scrollableTarget="scrollableDiv"
 			>
@@ -44,9 +43,7 @@ export default function Friends(props) {
 													)
 												}
 												title={
-													<Link to={`/users/${item.user_id}`}>
-														{item.user_name}
-													</Link>
+													<Link to={`/users/${item.user_id}`}>{item.name}</Link>
 												}
 												description={item.status}
 											/>

@@ -12,6 +12,7 @@ import { getConversation, deleteMessage } from "../../api/chatApi";
 import { getUserChatInfo } from "../../api/userApi";
 import { message } from "antd";
 import Spinner from "../../components/spinner/Spinner";
+import { SocketContextProvider } from "../../context/socketContext";
 
 export default function WrapperChat() {
 	const queryClient = useQueryClient();
@@ -19,10 +20,6 @@ export default function WrapperChat() {
 	const [chatHistory, setChatHistory] = useState([]);
 	const { id } = useParams();
 	const { user } = useContext(AuthContext);
-	const { userId } = user;
-	const socket = new WebSocket(
-		`${process.env.REACT_APP_CHAT_URL}?id=${userId}`
-	);
 
 	const { fetchNextPage, hasNextPage, isLoading, refetch } = useInfiniteQuery(
 		"messages",
@@ -112,17 +109,18 @@ export default function WrapperChat() {
 
 	return (
 		<>
-			<Chat
-				socket={socket}
-				user={user}
-				id={id}
-				fetchNextPage={fetchNextPage}
-				hasNextPage={hasNextPage}
-				chat={chatHistory || []}
-				onCreate={transformMessage}
-				handleDelete={handleDelete}
-				refetch={refetch}
-			/>
+			<SocketContextProvider>
+				<Chat
+					user={user}
+					id={id}
+					fetchNextPage={fetchNextPage}
+					hasNextPage={hasNextPage}
+					chat={chatHistory || []}
+					onCreate={transformMessage}
+					handleDelete={handleDelete}
+					refetch={refetch}
+				/>
+			</SocketContextProvider>
 		</>
 	);
 }
