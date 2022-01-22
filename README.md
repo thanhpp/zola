@@ -70,7 +70,7 @@
 - [x] [like](https://github.com/thanhpp/zola/issues/15)
 - [x] [edit_comment](https://github.com/thanhpp/zola/issues/30)
 - [x] [del_comment](https://github.com/thanhpp/zola/issues/31)
-- [ ] search
+- [x] [search](https://github.com/thanhpp/zola/issues/102)
 
 #### Chat
 - [x] [get_conversation](https://github.com/thanhpp/zola/issues/94)
