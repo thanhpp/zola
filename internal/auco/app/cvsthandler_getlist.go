@@ -1,6 +1,10 @@
 package app
 
-import "context"
+import (
+	"context"
+
+	"github.com/thanhpp/zola/internal/auco/infra/adapter/llqclient"
+)
 
 type GetListConversationRes struct {
 	Data      []*GetListConversationElem
@@ -9,6 +13,7 @@ type GetListConversationRes struct {
 
 type GetListConversationElem struct {
 	Room        *WsRoom
+	UserInfo    *llqclient.GetUserInfoResp
 	LastMessage *WsMessage
 }
 
@@ -30,8 +35,21 @@ func (c ConversationHandler) GetListConversation(ctx context.Context, requestorI
 			return nil, err
 		}
 
+		// get userinfo
+		var userID string
+		if requestorID != rooms[i].UserA {
+			userID = rooms[i].UserA
+		} else {
+			userID = rooms[i].UserB
+		}
+		userInfo, err := c.llqClient.GetUserInfo(userID)
+		if err != nil {
+			return nil, err
+		}
+
 		dataElem = append(dataElem, &GetListConversationElem{
 			Room:        rooms[i],
+			UserInfo:    userInfo,
 			LastMessage: lastMessage,
 		})
 

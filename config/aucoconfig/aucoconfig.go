@@ -8,10 +8,13 @@ import (
 )
 
 type MainConfig struct {
-	Name       string                  `mapstructure:"Name"`
-	Log        logger.LogConfig        `mapstructure:"Log"`
-	HTTPServer shared.HTTPServerConfig `mapstructure:"HTTPServer"`
-	Database   shared.DatabaseConfig   `mapstructure:"Database"`
+	Name               string                  `mapstructure:"Name"`
+	Log                logger.LogConfig        `mapstructure:"Log"`
+	HTTPServer         shared.HTTPServerConfig `mapstructure:"HTTPServer"`
+	Database           shared.DatabaseConfig   `mapstructure:"Database"`
+	LacLongQuanService struct {
+		Host string `mapstructure:"Host"`
+	} `mapstructure:"LacLongQuanService"`
 }
 
 var cfg = new(MainConfig)

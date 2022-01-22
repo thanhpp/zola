@@ -24,17 +24,13 @@ func (resp *GetListConversationResp) SetData(data *app.GetListConversationRes, r
 
 	resp.Data = make([]GetListConversationRespElem, 0, len(data.Data))
 	for i := range data.Data {
-		var partnerID string
-		if data.Data[i].Room.UserA == requestorID {
-			partnerID = data.Data[i].Room.UserB
-		} else {
-			partnerID = data.Data[i].Room.UserA
-		}
-
 		resp.Data = append(resp.Data, GetListConversationRespElem{
 			ID: data.Data[i].Room.ID,
 			Partner: PartnerData{
-				ID: partnerID,
+				ID:       data.Data[i].UserInfo.ID,
+				Name:     data.Data[i].UserInfo.Name,
+				Username: data.Data[i].UserInfo.Username,
+				Avatar:   data.Data[i].UserInfo.Avatar,
 			},
 			LastMessage: LastMessageData{
 				Messsage: data.Data[i].LastMessage.Content,

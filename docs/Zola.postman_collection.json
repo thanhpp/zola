@@ -2787,10 +2787,103 @@
 				{
 					"name": "get conversation list",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "{{auco}}/conversations",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get conversation by partnerid",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations/partner/ea033d22-708d-11ec-bd01-0242c0a83003?index=1&count=1",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations",
+								"partner",
+								"ea033d22-708d-11ec-bd01-0242c0a83003"
+							],
+							"query": [
+								{
+									"key": "index",
+									"value": "1"
+								},
+								{
+									"key": "count",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get conversation by roomid",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations/6476d7cf-3bfc-4bf6-a933-4f75e85fbb5d?index=1&count=1",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations",
+								"6476d7cf-3bfc-4bf6-a933-4f75e85fbb5d"
+							],
+							"query": [
+								{
+									"key": "index",
+									"value": "1"
+								},
+								{
+									"key": "count",
+									"value": "1"
+								}
+							]
 						}
 					},
 					"response": []

@@ -1,10 +1,12 @@
 package controller
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thanhpp/zola/internal/auco/infra/adapter/llqclient"
 	"github.com/thanhpp/zola/internal/laclongquan/infrastructure/port/httpserver/dto"
 )
 
@@ -73,4 +75,27 @@ func ginAbortUnauthorized(c *gin.Context, code int, msg string, data interface{}
 		http.StatusUnauthorized,
 		dto.NewDefaultResp(code, msg, data),
 	)
+}
+
+var (
+	claimsKey = "claims"
+)
+
+var (
+	ErrClaimsNotExist = errors.New("claims not exist")
+	ErrNotClaims      = errors.New("not claims")
+)
+
+func getClaimsFromCtx(c *gin.Context) (*llqclient.ValidateTokenResp, error) {
+	claimsItf, ok := c.Get(claimsKey)
+	if !ok {
+		return nil, ErrClaimsNotExist
+	}
+
+	claims, ok := claimsItf.(llqclient.ValidateTokenResp)
+	if !ok {
+		return nil, ErrNotClaims
+	}
+
+	return &claims, nil
 }

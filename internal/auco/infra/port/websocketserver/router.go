@@ -38,7 +38,10 @@ func (s *WebsocketServer) newRouter() *gin.Engine {
 
 	conversationGr := router.Group("/conversations")
 	{
+		conversationGr.Use(s.AuthMiddleware())
 		conversationGr.GET("", cCtrl.GetList)
+		conversationGr.GET("/partner/:id", cCtrl.GetByPartnerID)
+		conversationGr.GET("/:id", cCtrl.GetByRoomID)
 	}
 
 	return router

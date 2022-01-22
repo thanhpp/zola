@@ -32,6 +32,17 @@ func (g gormDB) unmarshalRoom(roomDB *RoomDB) *app.WsRoom {
 	return room
 }
 
+func (g gormDB) GetRoomByID(ctx context.Context, roomID string) (*app.WsRoom, error) {
+	var roomDB = new(RoomDB)
+
+	err := g.db.Model(g.roomModel).WithContext(ctx).Where("id = ?", roomID).Take(roomDB).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return g.unmarshalRoom(roomDB), nil
+}
+
 func (g gormDB) GetListRoom(ctx context.Context, userID string, offset, limit int) ([]*app.WsRoom, error) {
 	var listRoom []*RoomDB
 

@@ -17,3 +17,6 @@ Database:
   Pass:       auco_pass
   LogLevel:   Info
   LogColor:   true
+
+LacLongQuanService:
+  Host: https://zola.thanhpp.ninja

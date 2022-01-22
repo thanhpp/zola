@@ -75,7 +75,7 @@
 #### Chat
 - [ ] get_conversation
 - [ ] delete_message
-- [ ] get_list_conversation
+- [x] get_list_conversation
 - [ ] delete_conversation
 
 - TODO (data whatever)

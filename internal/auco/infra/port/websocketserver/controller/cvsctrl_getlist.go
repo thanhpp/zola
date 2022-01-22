@@ -10,7 +10,13 @@ import (
 )
 
 func (ctrl ConversationController) GetList(c *gin.Context) {
-	requestorID := c.Query("requestor_id")
+	claims, err := getClaimsFromCtx(c)
+	if err != nil {
+		logger.Errorf("CvsCtrl - get claims %v", err)
+		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		return
+	}
+	requestorID := claims.User.ID
 	offset, limit := pagination(c)
 
 	data, err := ctrl.conversationHandler.GetListConversation(c, requestorID, offset, limit)
