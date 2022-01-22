@@ -24,16 +24,12 @@ export default function WrapperChat() {
 		`${process.env.REACT_APP_CHAT_URL}?id=${userId}`
 	);
 
-	const {
-		data: messages,
-		fetchNextPage,
-		hasNextPage,
-		isLoading,
-	} = useInfiniteQuery(
+	const { fetchNextPage, hasNextPage, isLoading, refetch } = useInfiniteQuery(
 		"messages",
 		({ pageParam = 1 }) => getConversation({ id, pageParam }),
 		{
 			enabled: enabled,
+			retry: false,
 			getNextPageParam: (lastPage) => {
 				if (lastPage.data.data.conversation.length !== 0)
 					return lastPage.nextPage;
@@ -42,12 +38,11 @@ export default function WrapperChat() {
 			onError: (error) => {
 				message.error({
 					content: `Code: ${error.response.data.code};
-				Message: ${error.response.data.message}`,
+				Message: ${error.response.data.data}`,
 				});
 			},
 			onSuccess: (data) => {
 				setEnabled(false);
-				//console.log(data.pages[data.pages.length - 1].data.data.conversation);
 				setChatHistory((chat) => [
 					...chat,
 					...data.pages[data.pages.length - 1].data.data.conversation,
@@ -73,7 +68,6 @@ export default function WrapperChat() {
 
 	const { mutate: handleDelete } = useMutation(deleteMessage, {
 		onSuccess: () => {
-			//console.log(data);
 			queryClient.invalidateQueries("messages");
 		},
 		onError: (error) => {
@@ -83,8 +77,12 @@ export default function WrapperChat() {
 				Message: ${error.response.data.message}`,
 			});
 		},
-		onMutate: () => {
+		onMutate: (data) => {
 			message.loading("deleting...");
+			const updatedChat = chatHistory.filter(
+				(chat) => chat.message_id !== data
+			);
+			setChatHistory(updatedChat);
 		},
 	});
 
@@ -111,22 +109,20 @@ export default function WrapperChat() {
 	};
 
 	if (isLoading) return <Spinner />;
-	//console.log(chatHistory);
 
 	return (
 		<>
-			{messages && (
-				<Chat
-					socket={socket}
-					user={user}
-					id={id}
-					fetchNextPage={fetchNextPage}
-					hasNextPage={hasNextPage}
-					chat={chatHistory}
-					onCreate={transformMessage}
-					handleDelete={handleDelete}
-				/>
-			)}
+			<Chat
+				socket={socket}
+				user={user}
+				id={id}
+				fetchNextPage={fetchNextPage}
+				hasNextPage={hasNextPage}
+				chat={chatHistory || []}
+				onCreate={transformMessage}
+				handleDelete={handleDelete}
+				refetch={refetch}
+			/>
 		</>
 	);
 }

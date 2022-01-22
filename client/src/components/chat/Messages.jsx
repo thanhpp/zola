@@ -15,8 +15,6 @@ export default function Messages(props) {
 
 	return (
 		<>
-			{/* {messages.map((message) => { */}
-			{/* return ( */}
 			<Card
 				key={message.message_id}
 				className={
@@ -70,10 +68,6 @@ export default function Messages(props) {
 					{message.message}
 				</Typography>
 			</Card>
-			{/* ); */}
-			{/* } */}
-			{/* ) */}
-			{/* } */}
 		</>
 	);
 }
