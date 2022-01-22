@@ -116,5 +116,5 @@
 - [x] [get_user_list](https://github.com/thanhpp/zola/issues/69)
 - [ ] set_role
 - [ ] get_analyst_result
-- [ ] set_user_state, delete_user
+- [x] [set_user_state, delete_user](https://github.com/thanhpp/zola/issues/87)
 - [ ] get_user_basic_info
