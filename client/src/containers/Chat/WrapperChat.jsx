@@ -12,7 +12,8 @@ import { getConversation, deleteMessage } from "../../api/chatApi";
 import { getUserChatInfo } from "../../api/userApi";
 import { message } from "antd";
 import Spinner from "../../components/spinner/Spinner";
-import { SocketContextProvider } from "../../context/socketContext";
+import SocketWrapper from "./SocketWrap";
+//import { SocketContextProvider } from "../../context/socketContext";
 
 export default function WrapperChat() {
 	const queryClient = useQueryClient();
@@ -109,7 +110,7 @@ export default function WrapperChat() {
 
 	return (
 		<>
-			<SocketContextProvider>
+			<SocketWrapper>
 				<Chat
 					user={user}
 					id={id}
@@ -120,7 +121,7 @@ export default function WrapperChat() {
 					handleDelete={handleDelete}
 					refetch={refetch}
 				/>
-			</SocketContextProvider>
+			</SocketWrapper>
 		</>
 	);
 }
