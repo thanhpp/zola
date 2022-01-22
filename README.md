@@ -77,7 +77,6 @@
 - [x] [delete_message](https://github.com/thanhpp/zola/issues/94)
 - [x] [get_list_conversation](https://github.com/thanhpp/zola/issues/94)
 - [x] [delete_conversation](https://github.com/thanhpp/zola/issues/94)
-
 - TODO (data whatever)
   - [x] Tạo connection || ws://localhost:12000/ws ||
   - [x] Join room
