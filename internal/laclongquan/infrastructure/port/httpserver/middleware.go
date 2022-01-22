@@ -56,3 +56,28 @@ func (s HTTPServer) getBearerToken(c *gin.Context) (string, error) {
 
 	return "", ErrInvalidToken
 }
+
+func (s HTTPServer) validateInternal(c *gin.Context) {
+	token, err := s.getBearerToken(c)
+	if err != nil {
+		logger.Errorf("get token %v", err)
+		resp := new(dto.DefaultResp)
+		resp.SetCode(responsevalue.CodeInvalidToken)
+		resp.SetMsg(responsevalue.MsgUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, resp)
+		return
+	}
+
+	claims, err := s.auth.NewClaimsFromToken(c, token)
+	if err != nil {
+		logger.Debugf("error token %s", token)
+		logger.Errorf("get claims %v", err)
+		resp := new(dto.DefaultResp)
+		resp.SetCode(responsevalue.CodeInvalidToken)
+		resp.SetMsg(responsevalue.MsgUnauthorized)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, resp)
+		return
+	}
+
+	c.JSON(http.StatusOK, claims)
+}

@@ -59,28 +59,28 @@ func (u UserHandler) GetUserByID(ctx context.Context, requestorID, requestedID s
 }
 
 func (u UserHandler) GetUserMedia(ctx context.Context, requestorID, requestedID, mediaID string) (*entity.Media, error) {
-	requestor, err := u.repo.GetByID(ctx, requestorID)
-	if err != nil {
-		return nil, err
-	}
+	// requestor, err := u.repo.GetByID(ctx, requestorID)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	requested, err := u.repo.GetByID(ctx, requestedID)
 	if err != nil {
 		return nil, err
 	}
 
-	var (
-		relation *entity.Relation
-	)
-	if !requested.Equal(requestor) {
-		relation, err = u.relationRepo.GetRelationBetween(ctx, requestor.ID().String(), requested.ID().String())
-		if err != nil && !errors.Is(err, repository.ErrRelationNotFound) {
-			return nil, err
-		}
-	}
-	if err := requested.CanGetUserInfo(requestor, relation); err != nil {
-		return nil, err
-	}
+	// var (
+	// 	relation *entity.Relation
+	// )
+	// if !requested.Equal(requestor) {
+	// 	relation, err = u.relationRepo.GetRelationBetween(ctx, requestor.ID().String(), requested.ID().String())
+	// 	if err != nil && !errors.Is(err, repository.ErrRelationNotFound) {
+	// 		return nil, err
+	// 	}
+	// }
+	// if err := requested.CanGetUserInfo(requestor, relation); err != nil {
+	// 	return nil, err
+	// }
 
 	media, err := u.postRepo.GetMediaByID(ctx, mediaID)
 	if err != nil {

@@ -22,6 +22,7 @@ type WsMessage struct {
 	Content    string `json:"content"`
 	roomID     string
 	createdAt  int64
+	seen       bool
 }
 
 func (wm *WsMessage) Encode() []byte {
@@ -64,6 +65,11 @@ func (wm *WsMessage) GetCreatedAtFromID() (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	wm.createdAt = createdAtInt64
 
 	return createdAtInt64, nil
+}
+
+func (wm *WsMessage) IsSeen() bool {
+	return wm.seen
 }

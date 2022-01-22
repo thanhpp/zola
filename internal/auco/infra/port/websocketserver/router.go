@@ -26,6 +26,7 @@ func (s *WebsocketServer) newRouter() *gin.Engine {
 
 	// controller
 	wsCtrl := controller.NewWsController(s.wm)
+	cCtrl := controller.NewConversationController(&s.app.ConversationHandler)
 
 	// routes
 	router.StaticFS("/pub", http.Dir("./public"))
@@ -33,6 +34,16 @@ func (s *WebsocketServer) newRouter() *gin.Engine {
 	wsGroup := router.Group("/ws")
 	{
 		wsGroup.GET("", wsCtrl.ServeWebsocket)
+	}
+
+	conversationGr := router.Group("/conversations")
+	{
+		conversationGr.Use(s.AuthMiddleware())
+		conversationGr.GET("", cCtrl.GetList)
+		conversationGr.GET("/partner/:id", cCtrl.GetByPartnerID)
+		conversationGr.GET("/:id", cCtrl.GetByRoomID)
+		conversationGr.DELETE("/:id", cCtrl.DeleteByConversationID)
+		conversationGr.DELETE("/message/:id", cCtrl.DeleteMessage)
 	}
 
 	return router
