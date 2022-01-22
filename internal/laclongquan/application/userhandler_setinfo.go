@@ -62,6 +62,8 @@ func (u UserHandler) SetUserInfo(
 			}
 			user.UpdateAvatar(avatar.ID())
 			// logger.Debugf("set user info - update avatar: %s", avatar.ID())
+		} else {
+			user.UpdateAvatar("")
 		}
 
 		if coverImage != nil {
@@ -69,6 +71,8 @@ func (u UserHandler) SetUserInfo(
 				return nil, ErrCanNotUseMedia
 			}
 			user.UpdateCoverImage(coverImage.ID())
+		} else {
+			user.UpdateCoverImage("")
 		}
 
 		go func(esUser entity.User) {

@@ -39,33 +39,66 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 		coverMedia  *entity.Media
 	)
 
-	avaPostID, avaMediaID, err := ctrl.resolveMediaUrlFn(req.Avatar)
-	if err != nil && !errors.Is(err, ErrEmptyMediaURL) {
-		logger.Errorf("resolve media url (avatar) error: %v", err)
-		ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+	user, err := ctrl.handler.GetUserByID(c, userID.String(), userID.String())
+	if err != nil {
+		logger.Errorf("Error while getting user by id: %v", err)
+		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
 		return
 	}
-	if len(avaPostID)+len(avaMediaID) != 0 {
-		avatarMedia, err = ctrl.postHdl.GetMedia(c, userID.String(), avaPostID, avaMediaID)
-		if err != nil {
-			logger.Errorf("get media (avatar) error: %v", err)
+
+	avatarURL, coverURL := ctrl.formUserMediaUrlFn(user.User)
+	// logger.Debugf("avatarURL: 		%s, coverURL: 		%s", avatarURL, coverURL)
+	// logger.Debugf("req.avatarURL: 	%s, req.coverURL: 	%s", req.Avatar, req.CoverImage)
+	if avatarURL != req.Avatar {
+		// logger.Debugf("avatar url: %s", req.Avatar)
+		avaPostID, avaMediaID, err := ctrl.resolveMediaUrlFn(req.Avatar)
+		if err != nil && !errors.Is(err, ErrEmptyMediaURL) {
+			logger.Errorf("resolve media url (avatar) error: %v", err)
 			ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
 		}
+		if len(avaPostID)+len(avaMediaID) != 0 {
+			avatarMedia, err = ctrl.postHdl.GetMedia(c, userID.String(), avaPostID, avaMediaID)
+			if err != nil {
+				logger.Errorf("get media (avatar) error from postID + mediaID: %v", err)
+				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				return
+			}
+		}
+	} else {
+		if len(req.Avatar) != 0 {
+			avatarMedia, err = ctrl.postHdl.GetMediaByID(c, user.User.Avatar)
+			if err != nil {
+				logger.Errorf("get media (avatar) error: %v", err)
+				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				return
+			}
+		}
 	}
 
-	coverPostID, coverMediaID, err := ctrl.resolveMediaUrlFn(req.CoverImage)
-	if err != nil && !errors.Is(err, ErrEmptyMediaURL) {
-		logger.Errorf("resolve media url (cover image) error: %v", err)
-		ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
-		return
-	}
-	if len(coverPostID)+len(coverMediaID) != 0 {
-		coverMedia, err = ctrl.postHdl.GetMedia(c, userID.String(), coverPostID, coverMediaID)
-		if err != nil {
-			logger.Errorf("get media (cover image) error: %v", err)
+	if req.CoverImage != coverURL {
+		coverPostID, coverMediaID, err := ctrl.resolveMediaUrlFn(req.CoverImage)
+		if err != nil && !errors.Is(err, ErrEmptyMediaURL) {
+			logger.Errorf("resolve media url (cover image) error: %v", err)
 			ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
+		}
+		if len(coverPostID)+len(coverMediaID) != 0 {
+			coverMedia, err = ctrl.postHdl.GetMedia(c, userID.String(), coverPostID, coverMediaID)
+			if err != nil {
+				logger.Errorf("get media (cover image) postID + mediaID: %v", err)
+				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				return
+			}
+		}
+	} else {
+		if len(req.CoverImage) != 0 {
+			coverMedia, err = ctrl.postHdl.GetMediaByID(c, user.User.CoverImg)
+			if err != nil {
+				logger.Errorf("get media (cover image) error: %v", err)
+				ginAbortInternalError(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+				return
+			}
 		}
 	}
 
@@ -95,6 +128,10 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
 
+		case entity.ErrInvalidName:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			return
+
 		case entity.ErrInvalidCountry:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
@@ -103,7 +140,7 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, req)
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
 		return
 	}
 

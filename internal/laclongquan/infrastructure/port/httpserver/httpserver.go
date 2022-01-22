@@ -19,17 +19,26 @@ import (
 )
 
 type HTTPServer struct {
-	cfg  *shared.HTTPServerConfig
-	app  application.Application
-	auth *auth.AuthService
+	cfg             *shared.HTTPServerConfig
+	app             application.Application
+	auth            *auth.AuthService
+	processedDomain string
 }
 
 func NewHTTPServer(cfg *shared.HTTPServerConfig, app application.Application, authSrv *auth.AuthService) *HTTPServer {
-	return &HTTPServer{
+
+	newHTTPServer := &HTTPServer{
 		cfg:  cfg,
 		app:  app,
 		auth: authSrv,
 	}
+	processedDomain, err := newHTTPServer.preProcessURL(cfg.Domain)
+	if err != nil {
+		logger.Fatalf("invalid domain %s", cfg.Domain)
+	}
+	newHTTPServer.processedDomain = processedDomain
+
+	return newHTTPServer
 }
 
 func (s *HTTPServer) Start() (booting.Daemon, error) {
@@ -92,14 +101,17 @@ func (s HTTPServer) resolveMediaURL(url string) (postID, mediaID string, err err
 
 	urlComponent := strings.Split(url, "/")
 	if len(urlComponent) != 5 {
+		logger.Errorf("invalid media url len %s", url)
 		return "", "", controller.ErrInvalidMediaURL
 	}
 
-	if urlComponent[0] != s.cfg.Domain {
+	if urlComponent[0] != s.processedDomain {
+		logger.Errorf("invalid media url domain %s", url)
 		return "", "", controller.ErrInvalidMediaURL
 	}
 
 	if urlComponent[1] != "post" || urlComponent[3] != "media" {
+		logger.Errorf("invalid media url component %s", url)
 		return "", "", controller.ErrInvalidMediaURL
 	}
 
@@ -132,7 +144,7 @@ func (s HTTPServer) resolveUserMediaURL(url string) (userID, mediaID string, err
 		return "", "", controller.ErrInvalidMediaURL
 	}
 
-	if urlComponents[0] != s.cfg.Domain {
+	if urlComponents[0] != s.processedDomain {
 		return "", "", controller.ErrInvalidMediaURL
 	}
 

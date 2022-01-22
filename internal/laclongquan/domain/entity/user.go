@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 var (
@@ -13,6 +14,7 @@ var (
 	ErrEmptyInput         = errors.New("empty input")
 	ErrInvalidUsername    = errors.New("invalid username")
 	ErrInvalidInputLength = errors.New("invalid input length")
+	ErrInvalidName        = errors.New("invalid name")
 )
 
 const (
@@ -101,8 +103,21 @@ func (u *User) UpdateName(name string) error {
 		return nil
 	}
 
-	if err := validateUsername(name); err != nil {
-		return err
+	if !stringLengthCheck(name, 0, 50) {
+		return ErrInvalidName
+	}
+
+	if len(name) > 0 && (!unicode.IsLetter(rune(name[0])) && !unicode.IsNumber(rune(name[0]))) {
+		logger.Debugf("invalid name[0]: %c", name[0])
+		return ErrInvalidName
+	}
+
+	for i := range name {
+		if unicode.IsLetter(rune(name[i])) || unicode.IsNumber(rune(name[i])) || name[i] == '_' {
+			continue
+		}
+		logger.Debugf("invalid name: %s", name[i])
+		return ErrInvalidName
 	}
 
 	u.name = name
