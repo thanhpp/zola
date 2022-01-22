@@ -1,0 +1,172 @@
+pipeline {
+    environment {
+        registryCredential  = 'tys-dockerhub'
+        imageTag            = ''
+        customImage         = ''
+        svc_name            = ''
+        svc_port            = ''
+        svc_prefix          = ''
+        svc_dockerfile      = ''
+        svc_replica         = ''
+        eks_svc_name        = ''
+        eks_namespace       = ''
+        BRANCH              = ''
+    }
+    agent { label 'helm' }
+    stages {
+        stage('Read deployment configurations') {
+            steps {
+                script {            
+                    def props       = readProperties file: 'deploy/eks.properties'
+                    svc_dockerfile  = props['DOCKERFILE']
+                    svc_replica     = props['NREPLICA']
+                    svc_name        = props['SVCNAME']
+                    svc_port        = props['SVCPORT']
+                    svc_prefix      = props['PREFIX']
+                    eks_svc_name    = props['EKS_SVCNAME']
+                    eks_namespace   = props['NAMESPACE']
+                }
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh "git rev-parse --short HEAD > .git/commit-id"
+                script {
+                    imageTag = readFile('.git/commit-id').trim()
+                    BRANCH = "${GIT_BRANCH.split('/').size() > 1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
+                }                
+                //BRANCH = sh(returnStdout: true, script:"echo ${env.BRANCH_NAME} | sed 's/[^a-zA-Z0-9]/-/g'").trim().toLowerCase()
+            }
+        }
+        stage('Sonarqube') {
+            when {
+                expression {BRANCH == 'develop'}
+            }
+            steps {
+                script {   
+                    sh """      
+                    sonar-scanner \
+                        -Dsonar.projectKey=gt-casbin \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=https://sonarqube.genestory.vn \
+                        -Dsonar.login=2ecc353cba6b9d017057d63f75a41f4383eeac3d
+                    """
+                }
+            }
+        }
+        stage('Build and Test') {
+            steps {
+                echo 'Starting to build docker image'
+                script {
+
+                    customImage = docker.build("tysud/$svc_name:${BRANCH}-${imageTag}")
+                    
+                }
+            }
+            //image = docker.build("${registry_url}:${imageTag}","-f ${svc_dockerfile} .")
+        }
+        stage('Push to Registry') {
+            steps {
+                echo 'Starting to push docker image'
+
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        customImage.push()               
+                    }
+                }
+            }
+            //docker.withRegistry("https://${registry_url}", "ecr:ap-southeast-1:ec2-jenkins") {
+              //  image.push()
+            //}
+        }
+        
+
+        stage('Update helm chart') {
+            steps {
+            withAWS(credentials: 'aws-apse1', region: 'us-east-2') {
+                sh """
+                    cd /tmp
+                    helm repo add tysud-charts s3://tysud-helm-charts/charts
+                    helm repo update
+                    helm pull tysud-charts/$svc_name --untar=true
+                    CURRENT_CHART_VERSION=`cat $svc_name/Chart.yaml | grep "^version" | cut -d':' -f2 | sed 's/ //g'`
+                    NEW_CHART_VERSION=`echo "\$CURRENT_CHART_VERSION" | awk -F. '{\$NF = \$NF + 1;} 1' | sed 's/ /./g'`
+                    sed -i  "s/\$CURRENT_CHART_VERSION/\$NEW_CHART_VERSION/g" $svc_name/Chart.yaml
+                    sed -i 's/tag.*/tag: "${BRANCH}-${imageTag}"/' $svc_name/values.yaml
+                    helm package $svc_name                                                                              
+                    helm s3 push --force $svc_name-\$NEW_CHART_VERSION.tgz tysud-charts
+                 """
+                 }
+             }
+        }
+
+        stage('Deploy to Dev') {
+            when {
+                expression {BRANCH == 'develop'}
+            }
+            steps {
+            withAWS(credentials: 'aws-apse1', region: 'ap-southeast-1') {
+                sh """
+                    aws eks --region ap-southeast-1 update-kubeconfig --name gt-eks-dev
+                    helm upgrade --install $eks_svc_name -n $eks_namespace /tmp/$svc_name
+                 """
+                 }
+             }
+        }
+
+        stage('Deploy to QA') {
+            when {
+                expression {BRANCH == 'qa'}
+            }
+            steps {
+            withAWS(credentials: 'aws-apse1', region: 'ap-southeast-1') {
+                sh """
+                    aws eks --region ap-southeast-1 update-kubeconfig --name gt-eks-qa
+                    helm upgrade --install $eks_svc_name -n $eks_namespace /tmp/$svc_name
+                 """
+                 }
+             }
+        }
+
+        stage('Deploy to Sandbox') {
+            when {
+                expression {BRANCH == 'sandbox'}
+            }
+            steps {
+            withAWS(credentials: 'aws-apse1', region: 'ap-southeast-1') {
+                sh """
+                    aws eks --region ap-southeast-1 update-kubeconfig --name gt-eks-sandbox
+                    helm upgrade --install $eks_svc_name -n $eks_namespace /tmp/$svc_name
+                 """
+                }
+            }
+            
+        }
+
+        stage('Deploy to Staging') {
+            when {
+                expression {BRANCH == 'develop'}
+            }
+            steps {
+                echo "Staging"
+            }
+        }
+
+        stage('Deploy to Prod') {
+            when {
+                expression {BRANCH == 'release'}
+            }
+            steps {
+            withAWS(credentials: 'aws-apse1', region: 'ap-southeast-1') {
+                sh """
+                    aws eks --region ap-southeast-1 update-kubeconfig --name gt-eks-prod
+                    helm upgrade --install $eks_svc_name -n $eks_namespace /tmp/$svc_name
+                 """
+                }
+            }
+            
+        }
+    }
+}
