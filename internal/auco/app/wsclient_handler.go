@@ -63,7 +63,7 @@ func (c *WsClient) handleSend(msg *WsMessage) {
 	}
 
 	// create a new message
-	newMsg, err := c.wsManager.fac.NewMessage(room.ID, msg.SenderID, msg.ReceiverID, msg.Created, msg.Content)
+	newMsg, err := c.wsManager.fac.NewMessage(room.ID, msg.SenderID, msg.ReceiverID, msg.Created, msg.Content, false)
 	if err != nil {
 		logger.Errorf("WsClient %s: create message error: %v", c.ID, err)
 		return

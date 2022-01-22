@@ -13,6 +13,7 @@ type MessageDB struct {
 	ReceiverID string `gorm:"Column:receiver_id; Type:text"`
 	Content    string `gorm:"Column:content; Type:text"`
 	DeletedAt  int64  `gorm:"Column:deleted_at; Type:bigint"`
+	Seen       bool   `gorm:"Column:seen; Type:boolean; Default:false"`
 }
 
 func (g gormDB) marshalMessage(msg *app.WsMessage) (*MessageDB, error) {
@@ -28,11 +29,12 @@ func (g gormDB) marshalMessage(msg *app.WsMessage) (*MessageDB, error) {
 		ReceiverID: msg.ReceiverID,
 		Content:    msg.Content,
 		DeletedAt:  0,
+		Seen:       msg.IsSeen(),
 	}, nil
 }
 
 func (g gormDB) unmarshalMessage(msgDB *MessageDB) (*app.WsMessage, error) {
-	msg, err := g.fac.NewMessage(msgDB.RoomID, strconv.FormatInt(msgDB.CreatedAt, 10), msgDB.SenderID, msgDB.ReceiverID, msgDB.Content)
+	msg, err := g.fac.NewMessage(msgDB.RoomID, msgDB.SenderID, msgDB.ReceiverID, strconv.FormatInt(msgDB.CreatedAt, 10), msgDB.Content, msgDB.Seen)
 	if err != nil {
 		return nil, err
 	}

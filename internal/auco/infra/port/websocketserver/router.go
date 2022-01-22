@@ -26,6 +26,7 @@ func (s *WebsocketServer) newRouter() *gin.Engine {
 
 	// controller
 	wsCtrl := controller.NewWsController(s.wm)
+	cCtrl := controller.NewConversationController(&s.app.ConversationHandler)
 
 	// routes
 	router.StaticFS("/pub", http.Dir("./public"))
@@ -33,6 +34,11 @@ func (s *WebsocketServer) newRouter() *gin.Engine {
 	wsGroup := router.Group("/ws")
 	{
 		wsGroup.GET("", wsCtrl.ServeWebsocket)
+	}
+
+	conversationGr := router.Group("/conversations")
+	{
+		conversationGr.GET("", cCtrl.GetList)
 	}
 
 	return router

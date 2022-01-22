@@ -1,6 +1,7 @@
 package gormdb
 
 import (
+	"context"
 	"time"
 
 	"github.com/thanhpp/zola/internal/auco/app"
@@ -29,6 +30,25 @@ func (g gormDB) unmarshalRoom(roomDB *RoomDB) *app.WsRoom {
 		logger.Errorf("gormDB - unmarshalRoom: %v", err)
 	}
 	return room
+}
+
+func (g gormDB) GetListRoom(ctx context.Context, userID string, offset, limit int) ([]*app.WsRoom, error) {
+	var listRoom []*RoomDB
+
+	if err := g.db.Model(g.roomModel).WithContext(ctx).
+		Where(`(user_a = ? OR user_b = ?)`, userID, userID).
+		Order("created_at desc").
+		Offset(offset).Limit(limit).
+		Find(&listRoom).Error; err != nil {
+		return nil, err
+	}
+
+	var listRoomApp = make([]*app.WsRoom, 0, len(listRoom))
+	for _, roomDB := range listRoom {
+		listRoomApp = append(listRoomApp, g.unmarshalRoom(roomDB))
+	}
+
+	return listRoomApp, nil
 }
 
 func (g gormDB) FindRoomBetween(userA, userB string) (*app.WsRoom, error) {

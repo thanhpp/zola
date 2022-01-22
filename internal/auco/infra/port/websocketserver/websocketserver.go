@@ -16,12 +16,14 @@ import (
 type WebsocketServer struct {
 	cfg *shared.HTTPServerConfig
 	wm  *app.WsManager
+	app *app.App
 }
 
-func NewWebsocketServer(cfg *shared.HTTPServerConfig, wm *app.WsManager) *WebsocketServer {
+func NewWebsocketServer(cfg *shared.HTTPServerConfig, wm *app.WsManager, app *app.App) *WebsocketServer {
 	return &WebsocketServer{
 		cfg: cfg,
 		wm:  wm,
+		app: app,
 	}
 }
 
