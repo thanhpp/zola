@@ -1,0 +1,20 @@
+NAME: "gt-casbin"
+ENVIRONMENT: "PRODUCTION"
+FILE_MODE: 
+  READ_FROM_FILE: true 
+  WRITE_TO_DB: true
+
+POLICY_CSV_FILE: "rbac_with_domain_policy.csv"
+DEFAULT_ROLES: ["operator", "role 2"]
+
+LOG:
+  LEVEL: DEBUG 
+  COLOR: true
+
+WEB:
+  HOST: 127.0.0.1
+  PORT: 10002
+
+DB_DNS: "host=localhost user=pine password=123 dbname=casbin port=5432 sslmode=disable"
+CASBIN_CONFIG: "model.conf"
+
