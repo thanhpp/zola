@@ -135,6 +135,13 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 			postsGr.GET("", postCtrl.AdminGetListPosts)
 		}
 	}
+
+	internalGr := r.Group("/internal")
+	{
+		internalGr.GET("/validatetoken", s.validateInternal)
+		internalGr.GET("/user/:userid", userCtrl.InternalGetUser)
+		internalGr.GET("/isblock", userCtrl.InternalIsBlock)
+	}
 	// ---------------
 
 	return r
