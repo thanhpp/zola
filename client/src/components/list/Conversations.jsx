@@ -1,23 +1,24 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { List, Avatar, Typography, Popconfirm, Badge } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { List, Avatar, Typography, Popconfirm } from "antd";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Link } from "react-router-dom";
 const { Paragraph } = Typography;
 dayjs.extend(relativeTime);
 
-export default function Conversations({ conversations }) {
+export default function Conversations(props) {
+	const { conversations, handleDelete } = props;
 	return (
 		<List
 			itemLayout="vertical"
 			size="large"
 			pagination={{
-				onChange: (page) => {
-					console.log(page);
+				onChange: () => {
+					//console.log(page);
 				},
-				pageSize: 5,
+				pageSize: 20,
 			}}
 			dataSource={conversations}
 			renderItem={(conversation) => (
@@ -26,7 +27,7 @@ export default function Conversations({ conversations }) {
 					actions={[
 						<Popconfirm
 							title="Sure to delete conversation?"
-							onConfirm={() => console.log(conversation.id)}
+							onConfirm={() => handleDelete(conversation.id)}
 						>
 							<DeleteOutlined />
 							<span className="converstion-action-delete"> Delete</span>
@@ -35,19 +36,21 @@ export default function Conversations({ conversations }) {
 				>
 					<List.Item.Meta
 						avatar={
-							<Badge count={conversation.numNewMessage}>
+							conversation.partner.avatar ? (
 								<Avatar src={conversation.partner.avatar} />
-							</Badge>
+							) : (
+								<Avatar icon={<UserOutlined />} />
+							)
 						}
 						title={
 							<Link to={`${conversation.partner.id}`}>
-								{conversation.partner.username}
+								{conversation.partner.name}
 							</Link>
 						}
-						description={dayjs.unix(conversation.lastMessage.created).fromNow()}
+						description={dayjs.unix(conversation.lastmessage.created).fromNow()}
 					/>
-					<Paragraph strong={conversation.lastMessage.unread}>
-						{conversation.lastMessage.message}
+					<Paragraph strong={+conversation.lastmessage.unread}>
+						{conversation.lastmessage.message}
 					</Paragraph>
 				</List.Item>
 			)}

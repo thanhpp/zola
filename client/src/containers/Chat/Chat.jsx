@@ -4,12 +4,9 @@ import Editor from "../../components/chat/Editor";
 import styles from "./Chat.module.css";
 import ScrollToBottom from "react-scroll-to-bottom";
 import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { Comment, message } from "antd";
 import { useParams } from "react-router-dom";
-//import { socket } from "../../api/socket";
 import AuthContext from "../../context/authContext";
-dayjs.extend(relativeTime);
 
 function Chat(props) {
 	const { socket, user } = props;
@@ -21,7 +18,7 @@ function Chat(props) {
 		event: "joinchat",
 		sender: user.userId,
 		receiver: id,
-		created: Date.now().toString(),
+		created: `${dayjs().unix()}`,
 		content: "",
 	});
 
@@ -33,7 +30,7 @@ function Chat(props) {
 				event: "send",
 				sender: user.userId,
 				receiver: id,
-				created: Date.now().toString(),
+				created: `${dayjs().unix()}`,
 				content: e.target.value,
 			},
 		});
@@ -48,11 +45,8 @@ function Chat(props) {
 
 		//receive message
 		socket.onmessage = (e) => {
-			//console.log(e);
-			//console.log(e.data);
-			console.log(JSON.parse(e.data));
-			return false;
-			//setMessages((messages) => [...messages, e.data]);
+			//console.log(JSON.parse(e.data));
+			setMessages((messages) => [...messages, JSON.parse(e.data)]);
 		};
 
 		//error
@@ -61,14 +55,9 @@ function Chat(props) {
 		};
 
 		//close
-
 		socket.onclose = () => {
 			console.log("connection closed");
-			// socket = new WebSocket(process.env.REACT_APP_CHAT_URL);
-			// console.log("connection openned");
 		};
-
-		//console.log(socket.readyState);
 
 		if (socket.readyState === 0) {
 			message.loading("connecting to websocket");
@@ -95,7 +84,7 @@ function Chat(props) {
 					event: "send",
 					sender: user.userId,
 					receiver: id,
-					created: Date.now().toString(),
+					created: `${dayjs().unix()}`,
 					content: "",
 				},
 			});
@@ -109,7 +98,8 @@ function Chat(props) {
 	return (
 		<div className={styles.background}>
 			<ScrollToBottom className={styles.container}>
-				{messages.length > 1 && <Messages messages={messages} />}
+				<Messages messages={messages} />
+				{/* {!!messages.length && <Messages messages={messages} />} */}
 			</ScrollToBottom>
 
 			<Comment

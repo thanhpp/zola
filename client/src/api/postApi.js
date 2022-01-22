@@ -1,7 +1,7 @@
 import axiosClient from "./axiosClient";
 
 export async function getPostList({ pageParam = 1 }) {
-	const { data } = await axiosClient.get(`/admin/post?index=${pageParam}`);
+	const { data } = await axiosClient.get(`/admin/posts?index=${pageParam}`);
 	return {
 		data,
 		nextPage: pageParam + 1,

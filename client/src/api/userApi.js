@@ -31,10 +31,19 @@ export async function editUserInfo(formData) {
 	return data;
 }
 
-export async function getUserFriend({ pageParam = 1 }) {
-	const { data } = await axiosClient.get(`/friend?index=${pageParam}`);
+export async function getMyFriend({ pageParam = 1 }) {
+	const { data } = await axiosClient.get(
+		`/friend?index=${pageParam}&count=100`
+	);
 	return {
 		data,
 		nextPage: pageParam + 1,
+	};
+}
+
+export async function getUserFriend(id) {
+	const { data } = await axiosClient.get(`/friend/${id}`);
+	return {
+		data,
 	};
 }

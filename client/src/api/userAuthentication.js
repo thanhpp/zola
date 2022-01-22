@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosClient from "./axiosClient";
 
 export async function loginUser(user) {
 	const { phonenumber, password } = user;
@@ -10,11 +11,7 @@ export async function loginUser(user) {
 }
 
 export async function logoutUser() {
-	return await axios.get(`${process.env.REACT_APP_API_URL}/logout`, {
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem("token")}`,
-		},
-	});
+	return await axiosClient.get("/logout");
 }
 
 export async function signUpUser(user) {

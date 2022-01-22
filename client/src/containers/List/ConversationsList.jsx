@@ -1,48 +1,87 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Conversations from "../../components/list/Conversations";
-import { Button } from "antd";
+import { Button, message } from "antd";
+import Spinner from "../../components/spinner/Spinner";
 import ModalNewChat from "../../components/modal/ModalNewChat";
-
-const conversations = [
-	{
-		id: "2",
-		partner: {
-			id: "0fc9ef71-708e-11ec-bd01-0242c0a83003",
-			username: "Admin",
-			avatar: "https://joeschmoe.io/api/v1/random",
-		},
-		lastMessage: {
-			message: "this is a message",
-			created: "1638785955",
-			unread: 0, // 0 : read; 1: unread
-		},
-		numNewMessage: "2",
-	},
-	{
-		id: "4",
-		partner: {
-			id: "ea033d22-708d-11ec-bd01-0242c0a83003",
-			username: "ADMINZOLA",
-			avatar: "https://joeschmoe.io/api/v1/random",
-		},
-		lastMessage: {
-			message: "this is a message",
-			created: "1638785915",
-			unread: 1,
-		},
-		numNewMessage: "0",
-	},
-];
+import {
+	useQuery,
+	useInfiniteQuery,
+	useMutation,
+	useQueryClient,
+} from "react-query";
+import { getConversationList } from "../../api/chatApi";
+import AuthContext from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
+import { getMyFriend } from "../../api/userApi";
+import { deleteConversation } from "../../api/chatApi";
 
 export default function ConversationsList() {
+	let navigate = useNavigate();
+	const queryClient = useQueryClient();
+	const { user } = useContext(AuthContext);
 	const [displayModal, setDisplayModal] = useState(false);
+	const { data: conversations, isLoading } = useQuery("converstations", () =>
+		getConversationList(user.userId)
+	);
+
+	const { data: friends, isLoading: isFetchingFriend } = useInfiniteQuery(
+		"myFriends",
+		getMyFriend,
+		{
+			getNextPageParam: (lastPage) => {
+				if (lastPage.data.data.friends !== null) return lastPage.nextPage;
+				return undefined;
+			},
+			onError: (error) => {
+				message.error({
+					content: `Code: ${error.response.data.code};
+				Message: ${error.response.data.message}`,
+				});
+			},
+		}
+	);
+
+	const { mutate: deleteChat } = useMutation(deleteConversation, {
+		onSuccess: () => {
+			queryClient.invalidateQueries("converstations");
+		},
+		onError: (error) => {
+			message.error({
+				content: `Code: ${error.response.data.code};
+				Message: ${error.response.data.message}`,
+			});
+		},
+		onMutate: () => {
+			message.loading("deleting conversation");
+		},
+	});
+
+	if (isLoading) return <Spinner />;
+
+	const onCreateChat = (values) => {
+		navigate(`/messages/${values.userId}`);
+	};
+
 	return (
 		<div>
 			<Button type="primary" block onClick={() => setDisplayModal(true)}>
 				New Message
 			</Button>
-			<Conversations conversations={conversations} />
-			<ModalNewChat visible={displayModal} setVisible={setDisplayModal} />
+			{conversations && (
+				<Conversations
+					conversations={conversations.data}
+					handleDelete={deleteChat}
+				/>
+			)}
+			{friends && (
+				<ModalNewChat
+					visible={displayModal}
+					setVisible={setDisplayModal}
+					onCreate={onCreateChat}
+					friends={friends.pages[0].data.data.friends}
+					isLoading={isFetchingFriend}
+				/>
+			)}
 		</div>
 	);
 }
