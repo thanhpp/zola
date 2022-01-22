@@ -2887,6 +2887,63 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "delete conversation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations/e92beb1c-6faa-4f04-b805-c968916711f0",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations",
+								"e92beb1c-6faa-4f04-b805-c968916711f0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations/message/d83bd715-2985-4530-bbd8-22c3a846c656|1642789194219",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations",
+								"message",
+								"d83bd715-2985-4530-bbd8-22c3a846c656|1642789194219"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

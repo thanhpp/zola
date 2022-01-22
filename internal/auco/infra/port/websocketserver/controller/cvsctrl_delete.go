@@ -32,3 +32,25 @@ func (ctrl ConversationController) DeleteByConversationID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+func (ctrl ConversationController) DeleteMessage(c *gin.Context) {
+	requestorID, err := getRequestorIDFromClaims(c)
+	if err != nil {
+		logger.Errorf("CvsCtrl - get claims %v", err)
+		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		return
+	}
+
+	messageID := c.Param("id")
+
+	if err := ctrl.conversationHandler.DeleteMessage(c, requestorID, messageID); err != nil {
+		logger.Errorf("CvsCtrl - delete message %v", err)
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+		return
+	}
+
+	resp := new(dto.DefaultResp)
+	resp.SetCode(responsevalue.CodeOK)
+	resp.SetMsg(responsevalue.MsgOK)
+	c.JSON(http.StatusOK, resp)
+}

@@ -2,10 +2,12 @@ package gormdb
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/thanhpp/zola/internal/auco/app"
 	"github.com/thanhpp/zola/pkg/logger"
+	"gorm.io/gorm"
 )
 
 type RoomDB struct {
@@ -37,6 +39,9 @@ func (g gormDB) GetRoomByID(ctx context.Context, roomID string) (*app.WsRoom, er
 
 	err := g.db.Model(g.roomModel).WithContext(ctx).Where("id = ?", roomID).Take(roomDB).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, app.ErrRoomNotFound
+		}
 		return nil, err
 	}
 

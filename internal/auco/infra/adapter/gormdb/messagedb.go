@@ -55,3 +55,7 @@ func (g gormDB) CreateMessage(msg *app.WsMessage) error {
 func (g gormDB) DeleteByRoomID(ctx context.Context, roomID string) error {
 	return g.db.Model(g.msgModel).WithContext(ctx).Where("room_id = ?", roomID).Delete(MessageDB{}).Error
 }
+
+func (g gormDB) DeleteMessage(ctx context.Context, roomID string, createdAt int64) error {
+	return g.db.Model(g.msgModel).WithContext(ctx).Where("room_id = ? AND created_at = ?", roomID, createdAt).Delete(MessageDB{}).Error
+}

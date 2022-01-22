@@ -62,6 +62,11 @@ func (c *WsClient) handleSend(msg *WsMessage) {
 		return
 	}
 
+	// check content
+	if len(msg.Content) == 0 {
+		return
+	}
+
 	// create a new message
 	newMsg, err := c.wsManager.fac.NewMessage(room.ID, msg.SenderID, msg.ReceiverID, msg.Created, msg.Content, false)
 	if err != nil {
