@@ -3,7 +3,7 @@ import "antd/dist/antd.css";
 import { Modal, Form, Input } from "antd";
 
 export default function ModalNewChat(props) {
-	const { visible, setVisible } = props;
+	const { visible, setVisible, onCreate } = props;
 	const [form] = Form.useForm();
 
 	return (
@@ -21,8 +21,8 @@ export default function ModalNewChat(props) {
 					.validateFields()
 					.then((values) => {
 						form.resetFields();
-						console.log(values);
-						//onCreate(values);
+						//console.log(values);
+						onCreate(values);
 					})
 					.catch((info) => {
 						console.log("Validate Failed:", info);
@@ -41,19 +41,6 @@ export default function ModalNewChat(props) {
 					]}
 				>
 					<Input />
-				</Form.Item>
-
-				<Form.Item
-					label="Message"
-					name="message"
-					rules={[
-						{
-							required: true,
-							message: "Please input a message!",
-						},
-					]}
-				>
-					<Input.TextArea rows={4} />
 				</Form.Item>
 			</Form>
 		</Modal>

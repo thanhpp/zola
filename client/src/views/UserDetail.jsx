@@ -65,7 +65,7 @@ export default function UserDetail() {
 		data: usersFriends,
 		fetchNextPage,
 		hasNextPage,
-	} = useInfiniteQuery("friends", getUserFriend, {
+	} = useInfiniteQuery("friends", () => getUserFriend(id), {
 		getNextPageParam: (lastPage) => {
 			//console.log(lastPage.pageParam);
 			if (lastPage.data.data.friends !== null) return lastPage.nextPage;
