@@ -123,7 +123,6 @@ export default function Chat(props) {
 				<InfiniteScroll
 					dataLength={chat.length}
 					next={fetchNextPage}
-					//next={() => console.log("called next")}
 					style={{ display: "flex", flexDirection: "column-reverse" }}
 					inverse={true}
 					hasMore={hasNextPage}
