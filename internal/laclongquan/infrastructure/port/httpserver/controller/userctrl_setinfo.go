@@ -128,6 +128,10 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
 
+		case entity.ErrInvalidName:
+			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+			return
+
 		case entity.ErrInvalidCountry:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
@@ -136,7 +140,7 @@ func (ctrl UserController) SetUserInfo(c *gin.Context) {
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, req)
+		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
 		return
 	}
 
