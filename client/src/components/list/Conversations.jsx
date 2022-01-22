@@ -21,39 +21,43 @@ export default function Conversations(props) {
 				pageSize: 20,
 			}}
 			dataSource={conversations}
-			renderItem={(conversation) => (
-				<List.Item
-					key={conversation.id}
-					actions={[
-						<Popconfirm
-							title="Sure to delete conversation?"
-							onConfirm={() => handleDelete(conversation.id)}
-						>
-							<DeleteOutlined />
-							<span className="converstion-action-delete"> Delete</span>
-						</Popconfirm>,
-					]}
-				>
-					<List.Item.Meta
-						avatar={
-							conversation.partner.avatar ? (
-								<Avatar src={conversation.partner.avatar} />
-							) : (
-								<Avatar icon={<UserOutlined />} />
-							)
-						}
-						title={
-							<Link to={`${conversation.partner.id}`}>
-								{conversation.partner.name}
-							</Link>
-						}
-						description={dayjs.unix(conversation.lastmessage.created).fromNow()}
-					/>
-					<Paragraph strong={+conversation.lastmessage.unread}>
-						{conversation.lastmessage.message}
-					</Paragraph>
-				</List.Item>
-			)}
+			renderItem={(conversation) =>
+				conversation.lastmessage.message ? (
+					<List.Item
+						key={conversation.id}
+						actions={[
+							<Popconfirm
+								title="Sure to delete conversation?"
+								onConfirm={() => handleDelete(conversation.id)}
+							>
+								<DeleteOutlined />
+								<span className="converstion-action-delete"> Delete</span>
+							</Popconfirm>,
+						]}
+					>
+						<List.Item.Meta
+							avatar={
+								conversation.partner.avatar ? (
+									<Avatar src={conversation.partner.avatar} />
+								) : (
+									<Avatar icon={<UserOutlined />} />
+								)
+							}
+							title={
+								<Link to={`${conversation.partner.id}`}>
+									{conversation.partner.name}
+								</Link>
+							}
+							description={dayjs
+								.unix(conversation.lastmessage.created)
+								.fromNow()}
+						/>
+						<Paragraph strong={+conversation.lastmessage.unread}>
+							{conversation.lastmessage.message}
+						</Paragraph>
+					</List.Item>
+				) : null
+			}
 		/>
 	);
 }

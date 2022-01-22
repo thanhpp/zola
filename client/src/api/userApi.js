@@ -47,3 +47,8 @@ export async function getUserFriend(id) {
 		data,
 	};
 }
+
+export async function getUserChatInfo(id) {
+	const { data } = await axiosClient.get(`/internal/user/${id}`);
+	return data;
+}

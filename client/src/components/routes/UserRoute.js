@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import UserLayout from "../../containers/Layout/UserLayout";
 import ConversationsList from "../../containers/List/ConversationsList";
-import WrapperChat from "../../containers/Chat/Chat";
+import WrapperChat from "../../containers/Chat/WrapperChat";
 
 export const userRoutes = [
 	{

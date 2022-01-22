@@ -6,7 +6,7 @@ import UserDetail from "../../views/UserDetail";
 import PostsList from "../../containers/List/PostsList";
 import PostDetail from "../../views/PostDetail";
 import ConversationsList from "../../containers/List/ConversationsList";
-import WrapperChat from "../../containers/Chat/Chat";
+import WrapperChat from "../../containers/Chat/WrapperChat";
 import Search from "../../views/Search";
 
 export const adminRoutes = [

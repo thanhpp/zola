@@ -9,82 +9,71 @@ import AuthContext from "../../context/authContext";
 dayjs.extend(relativeTime);
 const { Meta } = Card;
 
-export default function Messages({ messages }) {
+export default function Messages(props) {
 	const { user } = useContext(AuthContext);
+	const { message, handleDelete } = props;
 
 	return (
 		<>
-			{messages.map((message) => {
-				return (
-					<Card
-						key={message.message_id}
-						className={
-							message.sender === user.userId
-								? styles["message-reciever-bubble"]
-								: styles["message-sender-bubble"]
-						}
-						size="small"
-					>
-						<Meta
-							avatar={<Avatar icon={<UserOutlined />} />}
-							title={
-								<div
-									className={
-										message.sender === user.userId
-											? styles["message-reciever-name"]
-											: styles["message-sender-name"]
-									}
-								>
-									{message.sender === user.userId ? "You" : message.sender}
-									<div
-										className={styles["message-icon"]}
-										onClick={() => console.log(message.messageId)}
-									>
-										<DeleteOutlined />
-									</div>
-								</div>
+			{/* {messages.map((message) => { */}
+			{/* return ( */}
+			<Card
+				key={message.message_id}
+				className={
+					message.sender.id === user.userId
+						? styles["message-reciever-bubble"]
+						: styles["message-sender-bubble"]
+				}
+				size="small"
+			>
+				<Meta
+					avatar={
+						message.sender.avatar ? (
+							<Avatar src={message.sender.avatar} />
+						) : (
+							<Avatar icon={<UserOutlined />} />
+						)
+					}
+					title={
+						<div
+							className={
+								message.sender.id === user.userId
+									? styles["message-reciever-name"]
+									: styles["message-sender-name"]
 							}
-							description={
-								<p
-									style={{
-										color: message.sender === user.userId ? "white" : "black",
-									}}
-								>
-									{dayjs.unix(message.created).fromNow()}
-								</p>
-							}
-						/>
-						<p></p>
-						<Typography
+						>
+							{message.sender.id === user.userId ? "You" : message.sender.name}
+							<div
+								className={styles["message-icon"]}
+								onClick={() => handleDelete(message.message_id)}
+							>
+								<DeleteOutlined />
+							</div>
+						</div>
+					}
+					description={
+						<p
 							style={{
-								color: message.sender === user.userId ? "white" : "black",
+								color: message.sender.id === user.userId ? "white" : "black",
 							}}
 						>
-							{message.content}
-						</Typography>
-					</Card>
-				);
-			})}
-			{/* {messages.map((message) => {
-				return (
-					<Comment
-						key={message.messageId}
-						actions={[
-							<span onClick={() => console.log(message.messageId)}>
-								Delete
-							</span>,
-						]}
-						author={
-							message.sender.id === userId ? message.sender.username : "You"
-						}
-						avatar={<Avatar src={message.sender.avatar} alt="avatar" />}
-						content={
-							<Typography.Paragraph>{message.message}</Typography.Paragraph>
-						}
-						datetime={dayjs.unix(message.created).fromNow()}
-					/>
-				);
-			})} */}
+							{dayjs.unix(message.created).fromNow()}
+						</p>
+					}
+				/>
+				<p></p>
+				<Typography
+					style={{
+						color: message.sender.id === user.userId ? "white" : "black",
+					}}
+				>
+					{message.message}
+				</Typography>
+			</Card>
+			{/* ); */}
+			{/* } */}
+			{/* ) */}
+			{/* } */}
 		</>
 	);
 }

@@ -1,18 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Messages from "../../components/chat/Messages";
 import Editor from "../../components/chat/Editor";
 import styles from "./Chat.module.css";
-import ScrollToBottom from "react-scroll-to-bottom";
+import InfiniteScroll from "react-infinite-scroll-component";
 import dayjs from "dayjs";
 import { Comment, message } from "antd";
-import { useParams } from "react-router-dom";
-import AuthContext from "../../context/authContext";
 
-function Chat(props) {
-	const { socket, user } = props;
-	const { id } = useParams();
+export default function Chat(props) {
+	const {
+		socket,
+		user,
+		id,
+		chat,
+		onCreate,
+		hasNextPage,
+		fetchNextPage,
+		handleDelete,
+	} = props;
 	const [isLoading, setIsLoading] = useState(false);
-	const [messages, setMessages] = useState([]);
+	//const [conversation, setConversation] = useState([]);
 	const [chatMessage, setChatMessage] = useState({
 		message_id: "",
 		event: "joinchat",
@@ -45,12 +51,15 @@ function Chat(props) {
 
 		//receive message
 		socket.onmessage = (e) => {
-			//console.log(JSON.parse(e.data));
-			setMessages((messages) => [...messages, JSON.parse(e.data)]);
+			console.log(JSON.parse(e.data));
+			onCreate(JSON.parse(e.data));
+			//return false;
+			//setConversation((messages) => [...messages, JSON.parse(e.data)]);
 		};
 
 		//error
 		socket.onerror = (error) => {
+			message.error("Error in connection with Websocket");
 			console.log(error);
 		};
 
@@ -62,6 +71,9 @@ function Chat(props) {
 		if (socket.readyState === 0) {
 			message.loading("connecting to websocket");
 		}
+
+		//console.log(chat);
+
 		//close when unmount
 		return () => {
 			socket.close();
@@ -97,10 +109,30 @@ function Chat(props) {
 
 	return (
 		<div className={styles.background}>
-			<ScrollToBottom className={styles.container}>
-				<Messages messages={messages} />
-				{/* {!!messages.length && <Messages messages={messages} />} */}
-			</ScrollToBottom>
+			<div id="scrollableDiv" className={styles.container}>
+				<InfiniteScroll
+					dataLength={chat.length}
+					//next={fetchNextPage}
+					next={() => console.log("called next")}
+					style={{ display: "flex", flexDirection: "column-reverse" }}
+					inverse={true}
+					hasMore={hasNextPage}
+					loader={"loading..."}
+					initialScrollY={800}
+					scrollableTarget="scrollableDiv"
+				>
+					{chat.map((message) => {
+						return (
+							<Messages
+								key={message.message_id}
+								message={message}
+								handleDelete={handleDelete}
+							/>
+						);
+					})}
+					{/* <Messages messages={chat} /> */}
+				</InfiniteScroll>
+			</div>
 
 			<Comment
 				content={
@@ -114,13 +146,4 @@ function Chat(props) {
 			/>
 		</div>
 	);
-}
-
-export default function WrapperChat() {
-	const { user } = useContext(AuthContext);
-	const { userId } = user;
-	const socket = new WebSocket(
-		`${process.env.REACT_APP_CHAT_URL}?id=${userId}`
-	);
-	return <Chat socket={socket} user={user} />;
 }

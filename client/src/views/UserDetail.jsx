@@ -4,7 +4,6 @@ import { Row, Col, Tabs, message } from "antd";
 import ProfileCard from "../components/user/ProfileCard";
 import ProfileForm from "../components/user/ProfileForm";
 import Friends from "../components/user/Friends";
-//import PostsList from "../containers/List/PostsList";
 import AuthContext from "../context/authContext";
 import {
 	useMutation,
@@ -47,8 +46,6 @@ export default function UserDetail() {
 		editUserInfo,
 		{
 			onSuccess: () => {
-				//queryClient.invalidateQueries("users", `${id}`);
-				//queryClient.refetchQueries(["user", id]);
 				queryClient.resetQueries();
 			},
 			onError: (error) => {
@@ -99,9 +96,6 @@ export default function UserDetail() {
 								editUserHandler={editUser}
 							/>
 						</TabPane>
-						{/* <TabPane tab="Posts" key="2">
-							<PostsList id={userInfos.data.data.id} />
-						</TabPane> */}
 					</Tabs>
 				</Col>
 
