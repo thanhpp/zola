@@ -2866,23 +2866,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{auco}}/conversations/6476d7cf-3bfc-4bf6-a933-4f75e85fbb5d?index=1&count=1",
+							"raw": "{{auco}}/conversations/d83bd715-2985-4530-bbd8-22c3a846c656",
 							"host": [
 								"{{auco}}"
 							],
 							"path": [
 								"conversations",
-								"6476d7cf-3bfc-4bf6-a933-4f75e85fbb5d"
-							],
-							"query": [
-								{
-									"key": "index",
-									"value": "1"
-								},
-								{
-									"key": "count",
-									"value": "1"
-								}
+								"d83bd715-2985-4530-bbd8-22c3a846c656"
 							]
 						}
 					},
@@ -2967,7 +2957,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "{{zola}}/internal/user/ea033d22-708d-11ec-bd01-0242c0a83003",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"internal",
+								"user",
+								"ea033d22-708d-11ec-bd01-0242c0a83003"
+							]
 						}
 					},
 					"response": []
@@ -3554,14 +3552,14 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{zola}}/friend/request/5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+					"raw": "{{zola}}/friend/request/21dff7ac-7776-11ec-b80e-0242c0a84003",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
 						"friend",
 						"request",
-						"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
+						"21dff7ac-7776-11ec-b80e-0242c0a84003"
 					]
 				}
 			},
@@ -5345,6 +5343,53 @@
 					"path": [
 						"user",
 						"online"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "keyword",
+							"value": "bóng",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{zola}}/search?index=1&count=1",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "index",
+							"value": "1"
+						},
+						{
+							"key": "count",
+							"value": "1"
+						}
 					]
 				}
 			},

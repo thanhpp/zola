@@ -142,6 +142,12 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		internalGr.GET("/user/:userid", userCtrl.InternalGetUser)
 		internalGr.GET("/isblock", userCtrl.InternalIsBlock)
 	}
+
+	searchGr := r.Group("/search")
+	{
+		searchGr.Use(s.AuthMiddleware())
+		searchGr.POST("", postCtrl.Search)
+	}
 	// ---------------
 
 	return r
