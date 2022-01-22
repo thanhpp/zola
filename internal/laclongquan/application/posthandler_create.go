@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/thanhpp/zola/internal/laclongquan/domain/entity"
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 func (p PostHandler) CreatePostWithMultipart(ctx context.Context, creator uuid.UUID, content string, opts ...MultipartOption) (*entity.Post, error) {
@@ -112,6 +113,19 @@ func (p PostHandler) CreatePostWithMultipart(ctx context.Context, creator uuid.U
 		p.filehdl.Cleanup(videoThumbnailPath)
 		return nil, err
 	}
+
+	go func() {
+		author, err := p.userRepo.GetByID(ctx, post.Creator())
+		if err != nil {
+			logger.Errorf("esCli - get user error %v", err)
+			return
+		}
+		if err := p.esClient.CreateUpdatePost(post, author.Name()); err != nil {
+			logger.Errorf("create update post %d to elasticsearch failed: %v", post.ID(), err)
+			return
+		}
+		logger.Infof("create update post %d to elasticsearch successfully", post.ID())
+	}()
 
 	return post, nil
 }

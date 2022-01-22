@@ -98,7 +98,7 @@ func (es *EsClient) formUserReq(user *entity.User) ([]byte, error) {
 	return json.Marshal(req)
 }
 
-func (es *EsClient) SearchUser(keyword string) ([]string, error) {
+func (es *EsClient) SearchUser(keyword string, index, count int) ([]string, error) {
 	// form url
 	url := es.host + "/search" + userPostfix
 	// logger.Debugf("search user url: ", url)

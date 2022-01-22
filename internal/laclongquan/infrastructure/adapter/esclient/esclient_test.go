@@ -35,7 +35,7 @@ func TestSearchUser(t *testing.T) {
 	var (
 		es = newESClient()
 	)
-	ids, err := es.SearchUser("09")
+	ids, err := es.SearchUser("09", 0, 20)
 	if err != nil {
 		t.Fatal(err)
 	}

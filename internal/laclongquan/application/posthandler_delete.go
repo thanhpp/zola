@@ -3,6 +3,8 @@ package application
 import (
 	"context"
 	"errors"
+
+	"github.com/thanhpp/zola/pkg/logger"
 )
 
 var (
@@ -32,8 +34,15 @@ func (p PostHandler) DeletePost(ctx context.Context, userID, postID string) erro
 	for i := range post.Media() {
 		p.filehdl.Cleanup(post.Media()[i].Path())
 		p.filehdl.Cleanup(post.Media()[i].ThumbPath())
-
 	}
+
+	go func() {
+		if err := p.esClient.DeletePost(postID); err != nil {
+			logger.Errorf("error deleting %s post from elasticsearch %v", postID, err)
+			return
+		}
+		logger.Infof("deleted %s post from elasticsearch", postID)
+	}()
 
 	return nil
 }
