@@ -16,7 +16,7 @@ func (ctrl ReportController) Create(c *gin.Context) {
 
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind req err: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, responsevalue.MsgInvalidRequest, req)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, responsevalue.MsgInvalidRequest)
 		return
 	}
 
@@ -24,7 +24,7 @@ func (ctrl ReportController) Create(c *gin.Context) {
 	userID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user id from ctx err: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, responsevalue.MsgInvalidRequest, nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, responsevalue.MsgInvalidRequest)
 		return
 	}
 
@@ -32,7 +32,7 @@ func (ctrl ReportController) Create(c *gin.Context) {
 	subjectInt, err := strconv.Atoi(req.Subject)
 	if err != nil {
 		logger.Errorf("convert subject to id err: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, responsevalue.MsgInvalidRequest, nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, responsevalue.MsgInvalidRequest)
 		return
 	}
 
@@ -41,21 +41,21 @@ func (ctrl ReportController) Create(c *gin.Context) {
 		logger.Errorf("create report err: %v", err)
 		switch err {
 		case entity.ErrInvalidReportSubjectID:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid subject id", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid subject id")
 			return
 
 		case repository.ErrPostNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodePostNotExist, "post not exist", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValuePostNotExist, "post not exist")
 			return
 
 		case entity.ErrLockedPost:
-			ginAbortNotAcceptable(c, responsevalue.CodeActionHasBeenDone, "report locked post", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueActionHasBeenDone, "report locked post")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }

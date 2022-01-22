@@ -14,14 +14,14 @@ func (ctrl PostController) AdminGetListPosts(c *gin.Context) {
 
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("PostCtrl: AdminGetListPosts: invalid request: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", req)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid request")
 		return
 	}
 
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("PostCtrl: AdminGetListPosts: invalid token: %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid token", err)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalid token")
 		return
 	}
 
@@ -33,12 +33,12 @@ func (ctrl PostController) AdminGetListPosts(c *gin.Context) {
 		switch err {
 
 		default:
-			ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+			ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		}
 	}
 
 	resp := new(dto.GetListPostResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(res, req.LastID, ctrl.formMediaURLFunc, ctrl.formVideoThumbURLFunc, ctrl.formUserMediaURLFunc)
 

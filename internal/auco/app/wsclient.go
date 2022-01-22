@@ -70,6 +70,8 @@ func (c *WsClient) writePump() {
 		if err := c.conn.Close(); err != nil {
 			logger.Errorf("WsClient %s: close websocket connection err: %v", c.ID, err)
 		}
+		c.disconnect()
+		close(c.sendC)
 	}()
 
 	for {
@@ -125,5 +127,4 @@ func (c *WsClient) disconnect() {
 	c.wsManager.roomMap.walkLock(func(wr *WsRoom) {
 		wr.clientMap.delete(c)
 	})
-	close(c.sendC)
 }

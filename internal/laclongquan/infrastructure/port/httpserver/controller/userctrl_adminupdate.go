@@ -14,21 +14,21 @@ func (ctrl UserController) AdminSetState(c *gin.Context) {
 
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("Failed to bind request: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid request")
 		return
 	}
 
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("Failed to get user ID from claims: %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
 	requestedID, err := getUserUUIDFromParam(c)
 	if err != nil {
 		logger.Errorf("Failed to get user ID from param: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid user ID", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid user ID")
 		return
 	}
 
@@ -37,24 +37,24 @@ func (ctrl UserController) AdminSetState(c *gin.Context) {
 		logger.Errorf("admin %s update user %s state to %s failed: %v", requestorID, requestedID, req.State, err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid user ID", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid user ID")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case entity.ErrInvalidState:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid state", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid state")
 			return
 
 		default:
-			ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+			ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 			return
 		}
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }
 
 func (ctrl UserController) AdminUpdatePassword(c *gin.Context) {
@@ -62,21 +62,21 @@ func (ctrl UserController) AdminUpdatePassword(c *gin.Context) {
 
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("Failed to bind request: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid request")
 		return
 	}
 
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("Failed to get user ID from claims: %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalid user")
 		return
 	}
 
 	requestedID, err := getUserUUIDFromParam(c)
 	if err != nil {
 		logger.Errorf("Failed to get user ID from param: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid user ID", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid user ID")
 		return
 	}
 
@@ -85,22 +85,22 @@ func (ctrl UserController) AdminUpdatePassword(c *gin.Context) {
 		logger.Errorf("admin %s update user %s password failed: %v", requestorID, requestedID, err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid user ID", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid user ID")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalid user", nil)
+			ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalid user")
 			return
 
 		case entity.ErrInvalidPassword:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid password", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid password")
 			return
 
 		default:
-			ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+			ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 			return
 		}
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }

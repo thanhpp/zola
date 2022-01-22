@@ -16,7 +16,7 @@ func (ctrl UserController) SignUp(c *gin.Context) {
 
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind req %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid request", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid request")
 		return
 	}
 	// logger.Debugf("signup req: %v", req)
@@ -26,21 +26,21 @@ func (ctrl UserController) SignUp(c *gin.Context) {
 		logger.Errorf("handle %v", err)
 		switch err {
 		case entity.ErrInvalidPhone:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid phone number", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid phone number")
 			return
 
 		case entity.ErrInvalidPassword:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid password", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid password")
 			return
 
 		case repository.ErrDuplicateUser:
-			ginAbortNotAcceptable(c, responsevalue.CodeUserExisted, "user existed", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueUserExisted, "user existed")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, responsevalue.MsgUnknownError)
 		return
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }

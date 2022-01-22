@@ -9,19 +9,24 @@ import (
 
 	"github.com/thanhpp/zola/config/shared"
 	"github.com/thanhpp/zola/internal/auco/app"
+	"github.com/thanhpp/zola/internal/auco/infra/adapter/llqclient"
 	"github.com/thanhpp/zola/pkg/booting"
 	"github.com/thanhpp/zola/pkg/logger"
 )
 
 type WebsocketServer struct {
-	cfg *shared.HTTPServerConfig
-	wm  *app.WsManager
+	cfg       *shared.HTTPServerConfig
+	wm        *app.WsManager
+	app       *app.App
+	llqClient *llqclient.LacLongQuanClient
 }
 
-func NewWebsocketServer(cfg *shared.HTTPServerConfig, wm *app.WsManager) *WebsocketServer {
+func NewWebsocketServer(cfg *shared.HTTPServerConfig, wm *app.WsManager, app *app.App, llqClient *llqclient.LacLongQuanClient) *WebsocketServer {
 	return &WebsocketServer{
-		cfg: cfg,
-		wm:  wm,
+		cfg:       cfg,
+		wm:        wm,
+		app:       app,
+		llqClient: llqClient,
 	}
 }
 

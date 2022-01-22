@@ -18,21 +18,21 @@ func (ctrl PostController) CreatePost(c *gin.Context) {
 
 	if err := c.ShouldBind(req); err != nil {
 		logger.Errorf("bind req %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, responsevalue.MsgInvalidRequest, nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, nil)
 		return
 	}
 
 	creator, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get user uuid %v", err)
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueInvalidateUser, nil)
 		return
 	}
 
 	form, err := c.MultipartForm()
 	if err != nil {
 		logger.Errorf("multipart form %v", err)
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueInvalidParameterType, nil)
 		return
 	}
 
@@ -49,41 +49,41 @@ func (ctrl PostController) CreatePost(c *gin.Context) {
 		logger.Errorf("create post %v", err)
 		switch err {
 		case application.ErrHasVideoAndImages:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "having images and video", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, nil)
 			return
 
 		case entity.ErrTooManyImages:
-			ginAbortNotAcceptable(c, responsevalue.CodeMaxImagesReached, "too many images", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueMaxImagesReached, nil)
 			return
 
 		case entity.ErrInvalidImageExtension:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid image extension", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, nil)
 			return
 
 		case entity.ErrMediaImageTooBig:
-			ginAbortNotAcceptable(c, responsevalue.CodeFileTooBig, "invalid image size", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueFileTooBig, nil)
 			return
 
 		case entity.ErrInvalidVideoExtension:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid video extension", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, nil)
 			return
 
 		case entity.ErrMediaVideoTooBig:
-			ginAbortNotAcceptable(c, responsevalue.CodeFileTooBig, "invalid video size", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueFileTooBig, nil)
 			return
 
 		case entity.ErrInvalidVideoDuration:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid video duration", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid video duration")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	// FIXME: missing URL
 	resp := new(dto.CreatePostResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetData(post.ID())
 
 	c.JSON(http.StatusOK, resp)

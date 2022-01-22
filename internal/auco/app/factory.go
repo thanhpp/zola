@@ -39,7 +39,7 @@ func (fac WsFactory) NewClient(id, name string, conn *websocket.Conn, wm *WsMana
 	}, nil
 }
 
-func (fac WsFactory) NewMessage(roomID, senderID, receiverID, createdAt, content string) (*WsMessage, error) {
+func (fac WsFactory) NewMessage(roomID, senderID, receiverID, createdAt, content string, seen bool) (*WsMessage, error) {
 	// time check
 	createdAtInt64, err := strconv.ParseInt(createdAt, 10, 64)
 	if err != nil {
@@ -57,5 +57,6 @@ func (fac WsFactory) NewMessage(roomID, senderID, receiverID, createdAt, content
 		Content:    content,
 		roomID:     roomID,
 		createdAt:  createdAtInt64,
+		seen:       seen,
 	}, nil
 }

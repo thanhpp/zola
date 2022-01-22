@@ -188,7 +188,7 @@ func (p postGorm) GetListPostForAdmin(ctx context.Context, requestorID string, t
 	)
 
 	stmt := p.db.WithContext(ctx).Model(p.postModel).
-		Preload(clause.Associations)
+		Preload(clause.Associations).Order("created_at desc")
 
 	if !timeMileStone.IsZero() {
 		stmt.Where("post_db.created_at < ?", timeMileStone)
@@ -209,7 +209,7 @@ func (p postGorm) GetListPostForAdmin(ctx context.Context, requestorID string, t
 
 	if !timeMileStone.IsZero() {
 		stmt2 := p.db.WithContext(ctx).Model(p.postModel)
-		if err := stmt2.Where("post_db.created_at > ?", timeMileStone).Count(&newItems).Error; err != nil {
+		if err := stmt2.Where("post_db.created_at > ?", timeMileStone).Order("created_at desc").Count(&newItems).Error; err != nil {
 			return nil, 0, err
 		}
 	}

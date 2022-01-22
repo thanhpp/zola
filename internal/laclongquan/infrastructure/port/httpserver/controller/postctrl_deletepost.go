@@ -12,7 +12,7 @@ func (ctrl PostController) DeletePost(c *gin.Context) {
 	postID, err := getPostID(c)
 	if err != nil {
 		logger.Errorf("Error get post id: %v", err)
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid post id", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid post id")
 		return
 	}
 
@@ -22,17 +22,17 @@ func (ctrl PostController) DeletePost(c *gin.Context) {
 		logger.Errorf("delete post: %v", err)
 		switch err {
 		case repository.ErrPostNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodePostNotExist, "post not exist", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValuePostNotExist, "post not exist")
 			return
 
 		case application.ErrPostCannotBeDeleted:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "post cannot be deleted", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "post cannot be deleted")
 			return
 		}
 
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, nil)
 }

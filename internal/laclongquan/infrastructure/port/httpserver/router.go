@@ -57,12 +57,12 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	{
 		userGr.Use(s.AuthMiddleware())
 		userGr.GET("/:userid", userCtrl.GetUserInfo)
-		userGr.GET("/:userid/media/:mediaid", userCtrl.GetUserMedia)
 
 		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 		userGr.PUT("/online", userCtrl.SetOnline)
 	}
+	r.GET("/user/:userid/media/:mediaid", userCtrl.GetUserMedia)
 
 	friendGr := r.Group("/friend")
 	{
@@ -134,6 +134,19 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 		{
 			postsGr.GET("", postCtrl.AdminGetListPosts)
 		}
+	}
+
+	internalGr := r.Group("/internal")
+	{
+		internalGr.GET("/validatetoken", s.validateInternal)
+		internalGr.GET("/user/:userid", userCtrl.InternalGetUser)
+		internalGr.GET("/isblock", userCtrl.InternalIsBlock)
+	}
+
+	searchGr := r.Group("/search")
+	{
+		searchGr.Use(s.AuthMiddleware())
+		searchGr.POST("", postCtrl.Search)
 	}
 	// ---------------
 

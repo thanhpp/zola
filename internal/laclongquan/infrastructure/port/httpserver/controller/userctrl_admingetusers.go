@@ -15,7 +15,7 @@ func (ctrl UserController) AdminGetUsers(c *gin.Context) {
 	adminID, err := getUserUUIDFromClaims(c)
 	if err != nil {
 		logger.Errorf("get userUUID from claims: %v", err)
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalidate user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalidate user")
 		return
 	}
 
@@ -24,19 +24,19 @@ func (ctrl UserController) AdminGetUsers(c *gin.Context) {
 		logger.Errorf("admin get users - %s - error: %v", adminID.String(), err)
 		switch err {
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidateUser, "invalidate user", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidateUser, "invalidate user")
 			return
 
 		case application.ErrPermissionDenied:
-			ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalidate user", nil)
+			ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalidate user")
 			return
 		}
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 		return
 	}
 
 	var resp = new(dto.GetUserListResp)
-	resp.SetCode(responsevalue.CodeOK)
+	resp.SetCode(responsevalue.ValueOK.Code)
 	resp.SetMsg(responsevalue.MsgOK)
 	resp.SetData(res, ctrl.formUserMediaUrlFn)
 

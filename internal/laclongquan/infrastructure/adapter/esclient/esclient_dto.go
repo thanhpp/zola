@@ -23,3 +23,28 @@ type SearchRespData struct {
 	Username    string `json:"username"`
 	Phonenumber string `json:"phonenumber"`
 }
+
+type PostDataReq struct {
+	ID        string         `json:"id"`
+	Described string         `json:"described"`
+	Author    PostAuthorData `json:"author"`
+	Created   string         `json:"created"`
+	Modified  string         `json:"modified"`
+}
+
+type PostAuthorData struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type SearchPostResp []SearchPostRespData
+
+type SearchPostRespData struct {
+	ID        string `json:"id"`
+	Described string `json:"described"`
+	Author    struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	} `json:"author"`
+	Created string `json:"created"`
+}

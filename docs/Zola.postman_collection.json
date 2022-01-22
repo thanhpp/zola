@@ -2782,6 +2782,208 @@
 			]
 		},
 		{
+			"name": "chat",
+			"item": [
+				{
+					"name": "get conversation list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get conversation by partnerid",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations/partner/ea033d22-708d-11ec-bd01-0242c0a83003?index=1&count=1",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations",
+								"partner",
+								"ea033d22-708d-11ec-bd01-0242c0a83003"
+							],
+							"query": [
+								{
+									"key": "index",
+									"value": "1"
+								},
+								{
+									"key": "count",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get conversation by roomid",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations/d83bd715-2985-4530-bbd8-22c3a846c656",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations",
+								"d83bd715-2985-4530-bbd8-22c3a846c656"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete conversation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations/e92beb1c-6faa-4f04-b805-c968916711f0",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations",
+								"e92beb1c-6faa-4f04-b805-c968916711f0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{auco}}/conversations/message/d83bd715-2985-4530-bbd8-22c3a846c656|1642789194219",
+							"host": [
+								"{{auco}}"
+							],
+							"path": [
+								"conversations",
+								"message",
+								"d83bd715-2985-4530-bbd8-22c3a846c656|1642789194219"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "internal",
+			"item": [
+				{
+					"name": "validate token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{zola}}/internal/user/ea033d22-708d-11ec-bd01-0242c0a83003",
+							"host": [
+								"{{zola}}"
+							],
+							"path": [
+								"internal",
+								"user",
+								"ea033d22-708d-11ec-bd01-0242c0a83003"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is block",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Signup",
 			"request": {
 				"method": "POST",
@@ -3350,14 +3552,14 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{zola}}/friend/request/5ba15938-6cb0-11ec-a3a1-0242ac1c0003",
+					"raw": "{{zola}}/friend/request/21dff7ac-7776-11ec-b80e-0242c0a84003",
 					"host": [
 						"{{zola}}"
 					],
 					"path": [
 						"friend",
 						"request",
-						"5ba15938-6cb0-11ec-a3a1-0242ac1c0003"
+						"21dff7ac-7776-11ec-b80e-0242c0a84003"
 					]
 				}
 			},
@@ -5141,6 +5343,53 @@
 					"path": [
 						"user",
 						"online"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "keyword",
+							"value": "bóng",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{zola}}/search?index=1&count=1",
+					"host": [
+						"{{zola}}"
+					],
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "index",
+							"value": "1"
+						},
+						{
+							"key": "count",
+							"value": "1"
+						}
 					]
 				}
 			},

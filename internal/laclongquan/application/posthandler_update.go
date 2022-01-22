@@ -88,5 +88,23 @@ func (p PostHandler) UpdatePost(ctx context.Context, creator, postID uuid.UUID, 
 		p.filehdl.Cleanup(deletedMedia[i].Path())
 	}
 
+	go func() {
+		post, err := p.repo.GetByID(context.Background(), postID.String())
+		if err != nil {
+			logger.Errorf("error getting %s post from elasticsearch: %v", postID, err)
+			return
+		}
+		author, err := p.userRepo.GetByID(ctx, post.Creator())
+		if err != nil {
+			logger.Errorf("esCli - get user error %v", err)
+			return
+		}
+		if err := p.esClient.CreateUpdatePost(post, author.Name()); err != nil {
+			logger.Errorf("error updating %s post in elasticsearch %v", postID, err)
+			return
+		}
+		logger.Infof("updated %s post in elasticsearch", postID)
+	}()
+
 	return nil
 }

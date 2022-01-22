@@ -80,17 +80,19 @@ func start(configPath string) {
 		}
 	}
 
-	// ---------------------- Sync all user to ES ----------------------
+	// ---------------------- Sync to ES ----------------------
 	if err := app.UserHandler.SyncAllUser(); err != nil {
 		logger.Errorf("can't sync all user to ES - err: %v", err)
 	}
+
+	app.PostHandler.SyncAllPostToEs()
 
 	// ------------- Daemons ---------------
 	mainCtx := context.Background()
 	daemonMan := booting.NewDaemonManeger(mainCtx)
 
-	logger.Info("starting daemons....")
 	daemonMan.Start(httpDaemon, authSrv.DeleteExpiredDaemons())
+	logger.Info("all daemons started....")
 	booting.WaitSignals(mainCtx)
 	daemonMan.Stop()
 

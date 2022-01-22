@@ -10,15 +10,15 @@ func (ctrl UserController) Signout(c *gin.Context) {
 	claims, err := getClaimsFromCtx(c)
 	if err != nil {
 		logger.Errorf("get claims %v", err)
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, responsevalue.MsgUnknownError)
 		return
 	}
 
 	if err := ctrl.authsrv.DeleteUserTokens(c, claims.User.ID); err != nil {
 		logger.Errorf("delete user tokens %v", err)
-		ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, nil)
+		ginAbortInternalError(c, responsevalue.ValueUnknownError, responsevalue.MsgUnknownError)
 		return
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }

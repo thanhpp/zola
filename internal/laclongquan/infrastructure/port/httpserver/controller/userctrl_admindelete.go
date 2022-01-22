@@ -12,13 +12,13 @@ import (
 func (ctrl UserController) AdminDeleteUser(c *gin.Context) {
 	requestorID, err := getUserUUIDFromClaims(c)
 	if err != nil {
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidateUser, "invalidate user", nil)
+		ginAbortUnauthorized(c, responsevalue.ValueInvalidateUser, "invalidate user")
 		return
 	}
 
 	requestedID, err := getUserUUIDFromParam(c)
 	if err != nil {
-		ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterType, "invalid user ID", nil)
+		ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterType, "invalid user ID")
 		return
 	}
 
@@ -26,22 +26,22 @@ func (ctrl UserController) AdminDeleteUser(c *gin.Context) {
 		logger.Errorf("admin %s delete user error: %v", requestorID, err)
 		switch err {
 		case application.ErrSelfDelete:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "self delete", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "self delete")
 			return
 
 		case entity.ErrPermissionDenied:
-			ginAbortUnauthorized(c, responsevalue.CodeInvalidAccess, "invalid access", nil)
+			ginAbortUnauthorized(c, responsevalue.ValueInvalidAccess, "invalid access")
 			return
 
 		case repository.ErrUserNotFound:
-			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "invalid user ID", nil)
+			ginAbortNotAcceptable(c, responsevalue.ValueInvalidParameterValue, "invalid user ID")
 			return
 
 		default:
-			ginAbortInternalError(c, responsevalue.CodeUnknownError, responsevalue.MsgUnknownError, err.Error())
+			ginAbortInternalError(c, responsevalue.ValueUnknownError, err.Error())
 			return
 		}
 	}
 
-	ginRespOK(c, responsevalue.CodeOK, responsevalue.MsgOK, nil)
+	ginRespOK(c, responsevalue.ValueOK, responsevalue.MsgOK)
 }

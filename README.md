@@ -70,14 +70,13 @@
 - [x] [like](https://github.com/thanhpp/zola/issues/15)
 - [x] [edit_comment](https://github.com/thanhpp/zola/issues/30)
 - [x] [del_comment](https://github.com/thanhpp/zola/issues/31)
-- [ ] search
+- [x] [search](https://github.com/thanhpp/zola/issues/102)
 
 #### Chat
-- [ ] get_conversation
-- [ ] delete_message
-- [ ] get_list_conversation
-- [ ] delete_conversation
-
+- [x] [get_conversation](https://github.com/thanhpp/zola/issues/94)
+- [x] [delete_message](https://github.com/thanhpp/zola/issues/94)
+- [x] [get_list_conversation](https://github.com/thanhpp/zola/issues/94)
+- [x] [delete_conversation](https://github.com/thanhpp/zola/issues/94)
 - TODO (data whatever)
   - [x] Tạo connection || ws://localhost:12000/ws ||
   - [x] Join room
@@ -116,5 +115,5 @@
 - [x] [get_user_list](https://github.com/thanhpp/zola/issues/69)
 - [ ] set_role
 - [ ] get_analyst_result
-- [ ] set_user_state, delete_user
+- [x] [set_user_state, delete_user](https://github.com/thanhpp/zola/issues/87)
 - [ ] get_user_basic_info
