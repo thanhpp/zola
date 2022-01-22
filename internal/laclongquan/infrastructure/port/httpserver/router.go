@@ -57,12 +57,12 @@ func (s *HTTPServer) newRouter() *gin.Engine {
 	{
 		userGr.Use(s.AuthMiddleware())
 		userGr.GET("/:userid", userCtrl.GetUserInfo)
-		userGr.GET("/:userid/media/:mediaid", userCtrl.GetUserMedia)
 
 		userGr.PUT("", userCtrl.SetUserInfo)
 		userGr.PUT("/password", userCtrl.ChangePassword)
 		userGr.PUT("/online", userCtrl.SetOnline)
 	}
+	r.GET("/user/:userid/media/:mediaid", userCtrl.GetUserMedia)
 
 	friendGr := r.Group("/friend")
 	{

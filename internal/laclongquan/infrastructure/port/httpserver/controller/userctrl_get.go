@@ -54,11 +54,11 @@ func (ctrl UserController) GetUserInfo(c *gin.Context) {
 }
 
 func (ctrl UserController) GetUserMedia(c *gin.Context) {
-	requestorID, err := getUserUUIDFromClaims(c)
-	if err != nil {
-		ginAbortUnauthorized(c, responsevalue.CodeInvalidToken, "invalid token", nil)
-		return
-	}
+	// requestorID, err := getUserUUIDFromClaims(c)
+	// if err != nil {
+	// 	ginAbortUnauthorized(c, responsevalue.CodeInvalidToken, "invalid token", nil)
+	// 	return
+	// }
 
 	requestedID, err := getUserUUIDFromParam(c)
 	if err != nil {
@@ -72,9 +72,9 @@ func (ctrl UserController) GetUserMedia(c *gin.Context) {
 		return
 	}
 
-	media, err := ctrl.handler.GetUserMedia(c, requestorID.String(), requestedID.String(), mediaID)
+	media, err := ctrl.handler.GetUserMedia(c, "requestorID.String()", requestedID.String(), mediaID)
 	if err != nil {
-		logger.Errorf("can not get user %s media %s: %v", requestorID.String(), mediaID, err)
+		logger.Errorf("can not get user %s media %s: %v", " requestorID.String()", mediaID, err)
 		switch err {
 		case repository.ErrUserNotFound:
 			ginAbortNotAcceptable(c, responsevalue.CodeInvalidParameterValue, "media not found", nil)
