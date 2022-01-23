@@ -188,6 +188,7 @@ func (p postGorm) GetListPostForAdmin(ctx context.Context, requestorID string, t
 	)
 
 	stmt := p.db.WithContext(ctx).Model(p.postModel).
+		Distinct("post_db.*").
 		Preload(clause.Associations).Order("created_at desc")
 
 	if !timeMileStone.IsZero() {
@@ -208,7 +209,7 @@ func (p postGorm) GetListPostForAdmin(ctx context.Context, requestorID string, t
 	}
 
 	if !timeMileStone.IsZero() {
-		stmt2 := p.db.WithContext(ctx).Model(p.postModel)
+		stmt2 := p.db.WithContext(ctx).Model(p.postModel).Distinct("post_db.*")
 		if err := stmt2.Where("post_db.created_at > ?", timeMileStone).Order("created_at desc").Count(&newItems).Error; err != nil {
 			return nil, 0, err
 		}
@@ -220,8 +221,8 @@ func (p postGorm) GetListPostForAdmin(ctx context.Context, requestorID string, t
 func (p postGorm) joinGetListPostFromActiveFriends(db *gorm.DB, requestorID string) {
 	db.Order("post_db.created_at desc").
 		Joins(`
-	JOIN user_db ON (post_db.creator = user_db.user_uuid AND user_db.state = 'active')
-	LEFT OUTER JOIN relation_db 
+	LEFT JOIN user_db ON (post_db.creator = user_db.user_uuid AND user_db.state = 'active')
+	LEFT JOIN relation_db 
 	ON (
 		(
 			(relation_db.user_a = post_db.creator AND relation_db.user_b = ?)

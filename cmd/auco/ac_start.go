@@ -49,7 +49,19 @@ func start(configPath string) {
 	logger.Info("starting daemons....")
 	daemonMan.Start(wsServerDaemon)
 	booting.WaitSignals(mainCtx)
-	daemonMan.Stop()
+	log.Println("Shutting down...")
+	shutdownTicker := time.NewTicker(time.Second * 5)
+	defer shutdownTicker.Stop()
+	for {
+		select {
+		case <-shutdownTicker.C:
+			log.Println("force shutdown", time.Now())
+			return
+		default:
+			daemonMan.Stop()
+			log.Println("gracefully shutdown", time.Now())
+			return
+		}
+	}
 
-	log.Println("shutdown", time.Now())
 }

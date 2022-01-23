@@ -93,10 +93,11 @@ func (c commentGorm) GetByPostIDFromNonBlockedActiveUser(ctx context.Context, re
 
 	stmt := c.db.WithContext(ctx).Model(c.cmtModel).
 		Select("comment_db.*").
+		Distinct("comment_db.*").
 		Where("post_uuid = ?", postID).
 		Order("created_at desc").
 		Joins(`JOIN user_db ON user_db.user_uuid = comment_db.creator_uuid AND user_db.state = 'active'
-		LEFT OUTER JOIN relation_db ON (
+		LEFT JOIN relation_db ON (
 			(
 				(relation_db.user_a = ? AND relation_db.user_b = comment_db.creator_uuid) 
 				OR

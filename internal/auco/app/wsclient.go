@@ -29,12 +29,8 @@ type WsClient struct {
 }
 
 func (c *WsClient) readPump() {
-	// init
-	readTicker := time.NewTicker(readPeriod)
-
-	// cleanup
 	defer func() {
-		readTicker.Stop()
+		logger.Infof("WsClient %s: read pump stopped - 1", c.ID)
 		c.disconnect()
 	}()
 
@@ -42,14 +38,11 @@ func (c *WsClient) readPump() {
 	c.conn.SetReadLimit(maxMessageSize)
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.conn.SetPongHandler(func(string) error {
-		c.conn.SetReadDeadline(time.Now().Add(pongWait))
-		return nil
+		return c.conn.SetReadDeadline(time.Now().Add(pongWait))
 	})
 
 	// Start endless read loop, waiting for messages from client
 	for {
-		<-readTicker.C
-
 		_, jsonMessage, err := c.conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
@@ -61,17 +54,16 @@ func (c *WsClient) readPump() {
 		logger.Debugf("WsClient %s: received message: %s", c.ID, string(jsonMessage))
 		c.handleNewMessage(jsonMessage)
 	}
+
 }
 
 func (c *WsClient) writePump() {
 	ticker := time.NewTicker(pingPeriod)
+
 	defer func() {
+		logger.Infof("WsClient %s: write pump stopped - 1", c.ID)
 		ticker.Stop()
-		if err := c.conn.Close(); err != nil {
-			logger.Errorf("WsClient %s: close websocket connection err: %v", c.ID, err)
-		}
-		c.disconnect()
-		close(c.sendC)
+		c.conn.Close()
 	}()
 
 	for {
@@ -80,8 +72,8 @@ func (c *WsClient) writePump() {
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				// The WsManager closed the channel.
-				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
-				return
+				err := c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				logger.Errorf("WsClient %s: close message %v", c.ID, err)
 			}
 
 			w, err := c.conn.NextWriter(websocket.TextMessage)
@@ -89,29 +81,48 @@ func (c *WsClient) writePump() {
 				logger.Errorf("WsClient %s: create writer err: %v", c.ID, err)
 				return
 			}
-			w.Write(msg)
+			if _, err := w.Write(msg); err != nil {
+				logger.Errorf("WsClient %s: write message 1 err: %v", c.ID, err)
+
+			}
 
 			// Write queued chat messages to the current websocket message.
 			n := len(c.sendC)
 			for i := 0; i < n; i++ {
-				w.Write(newline)
-				w.Write(<-c.sendC)
+				if _, err := w.Write(newline); err != nil {
+
+					logger.Errorf("WsClient %s: write message 2 err: %v", c.ID, err)
+
+				}
+				if _, err := w.Write(<-c.sendC); err != nil {
+
+					logger.Errorf("WsClient %s: write message 3 err: %v", c.ID, err)
+
+				}
 			}
 
 			if err := w.Close(); err != nil {
 				logger.Errorf("WsClient %s: close writer err: %v", c.ID, err)
-				return
+
+			}
+			if err := c.conn.SetWriteDeadline(time.Now().Add(writeWait)); err != nil {
+				logger.Errorf("WsClient %s: set write deadline err: %v", c.ID, err)
+
 			}
 
 		case <-ticker.C:
 			// keep alive. server -> user
-			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := c.conn.SetWriteDeadline(time.Now().Add(writeWait)); err != nil {
+				logger.Errorf("WsClient %s: set write deadline err: %v", c.ID, err)
+				return
+			}
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				logger.Errorf("WsClient %s: ping message err: %v", c.ID, err)
 				return
 			}
 		}
 	}
+
 }
 
 func (c *WsClient) send(msg []byte) {
@@ -123,8 +134,17 @@ func (c *WsClient) send(msg []byte) {
 }
 
 func (c *WsClient) disconnect() {
+	// logger.Warnf("WsClient %s: disconnecting", c.ID)
 	c.wsManager.clientMap.delete(c)
+	// logger.Warnf("WsClient %s: disconnecting - CP1", c.ID)
 	c.wsManager.roomMap.walkLock(func(wr *WsRoom) {
 		wr.clientMap.delete(c)
 	})
+	close(c.sendC)
+	// logger.Warnf("WsClient %s: disconnecting - CP2", c.ID)
+	if err := c.conn.Close(); err != nil {
+		logger.Errorf("WsClient %s: close websocket connection err: %v", c.ID, err)
+	}
+	// logger.Warnf("WsClient %s: disconnecting - CP3", c.ID)
+	logger.Infof("WsClient %s: disconnected", c.ID)
 }

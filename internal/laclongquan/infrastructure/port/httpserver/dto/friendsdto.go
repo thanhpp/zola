@@ -61,6 +61,7 @@ type GetUserFriendsResp struct {
 type GetUserFriendsRespData struct {
 	UserID   string `json:"user_id"`
 	UserName string `json:"user_name"`
+	Name     string `json:"name"`
 	Avatar   string `json:"avatar"`
 	Status   string `json:"status"`
 }
@@ -81,6 +82,7 @@ func (resp *GetUserFriendsResp) SetData(users []*entity.User, total int, formUse
 		resp.Data.Friends = append(resp.Data.Friends, GetUserFriendsRespData{
 			UserID:   users[i].ID().String(),
 			UserName: users[i].GetUsername(),
+			Name:     users[i].GetName(),
 			Avatar:   avatarURL,
 			Status:   status,
 		})
