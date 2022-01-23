@@ -44,5 +44,5 @@ func (ctrl WsCtrl) ServeWebsocket(c *gin.Context) {
 
 	ctrl.wsManager.CreateClient(id, name, conn)
 
-	logger.Debugf("new client connected with id %s, name %s", id, name)
+	logger.Infof("WsCtrl - new client connected with id %s, name %s", id, name)
 }

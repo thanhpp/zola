@@ -77,34 +77,35 @@ func newWsClientMap() *wsClientMap {
 
 func (cm *wsClientMap) add(client *WsClient) {
 	cm.rw.Lock()
-	if cachedClient, ok := cm.m[client.ID]; ok {
-		cachedClient.disconnect()
-	}
+	// logger.Warnf("WsClientMap: add client %s - lock", client.ID)
 	cm.m[client.ID] = client
 	cm.rw.Unlock()
+	// logger.Warnf("WsClientMap: add client %s - unlock", client.ID)
 }
 
 func (cm *wsClientMap) delete(client *WsClient) {
 	cm.rw.Lock()
+	// logger.Warnf("WsClientMap: delete client %s - lock", client.ID)
 	if _, ok := cm.m[client.ID]; ok {
 		delete(cm.m, client.ID)
 	}
 	cm.rw.Unlock()
+	// logger.Warnf("WsClientMap: delete client %s - unlock", client.ID)
 }
 
 func (cm *wsClientMap) findByID(id string) (*WsClient, bool) {
-	cm.rw.RLock()
+	// logger.Warnf("WsClientMap: find client %s - lock", id)
 	client, ok := cm.m[id]
-	cm.rw.RUnlock()
+	// logger.Warnf("WsClientMap: find client %s - unlock", id)
 	return client, ok
 }
 
 func (cm *wsClientMap) walkLock(fn func(*WsClient)) {
 	cm.rw.Lock()
-	logger.Debugf("WsClientMap: walkLock - lock")
+	// logger.Debugf("WsClientMap: walkLock - lock")
 	for _, client := range cm.m {
 		fn(client)
 	}
 	cm.rw.Unlock()
-	logger.Debugf("WsClientMap: walkLock - unlock")
+	// logger.Debugf("WsClientMap: walkLock - unlock")
 }

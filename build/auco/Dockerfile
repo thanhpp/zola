@@ -34,6 +34,7 @@ WORKDIR /run/public
 COPY --from=builder ["/go/src/github.com/thanhpp/zola/cmd/auco/public", "."]
 
 EXPOSE 12000
+EXPOSE 443
 
 WORKDIR /run
 CMD /wait && /run/auco
