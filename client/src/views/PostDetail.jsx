@@ -22,6 +22,7 @@ import Spinner from "../components/spinner/Spinner";
 export default function PostDetail() {
 	const queryClient = useQueryClient();
 	const { id } = useParams();
+	const [enabled, setEnabled] = useState(true);
 	const [comment, setComment] = useState({
 		value: "",
 	});
@@ -35,7 +36,7 @@ export default function PostDetail() {
 		["posts", id, "comments"],
 		({ pageParam = 1 }) => getPostComment({ id, pageParam }),
 		{
-			//enabled: enabled,
+			enabled: enabled,
 			retry: false,
 			getNextPageParam: (lastPage) => {
 				//console.log(lastPage);
@@ -47,6 +48,9 @@ export default function PostDetail() {
 					content: `Code: ${error.response?.data?.code};
 				Message: ${error.response?.data?.message}`,
 				});
+			},
+			onSuccess: () => {
+				setEnabled(false);
 			},
 		}
 	);

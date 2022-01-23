@@ -12,7 +12,7 @@ import { getConversation, deleteMessage } from "../../api/chatApi";
 import { getUserChatInfo } from "../../api/userApi";
 import { message } from "antd";
 import Spinner from "../../components/spinner/Spinner";
-import SocketWrapper from "./SocketWrap";
+//import SocketWrapper from "./SocketWrap";
 //import { SocketContextProvider } from "../../context/socketContext";
 
 export default function WrapperChat() {
@@ -22,7 +22,13 @@ export default function WrapperChat() {
 	const { id } = useParams();
 	const { user } = useContext(AuthContext);
 
-	const { fetchNextPage, hasNextPage, isLoading, refetch } = useInfiniteQuery(
+	const {
+		data: messages,
+		fetchNextPage,
+		hasNextPage,
+		isLoading,
+		refetch,
+	} = useInfiniteQuery(
 		"messages",
 		({ pageParam = 1 }) => getConversation({ id, pageParam }),
 		{
@@ -95,12 +101,12 @@ export default function WrapperChat() {
 		newMessage.sender.id = sender;
 		if (sender === user.userId) {
 			newMessage.sender.avatar = currentUser?.avatar || "";
-			newMessage.sender.username = currentUser.username;
-			newMessage.sender.name = currentUser.name;
+			newMessage.sender.username = currentUser?.username || "";
+			newMessage.sender.name = currentUser?.name;
 		} else {
-			newMessage.sender.avatar = partnerInfo.avatar;
-			newMessage.sender.username = partnerInfo.username;
-			newMessage.sender.name = partnerInfo.name;
+			newMessage.sender.avatar = partnerInfo?.avatar || "";
+			newMessage.sender.username = partnerInfo?.username || "";
+			newMessage.sender.name = partnerInfo?.name || "";
 		}
 
 		setChatHistory((chat) => [newMessage, ...chat]);
@@ -110,7 +116,7 @@ export default function WrapperChat() {
 
 	return (
 		<>
-			<SocketWrapper>
+			{messages && (
 				<Chat
 					user={user}
 					id={id}
@@ -121,7 +127,7 @@ export default function WrapperChat() {
 					handleDelete={handleDelete}
 					refetch={refetch}
 				/>
-			</SocketWrapper>
+			)}
 		</>
 	);
 }

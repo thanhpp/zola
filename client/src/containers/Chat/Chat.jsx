@@ -48,7 +48,7 @@ export default function Chat(props) {
 
 		//receive message
 		socket.onmessage = (e) => {
-			console.log(JSON.parse(e.data));
+			//console.log(JSON.parse(e.data));
 			onCreate(JSON.parse(e.data));
 			//return false;
 		};
