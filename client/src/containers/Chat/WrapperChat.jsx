@@ -6,7 +6,7 @@ import {
 	useQuery,
 } from "react-query";
 import AuthContext from "../../context/authContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Chat from "./Chat";
 import { getConversation, deleteMessage } from "../../api/chatApi";
 import { getUserChatInfo } from "../../api/userApi";
@@ -15,7 +15,6 @@ import Spinner from "../../components/spinner/Spinner";
 import SocketContext from "../../context/socketContext";
 
 export default function WrapperChat() {
-	let navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const [enabled, setEnabled] = useState(true);
 	const [chatHistory, setChatHistory] = useState([]);
@@ -134,7 +133,7 @@ export default function WrapperChat() {
 					title="500"
 					subTitle="Sorry, something went wrong."
 					extra={
-						<Button type="primary" onClick={() => navigate("/users")}>
+						<Button type="primary" onClick={() => window.location.reload()}>
 							Back Home
 						</Button>
 					}
