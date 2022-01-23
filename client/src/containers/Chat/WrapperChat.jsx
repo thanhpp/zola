@@ -6,21 +6,22 @@ import {
 	useQuery,
 } from "react-query";
 import AuthContext from "../../context/authContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Chat from "./Chat";
 import { getConversation, deleteMessage } from "../../api/chatApi";
 import { getUserChatInfo } from "../../api/userApi";
-import { message } from "antd";
+import { message, Result, Button } from "antd";
 import Spinner from "../../components/spinner/Spinner";
-//import SocketWrapper from "./SocketWrap";
-//import { SocketContextProvider } from "../../context/socketContext";
+import SocketContext from "../../context/socketContext";
 
 export default function WrapperChat() {
+	let navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const [enabled, setEnabled] = useState(true);
 	const [chatHistory, setChatHistory] = useState([]);
 	const { id } = useParams();
 	const { user } = useContext(AuthContext);
+	const { socket } = useContext(SocketContext);
 
 	const {
 		data: messages,
@@ -116,7 +117,7 @@ export default function WrapperChat() {
 
 	return (
 		<>
-			{messages && (
+			{messages && socket ? (
 				<Chat
 					user={user}
 					id={id}
@@ -126,6 +127,17 @@ export default function WrapperChat() {
 					onCreate={transformMessage}
 					handleDelete={handleDelete}
 					refetch={refetch}
+				/>
+			) : (
+				<Result
+					status="500"
+					title="500"
+					subTitle="Sorry, something went wrong."
+					extra={
+						<Button type="primary" onClick={() => navigate("/users")}>
+							Back Home
+						</Button>
+					}
 				/>
 			)}
 		</>
